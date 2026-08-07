@@ -18,8 +18,10 @@ shape = SubResource("CapsuleShape2D_ytkss")
 
 [node name="Kunek" type="AnimatedSprite2D" parent="." unique_id=706360744]
 sprite_frames = ExtResource("kunek_frames")
-animation = &"WeaselJump4"
+animation = &"FoxDie1"
 autoplay = "FoxIdle8"
+frame = 15
+frame_progress = 1.0
 
 [node name="Outline" type="AnimatedSprite2D" parent="." unique_id=812345678]
 z_index = 100
