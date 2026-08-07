@@ -6,9 +6,9 @@ DIR="tiles"
 TILE_SIZE = 80
 N_SETS = 17  # Maximal number for N
 ROW_LEN = 24  # Minimum row length (0 means it defaults to the longest list)
-
-LIST1 = ["box", "half", "up-half", "slope-x0", "slope-x1", "slope-y0", "slope-y1", "up-slope-x0", "up-slope-x1", "up-slope-y0", "up-slope-y1", "leav170-box", "leav170-half", "leav170-up-half", "leav210-box", "leav210-half", "leav210-up-half", "pole1", "pole2", "pole3", "pole4", "pole5", "thick-x0", "thick-y0", "thick-x1", "thick-y1"]
-LIST2 = ["stairs-x0", "stairs-x1", "stairs-y0", "stairs-y1", "short-stairs-x0", "short-stairs-x1", "short-stairs-y0", "short-stairs-y1", "up-stairs-x0", "up-stairs-x1", "up-stairs-y0", "up-stairs-y1", "up-short-stairs-x0", "up-short-stairs-x1", "up-short-stairs-y0", "up-short-stairs-y1", "half-x0", "half-y0","half-x1", "half-y1", "wall-x0", "wall-y0", "wall-x1", "wall-y1", "mid-x", "mid-y"]
+        
+LIST1 = ["box", "half", "up-half", "slope-x0", "slope-x1", "slope-y0", "slope-y1", "up-slope-x0", "up-slope-x1", "up-slope-y0", "up-slope-y1", "leav170-box", "leav170-half", "leav170-up-half", "leav210-box", "leav210-half", "leav210-up-half", "pole1", "pole2", "pole3", "pole4", "pole5", "thick-x0", "thick-y0", "thick-x1", "thick-y1", "pole6", "midthick-x", "midthick-y"]
+LIST2 = ["stairs-x0", "stairs-x1", "stairs-y0", "stairs-y1", "short-stairs-x0", "short-stairs-x1", "short-stairs-y0", "short-stairs-y1", "up-stairs-x0", "up-stairs-x1", "up-stairs-y0", "up-stairs-y1", "up-short-stairs-x0", "up-short-stairs-x1", "up-short-stairs-y0", "up-short-stairs-y1", "half-x0", "half-y0","half-x1", "half-y1", "wall-x0", "wall-y0", "wall-x1", "wall-y1", "mid-x", "mid-y", "midwall-x", "midwall-y"]
 OUTPUT_FILE = "merge_tiles.png"
 # ---------------------
 

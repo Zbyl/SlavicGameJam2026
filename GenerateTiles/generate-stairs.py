@@ -242,6 +242,12 @@ def world_levels(args):
     return complementary, short, axis, low_end, [v * args.box_height for v in levels]
 
 
+def step_has_thickness(complementary, z, height):
+    """Whether the solid has non-zero thickness at this tread level."""
+    thickness = height - z if complementary else z
+    return thickness > 1e-12
+
+
 # ----------------------------------------------------------------------
 # Faces
 # ----------------------------------------------------------------------
@@ -272,6 +278,11 @@ def build_faces(args):
 
     # Staircase horizontal surfaces.
     for i, z in enumerate(level_z):
+        # Do not draw the zero-thickness first tread of short-stairs (z=0),
+        # or the zero-thickness terminal tread of complementary stairs (z=h).
+        if not step_has_thickness(complementary, z, h):
+            continue
+
         a0 = i * ds
         a1 = (i + 1) * ds
 
@@ -281,18 +292,10 @@ def build_faces(args):
             pts = [(0, a0, z), (s, a0, z), (s, a1, z), (0, a1, z)]
 
         if complementary:
-            # The stepped surface is the underside.  If a terminal strip is
-            # exactly h..h, retain it as an upward top face as requested.
-            terminal_at_h = abs(z - h) < 1e-12
-            add(
-                "top" if terminal_at_h else "bottom",
-                pts,
-                (0, 0, 1) if terminal_at_h else (0, 0, -1),
-                force_visible=terminal_at_h,
-            )
+            # The stepped surface is the underside.
+            add("bottom", pts, (0, 0, -1))
         else:
-            # z=0 short-stair tread remains a genuine visible horizontal face.
-            add("top", pts, (0, 0, 1), force_visible=(short and abs(z) < 1e-12))
+            add("top", pts, (0, 0, 1))
 
     # Risers between neighbouring treads.
     for i in range(n - 1):
@@ -353,9 +356,21 @@ def build_faces(args):
             normal = (0, sign, 0)
         add("side", pts, normal)
 
-    # Flat opposite cap, one polygon: no artificial step divisions.
+    # Flat opposite cap.  For complementary stairs, construct it from only
+    # the strips that have actual solid below them; otherwise an up-stairs
+    # terminal level at z=h would leave a spurious top face over empty space.
+    # These are fill polygons only, so their internal boundaries are not inked.
     if complementary:
-        add("top", [(0, 0, h), (s, 0, h), (s, s, h), (0, s, h)], (0, 0, 1))
+        for i, z in enumerate(level_z):
+            if not step_has_thickness(complementary, z, h):
+                continue
+            a0 = i * ds
+            a1 = (i + 1) * ds
+            if axis == "x":
+                pts = [(a0, 0, h), (a1, 0, h), (a1, s, h), (a0, s, h)]
+            else:
+                pts = [(0, a0, h), (s, a0, h), (s, a1, h), (0, a1, h)]
+            add("top", pts, (0, 0, 1))
     else:
         add("bottom", [(0, s, 0), (s, s, 0), (s, 0, 0), (0, 0, 0)], (0, 0, -1))
 
@@ -413,13 +428,21 @@ def build_edges(args, camera_vector):
     for i, z in enumerate(level_z):
         a0 = i * ds
         a1 = (i + 1) * ds
-        add(p(a0, near_t, z), p(a1, near_t, z))
+        if step_has_thickness(complementary, z, h):
+            add(p(a0, near_t, z), p(a1, near_t, z))
         if i + 1 < n:
             add(p(a1, near_t, z), p(a1, near_t, level_z[i + 1]))
 
-    # Close this visible side against the opposite flat cap.
+    # Close this visible side against the opposite flat cap.  Draw the cap
+    # boundary one strip at a time so a zero-thickness tread does not leave
+    # an otherwise orphaned horizontal edge.
     flat_z = h if complementary else 0
-    add(p(0, near_t, flat_z), p(s, near_t, flat_z))
+    for i, z in enumerate(level_z):
+        if step_has_thickness(complementary, z, h):
+            add(
+                p(i * ds, near_t, flat_z),
+                p((i + 1) * ds, near_t, flat_z),
+            )
     add(p(0, near_t, flat_z), p(0, near_t, level_z[0]))
     add(p(s, near_t, flat_z), p(s, near_t, level_z[-1]))
 
@@ -446,23 +469,27 @@ def build_edges(args, camera_vector):
 
             riser_faces_camera = sign * axis_camera > 1e-10
             if riser_faces_camera:
-                e0, e1 = across(a, lo)
-                add(e0, e1)
-                e0, e1 = across(a, hi)
-                add(e0, e1)
+                # Each horizontal riser border belongs to the tread at that
+                # same level.  Suppress it when that tread has zero thickness.
+                for z in (z0, z1):
+                    if step_has_thickness(complementary, z, h):
+                        e0, e1 = across(a, z)
+                        add(e0, e1)
             else:
                 # Even when the riser faces away, its upper tread border is
                 # the visible crease between adjacent top levels.
-                e0, e1 = across(a, hi)
-                add(e0, e1)
+                if step_has_thickness(complementary, hi, h):
+                    e0, e1 = across(a, hi)
+                    add(e0, e1)
 
     # 3. Only the longitudinal END toward the camera gets an across-width
     # outline.  The opposite/back end is intentionally not inked.
     near_index = n - 1 if axis_camera >= 0 else 0
     near_a = s if near_index == n - 1 else 0
     near_z = level_z[near_index]
-    e0, e1 = across(near_a, h if complementary else near_z)
-    add(e0, e1)
+    if step_has_thickness(complementary, near_z, h):
+        e0, e1 = across(near_a, h if complementary else near_z)
+        add(e0, e1)
 
     # Remove duplicates without changing order.
     result = []

@@ -15,8 +15,13 @@ SHAPES=(
     "pole3"
     "pole4"
     "pole5"
+    "pole6"
     "mid-x"
     "mid-y"
+    "midwall-x"
+    "midwall-y"
+    "midthick-x"
+    "midthick-y"
     "half-x0"
     "half-x1"
     "half-y0"
@@ -37,7 +42,7 @@ COMMON_OPTIONS=(
     --color $COLOR
     --camera-rotation 45
     --camera-elevation 30
-    --edge-width 0
+    --edge-width 0.01
     --scale 2
     --aa 2
 )
