@@ -1,13 +1,28 @@
 extends CharacterBody2D
 
 @export var speed = 300
+@export var character = "Fox"
 var direction = Vector2.ZERO
-var currentAngle = 8;
+var currentAngle = 8
+var currentState = "Idle"
 @onready var animation: AnimatedSprite2D = $AnimatedSprite2D
 
 func _physics_process(delta):
     # Pobranie inputu z padka (d-pad lub lewego stick)
     direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+
+    var changeAnimation = false
+
+    var state: String
+
+    if direction == Vector2.ZERO:
+        state = "Idle"
+    else:
+        state = "Dir"
+
+    if state != currentState:
+        currentState = state
+        changeAnimation = true
 
     if direction != Vector2.ZERO:
         # kąt animacji
@@ -19,7 +34,10 @@ func _physics_process(delta):
 
         if angle != currentAngle:
             currentAngle = angle
-            animation.play("dir" + str(currentAngle))
+            changeAnimation = true
+
+    if changeAnimation:
+        animation.play(character+currentState+str(currentAngle))
 
     # Ustawienie prędkości
     velocity = direction * speed
