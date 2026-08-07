@@ -10,17 +10,17 @@ import math
 # Defaults
 # ----------------------------------------------------------------------
 
-TILE_WIDTH = 64
-TILE_HEIGHT = 64
+TILE_WIDTH = 41
+TILE_HEIGHT = 41
 
-BOX_SIZE = 16.0
-BOX_HEIGHT = 16.0
+BOX_SIZE = (TILE_WIDTH-1) / math.sqrt(2)
+BOX_HEIGHT = BOX_SIZE * math.sqrt(3) * 0.5
 
 SHAPE = "box"
 PREFIX = "tile"
 
-CAMERA_ROTATION = 35.0
-CAMERA_ELEVATION = 45.0
+CAMERA_ROTATION = 45.0
+CAMERA_ELEVATION = 30.0
 
 COLOR = (150, 220, 170)
 
@@ -36,7 +36,7 @@ RIGHT_HUE_SHIFT = 3.0
 BOTTOM_HUE_SHIFT = 0.0
 EDGE_HUE_SHIFT = 0.0
 
-EDGE_WIDTH = 1.0
+EDGE_WIDTH = 0.5
 
 SCALE = 2
 AA = 2
@@ -381,14 +381,26 @@ def main():
         args.camera_rotation,
         args.camera_elevation,
     )
+    
+    vertical_offset = (
+        args.box_height / 2
+        * math.cos(math.radians(args.camera_elevation))
+    )
 
     def screen_point(p):
         x, y = p
-        return (
-            args.tile_width / 2 + x - projected_ground_center[0],
-            args.tile_height / 2 + y - projected_ground_center[1],
-        )
 
+        return (
+            args.tile_width / 2
+            + x
+            - projected_ground_center[0],
+    
+            args.tile_height / 2
+            + vertical_offset
+            + y
+            - projected_ground_center[1],
+        )
+   
     def aa_point(p):
         x, y = screen_point(p)
         return (

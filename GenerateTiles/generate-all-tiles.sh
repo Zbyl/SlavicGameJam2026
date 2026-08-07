@@ -5,7 +5,7 @@ set -euo pipefail
 # launched from Git Bash with another current working directory.
 cd "$(dirname "$0")"
 
-MOD=1
+MOD=3
 PREFIX="tile"$MOD
 COLORS=( "96dcaa"  "927b66"  "ec9a4e" )
 COLOR=${COLORS[(($MOD-1))]}
@@ -28,13 +28,11 @@ SHAPES=(
 COMMON_OPTIONS=(
     --prefix $PREFIX
     --color $COLOR
-    --camera-rotation 35
-    --camera-elevation 45
-    --tile-width 64
-    --tile-height 64
-    --box-size 16
-    --box-height 16
-    --edge-width 1
+    --camera-rotation 45
+    --camera-elevation 30
+    --tile-width 41
+    --tile-height 41
+    --edge-width 0.5
     --scale 2
     --aa 2
 )
