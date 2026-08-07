@@ -8,7 +8,8 @@ cd "$(dirname "$0")"
 COLORS=(
   "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # Original set
   "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
-  "dbb568" "e0cbac"                    # Mustard & Straw Yellow
+  "dbb568" "e0cbac" "a5a5a5" 
+  "777777" "4a4a4a"  # Mustard & Straw Yellow
 )
 
 # Dynamically count the number of colors in the array
@@ -27,7 +28,7 @@ for (( N=1; N<=NUM_COLORS; N++ )); do
 
     # Check if generator scripts exist and are executable before running
     if [[ -x "./generate-tiles-set.sh" && -x "./generate-stairs-set.sh" ]]; then
-        #./generate-tiles-set.sh "$N" "$COL"
+        ./generate-tiles-set.sh "$N" "$COL"
         ./generate-stairs-set.sh "$N" "$COL"
     else
         echo "Error: Verification failed. Ensure generator scripts are in this folder and executable (chmod +x)."

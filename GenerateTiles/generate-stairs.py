@@ -417,30 +417,37 @@ def build_edges(args, camera_vector):
     add(p(s, near_t, flat_z), p(s, near_t, level_z[-1]))
 
     # 2. Real step creases across the stair width.
-    # A front-facing riser gets both borders.  For an ordinary back-facing
-    # riser, retain its UPPER tread edge; this is the missing edge on the
-    # 45/30 stairs-x0 / stairs-y1 type views.
-    for i in range(n - 1):
-        z0 = level_z[i]
-        z1 = level_z[i + 1]
-        if abs(z0 - z1) < 1e-12:
-            continue
+    #
+    # For ordinary stairs the stepped surface is the TOP surface, so these
+    # across-width edges are real visible tread/riser creases.
+    #
+    # For complementary (up-*) stairs the stepped surface is the UNDERSIDE.
+    # From a camera above the tile, full-width underside-riser borders are
+    # hidden by the solid.  The complementary staircase remains visible via
+    # the camera-facing side profile generated in section 1, so do not ink
+    # these hidden diagonals at all.
+    if not complementary:
+        for i in range(n - 1):
+            z0 = level_z[i]
+            z1 = level_z[i + 1]
+            if abs(z0 - z1) < 1e-12:
+                continue
 
-        a = (i + 1) * ds
-        lo, hi = sorted((z0, z1))
-        sign = -1 if z0 < z1 else 1
-        if complementary:
-            sign = -sign
+            a = (i + 1) * ds
+            lo, hi = sorted((z0, z1))
+            sign = -1 if z0 < z1 else 1
 
-        riser_faces_camera = sign * axis_camera > 1e-10
-        if riser_faces_camera:
-            e0, e1 = across(a, lo)
-            add(e0, e1)
-            e0, e1 = across(a, hi)
-            add(e0, e1)
-        elif not complementary:
-            e0, e1 = across(a, hi)
-            add(e0, e1)
+            riser_faces_camera = sign * axis_camera > 1e-10
+            if riser_faces_camera:
+                e0, e1 = across(a, lo)
+                add(e0, e1)
+                e0, e1 = across(a, hi)
+                add(e0, e1)
+            else:
+                # Even when the riser faces away, its upper tread border is
+                # the visible crease between adjacent top levels.
+                e0, e1 = across(a, hi)
+                add(e0, e1)
 
     # 3. Only the longitudinal END toward the camera gets an across-width
     # outline.  The opposite/back end is intentionally not inked.

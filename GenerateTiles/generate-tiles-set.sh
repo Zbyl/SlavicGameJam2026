@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 MOD=${1:-1}
-COLOR=${2:-"96dcaa"}
+COLOR=${2:-"#96dcaa"}
 PREFIX="tile"$MOD
 
 SHAPES=(
