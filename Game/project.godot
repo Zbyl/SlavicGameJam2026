@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Game"
+run/main_scene="uid://7vh5ua3bmum8"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -22,6 +23,13 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="Game"
+
+[layer_names]
+
+2d_physics/layer_1="Player"
+2d_physics/layer_17="Layer0"
+2d_physics/layer_18="Layer1"
+2d_physics/layer_19="Layer2"
 
 [physics]
 
