@@ -19,10 +19,14 @@ SHAPES=(
     up-slope-y1
 )
 
+# 1 --color "96dcaa"
+# 2 --color "927b66"
+# 3 --color "ec9a4e"
+
 # Common settings for the whole tileset. Edit these as desired.
 COMMON_OPTIONS=(
-    --prefix tile
-    --color "96dcaa"
+    --prefix tile3
+    --color "ec9a4e"
     --camera-rotation 35
     --camera-elevation 45
     --tile-width 64
