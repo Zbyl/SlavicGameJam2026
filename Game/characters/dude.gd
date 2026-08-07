@@ -1,15 +1,23 @@
 extends CharacterBody2D
 
+const DEADZONE = 0.1
+
 @export var speed = 300
-@export var character = "Fox"
+@export var character = "Snow"
+@export var controller = 0
+
 var direction = Vector2.ZERO
 var currentAngle = 8
-var currentState = "Idle"
+var currentState = "None"
+
 @onready var animation: AnimatedSprite2D = $AnimatedSprite2D
 
 func _physics_process(delta):
-    # Pobranie inputu z padka (d-pad lub lewego stick)
-    direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+    var x = Input.get_joy_axis(controller, JOY_AXIS_LEFT_X)
+    var y = Input.get_joy_axis(controller, JOY_AXIS_LEFT_Y)
+    var direction = Vector2(x, y)
+    if direction.length() < DEADZONE:
+        direction = Vector2.ZERO
 
     var changeAnimation = false
 
