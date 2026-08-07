@@ -7,7 +7,7 @@ import math
 
 
 # ----------------------------------------------------------------------
-# Defaults
+# Defaults -- copied from current generate-tile.py
 # ----------------------------------------------------------------------
 
 TILE_WIDTH = 40
@@ -16,10 +16,9 @@ TILE_HEIGHT = 40
 BOX_SIZE = TILE_WIDTH / math.sqrt(2)
 BOX_HEIGHT = BOX_SIZE * math.sqrt(3) * 0.5 * 0.95
 
-
 SHAPE = "stairs-x1"
-NSTEPS = 4
 PREFIX = "tile"
+NSTEPS = 4
 
 CAMERA_ROTATION = 45.0
 CAMERA_ELEVATION = 30.0
@@ -38,7 +37,7 @@ RIGHT_HUE_SHIFT = 3.0
 BOTTOM_HUE_SHIFT = 0.0
 EDGE_HUE_SHIFT = 0.0
 
-EDGE_WIDTH = 1.0
+EDGE_WIDTH = 0.5
 
 SCALE = 2
 AA = 2
@@ -58,7 +57,6 @@ SHAPES = tuple(
 def parse_color(value):
     """Accept #RRGGBB, RRGGBB, or R,G,B."""
     text = value.strip()
-
     if text.startswith("#"):
         text = text[1:]
 
@@ -69,7 +67,6 @@ def parse_color(value):
             raise argparse.ArgumentTypeError(
                 "color must be #RRGGBB, RRGGBB, or R,G,B"
             ) from exc
-
         if len(parts) != 3 or any(x < 0 or x > 255 for x in parts):
             raise argparse.ArgumentTypeError(
                 "R,G,B components must each be in the range 0..255"
@@ -110,28 +107,23 @@ def nonnegative_float(value):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Generate an orthographic isometric-style PNG stair tile."
+        description="Generate an orthographic isometric-style staircase PNG tile."
     )
 
     parser.add_argument(
-        "-t", "--shape",
-        choices=SHAPES,
-        default=SHAPE,
-        help=f"shape to generate (default: {SHAPE})",
+        "-t", "--shape", choices=SHAPES, default=SHAPE,
+        help=f"stair shape to generate (default: {SHAPE})",
     )
     parser.add_argument(
-        "-n", "--nsteps",
-        type=positive_int,
-        default=NSTEPS,
-        help=f"number of steps (default: {NSTEPS})",
+        "-n", "--nsteps", type=positive_int, default=NSTEPS,
+        help=f"number of stair treads (default: {NSTEPS})",
     )
     parser.add_argument(
         "-o", "--output",
         help="output PNG filename; default is PREFIX-SHAPE.png",
     )
     parser.add_argument(
-        "-p", "--prefix",
-        default=PREFIX,
+        "-p", "--prefix", default=PREFIX,
         help=f"output prefix when --output is omitted (default: {PREFIX})",
     )
 
@@ -141,25 +133,18 @@ def parse_args():
     parser.add_argument("--box-height", type=positive_float, default=BOX_HEIGHT)
 
     parser.add_argument(
-        "--camera-rotation", "--rotation",
-        dest="camera_rotation",
-        type=float,
-        default=CAMERA_ROTATION,
+        "--camera-rotation", "--rotation", dest="camera_rotation",
+        type=float, default=CAMERA_ROTATION,
         help=f"camera azimuth in degrees (default: {CAMERA_ROTATION})",
     )
     parser.add_argument(
-        "--camera-elevation", "--elevation",
-        dest="camera_elevation",
-        type=float,
-        default=CAMERA_ELEVATION,
+        "--camera-elevation", "--elevation", dest="camera_elevation",
+        type=float, default=CAMERA_ELEVATION,
         help=f"camera elevation above horizontal in degrees (default: {CAMERA_ELEVATION})",
     )
 
     parser.add_argument(
-        "-c", "--color",
-        type=parse_color,
-        default=COLOR,
-        metavar="COLOR",
+        "-c", "--color", type=parse_color, default=COLOR, metavar="COLOR",
         help="base color as #RRGGBB, RRGGBB, or R,G,B",
     )
 
@@ -183,33 +168,20 @@ def parse_args():
 
 
 # ----------------------------------------------------------------------
-# Color manipulation
+# Color / projection helpers
 # ----------------------------------------------------------------------
 
 def modify_color(color, brightness=1.0, hue_shift=0.0):
     r, g, b = [c / 255.0 for c in color]
     hue, saturation, value = colorsys.rgb_to_hsv(r, g, b)
-
     hue = (hue + hue_shift / 360.0) % 1.0
     value = max(0.0, min(1.0, value * brightness))
-
     r, g, b = colorsys.hsv_to_rgb(hue, saturation, value)
+    return round(r * 255), round(g * 255), round(b * 255), 255
 
-    return (
-        round(r * 255),
-        round(g * 255),
-        round(b * 255),
-        255,
-    )
-
-
-# ----------------------------------------------------------------------
-# Vector/projection helpers
-# ----------------------------------------------------------------------
 
 def project(point, azimuth_deg, elevation_deg):
     x, y, z = point
-
     az = math.radians(azimuth_deg)
     el = math.radians(elevation_deg)
 
@@ -219,291 +191,285 @@ def project(point, azimuth_deg, elevation_deg):
         - y * math.sin(az) * math.sin(el)
         + z * math.cos(el)
     )
-
     return sx, -sy
-
-
-def sub(a, b):
-    return tuple(x - y for x, y in zip(a, b))
-
-
-def cross(a, b):
-    return (
-        a[1] * b[2] - a[2] * b[1],
-        a[2] * b[0] - a[0] * b[2],
-        a[0] * b[1] - a[1] * b[0],
-    )
 
 
 def dot(a, b):
     return sum(x * y for x, y in zip(a, b))
 
 
-def polygon_normal(points):
-    """Return a non-zero normal for a planar polygon, if possible."""
-    p0 = points[0]
-    for i in range(1, len(points) - 1):
-        a = sub(points[i], p0)
-        b = sub(points[i + 1], p0)
-        n = cross(a, b)
-        if dot(n, n) > 1e-12:
-            return n
-    return (0.0, 0.0, 0.0)
-
-
-def orient_polygon(points, desired_normal):
-    """Reverse polygon winding when necessary to point its normal outward."""
-    if dot(polygon_normal(points), desired_normal) < 0:
-        return list(reversed(points))
-    return points
-
-
 def average_depth(points, camera_vector):
-    return sum(dot(point, camera_vector) for point in points) / len(points)
+    return sum(dot(p, camera_vector) for p in points) / len(points)
 
 
 # ----------------------------------------------------------------------
-# Stair geometry
+# Stair profile
 # ----------------------------------------------------------------------
 
-def parse_shape(shape):
-    """
-    Return (upper, short, axis, low_side).
+def decode_shape(shape):
+    """Return complementary, short, axis, low_end."""
+    complementary = shape.startswith("up-")
+    core = shape[3:] if complementary else shape
 
-    Direction follows generate-tile.py's slope convention:
-    x1 means the staircase descends toward x=BOX_SIZE (x=1), so x1 is
-    the low edge.  x0 means x=0 is the low edge, and similarly for y.
-    """
-    upper = shape.startswith("up-")
-    base = shape[3:] if upper else shape
+    short = core.startswith("short-")
+    core = core[6:] if short else core
 
-    short = base.startswith("short-")
-    if short:
-        base = base[6:]
-
-    # base is now e.g. "stairs-x1"
-    _, direction = base.split("-", 1)
-    axis = direction[0]
-    low_side = int(direction[1])
-
-    return upper, short, axis, low_side
+    direction = core.split("-", 1)[1]
+    return complementary, short, direction[0], int(direction[1])
 
 
 def stair_levels(nsteps, short):
-    """
-    Heights from low edge toward high edge, as fractions of BOX_HEIGHT.
-
-    stairs:       1/n, 2/n, ..., 1
-    short-stairs: 0,   1/n, ..., (n-1)/n
-    """
+    """Height fractions from low end toward high end."""
     if short:
+        # First tread is exactly at z=0; last is below z=h.
         return [i / nsteps for i in range(nsteps)]
+    # First tread is already elevated; last is exactly at z=h.
     return [(i + 1) / nsteps for i in range(nsteps)]
 
 
-def build_geometry(shape, nsteps, size, height):
-    """Build exposed polygons for the staircase solid."""
-    upper, short, axis, low_side = parse_shape(shape)
-    levels = [fraction * height for fraction in stair_levels(nsteps, short)]
+def world_levels(args):
+    complementary, short, axis, low_end = decode_shape(args.shape)
+    levels = stair_levels(args.nsteps, short)
+    if low_end == 1:
+        levels = list(reversed(levels))
+    return complementary, short, axis, low_end, [v * args.box_height for v in levels]
 
-    # Coordinate boundaries ordered from the low edge toward the high edge.
-    if low_side == 0:
-        bounds = [size * i / nsteps for i in range(nsteps + 1)]
-        low_dir = -1.0
-    else:
-        bounds = [size * (1.0 - i / nsteps) for i in range(nsteps + 1)]
-        low_dir = 1.0
 
-    high_dir = -low_dir
+# ----------------------------------------------------------------------
+# Faces
+# ----------------------------------------------------------------------
 
-    if axis == "x":
-        def point(u, v, z):
-            return (u, v, z)
+def build_faces(args):
+    """
+    Build the solid from simple rectangles.
 
-        low_normal = (low_dir, 0.0, 0.0)
-        high_normal = (high_dir, 0.0, 0.0)
-        side0_normal = (0.0, -1.0, 0.0)
-        side1_normal = (0.0, 1.0, 0.0)
-    else:
-        def point(u, v, z):
-            return (v, u, z)
-
-        low_normal = (0.0, low_dir, 0.0)
-        high_normal = (0.0, high_dir, 0.0)
-        side0_normal = (-1.0, 0.0, 0.0)
-        side1_normal = (1.0, 0.0, 0.0)
+    These rectangles exist only for filling/shading.  Their boundaries are
+    NOT automatically rendered as edges, because the strip subdivision is
+    not physical geometry.
+    """
+    complementary, short, axis, low_end, level_z = world_levels(args)
+    s = args.box_size
+    h = args.box_height
+    n = args.nsteps
+    ds = s / n
 
     faces = []
 
-    def add_face(kind, points, desired_normal):
-        points = orient_polygon(points, desired_normal)
-        if dot(polygon_normal(points), polygon_normal(points)) <= 1e-12:
-            return
-        faces.append({"kind": kind, "points": points})
+    def add(kind, points, normal, force_visible=False):
+        faces.append({
+            "kind": kind,
+            "points": points,
+            "normal": normal,
+            "force_visible": force_visible,
+        })
 
-    # Horizontal staircase boundary.
-    material_indices = []
+    # Staircase horizontal surfaces.
+    for i, z in enumerate(level_z):
+        a0 = i * ds
+        a1 = (i + 1) * ds
 
-    for i in range(nsteps):
-        u0 = bounds[i]
-        u1 = bounds[i + 1]
-        z = levels[i]
-
-        if upper:
-            # Complement: material lies from the staircase profile up to h.
-            if z < height - 1e-12:
-                material_indices.append(i)
-                add_face(
-                    "bottom",
-                    [
-                        point(u0, 0, z), point(u0, size, z),
-                        point(u1, size, z), point(u1, 0, z),
-                    ],
-                    (0.0, 0.0, -1.0),
-                )
+        if axis == "x":
+            pts = [(a0, 0, z), (a1, 0, z), (a1, s, z), (a0, s, z)]
         else:
-            # Ordinary stairs: material lies from z=0 up to the profile.
-            if z > 1e-12:
-                material_indices.append(i)
-                add_face(
-                    "top",
-                    [
-                        point(u0, 0, z), point(u1, 0, z),
-                        point(u1, size, z), point(u0, size, z),
-                    ],
-                    (0.0, 0.0, 1.0),
-                )
+            pts = [(0, a0, z), (s, a0, z), (s, a1, z), (0, a1, z)]
 
-    # The opposite outer cap is planar.  Draw it as one polygon so it does
-    # not get artificial seam lines at every internal step boundary.
-    if material_indices:
-        first = material_indices[0]
-        last = material_indices[-1]
-        u0 = bounds[first]
-        u1 = bounds[last + 1]
-
-        if upper:
-            add_face(
-                "top",
-                [
-                    point(u0, 0, height), point(u1, 0, height),
-                    point(u1, size, height), point(u0, size, height),
-                ],
-                (0.0, 0.0, 1.0),
+        if complementary:
+            # The stepped surface is the underside.  If a terminal strip is
+            # exactly h..h, retain it as an upward top face as requested.
+            terminal_at_h = abs(z - h) < 1e-12
+            add(
+                "top" if terminal_at_h else "bottom",
+                pts,
+                (0, 0, 1) if terminal_at_h else (0, 0, -1),
+                force_visible=terminal_at_h,
             )
         else:
-            add_face(
-                "bottom",
-                [
-                    point(u0, 0, 0), point(u0, size, 0),
-                    point(u1, size, 0), point(u1, 0, 0),
-                ],
-                (0.0, 0.0, -1.0),
-            )
+            # z=0 short-stair tread remains a genuine visible horizontal face.
+            add("top", pts, (0, 0, 1), force_visible=(short and abs(z) < 1e-12))
 
-    # Vertical risers between consecutive steps.
-    for i in range(nsteps - 1):
-        u = bounds[i + 1]
-        z0 = levels[i]
-        z1 = levels[i + 1]
-
-        if abs(z1 - z0) <= 1e-12:
+    # Risers between neighbouring treads.
+    for i in range(n - 1):
+        z0 = level_z[i]
+        z1 = level_z[i + 1]
+        if abs(z0 - z1) < 1e-12:
             continue
 
-        desired = high_normal if upper else low_normal
-        add_face(
-            "side",
-            [
-                point(u, 0, z0), point(u, size, z0),
-                point(u, size, z1), point(u, 0, z1),
-            ],
-            desired,
-        )
+        a = (i + 1) * ds
+        lo, hi = sorted((z0, z1))
 
-    # Low and high end faces.
-    low_z = levels[0]
-    high_z = levels[-1]
+        # Ordinary solid is below profile.  Riser outward normal points toward
+        # the lower tread.  Complement reverses that normal.
+        sign = -1 if z0 < z1 else 1
+        if complementary:
+            sign = -sign
 
-    if upper:
-        if low_z < height - 1e-12:
-            add_face(
-                "side",
-                [point(bounds[0], 0, low_z), point(bounds[0], size, low_z),
-                 point(bounds[0], size, height), point(bounds[0], 0, height)],
-                low_normal,
-            )
-        if high_z < height - 1e-12:
-            add_face(
-                "side",
-                [point(bounds[-1], 0, high_z), point(bounds[-1], 0, height),
-                 point(bounds[-1], size, height), point(bounds[-1], size, high_z)],
-                high_normal,
-            )
+        if axis == "x":
+            pts = [(a, 0, lo), (a, s, lo), (a, s, hi), (a, 0, hi)]
+            normal = (sign, 0, 0)
+        else:
+            pts = [(0, a, lo), (0, a, hi), (s, a, hi), (s, a, lo)]
+            normal = (0, sign, 0)
+
+        # Point ordering is irrelevant because normal is explicit.
+        add("side", pts, normal)
+
+    # Two transverse long sides.  They are split only for filling; there will
+    # be no full-height edge at each split.
+    for i, z in enumerate(level_z):
+        a0 = i * ds
+        a1 = (i + 1) * ds
+        lo = z if complementary else 0
+        hi = h if complementary else z
+        if hi - lo <= 1e-12:
+            continue
+
+        if axis == "x":
+            add("side", [(a0, 0, lo), (a0, 0, hi), (a1, 0, hi), (a1, 0, lo)], (0, -1, 0))
+            add("side", [(a0, s, lo), (a1, s, lo), (a1, s, hi), (a0, s, hi)], (0, 1, 0))
+        else:
+            add("side", [(0, a0, lo), (0, a1, lo), (0, a1, hi), (0, a0, hi)], (-1, 0, 0))
+            add("side", [(s, a0, lo), (s, a0, hi), (s, a1, hi), (s, a1, lo)], (1, 0, 0))
+
+    # Two longitudinal end faces.
+    for idx, a, sign in ((0, 0, -1), (n - 1, s, 1)):
+        z = level_z[idx]
+        lo = z if complementary else 0
+        hi = h if complementary else z
+        if hi - lo <= 1e-12:
+            continue
+
+        if axis == "x":
+            pts = [(a, 0, lo), (a, s, lo), (a, s, hi), (a, 0, hi)]
+            normal = (sign, 0, 0)
+        else:
+            pts = [(0, a, lo), (s, a, lo), (s, a, hi), (0, a, hi)]
+            normal = (0, sign, 0)
+        add("side", pts, normal)
+
+    # Flat opposite cap, one polygon: no artificial step divisions.
+    if complementary:
+        add("top", [(0, 0, h), (s, 0, h), (s, s, h), (0, s, h)], (0, 0, 1))
     else:
-        if low_z > 1e-12:
-            add_face(
-                "side",
-                [point(bounds[0], 0, 0), point(bounds[0], 0, low_z),
-                 point(bounds[0], size, low_z), point(bounds[0], size, 0)],
-                low_normal,
-            )
-        if high_z > 1e-12:
-            add_face(
-                "side",
-                [point(bounds[-1], 0, 0), point(bounds[-1], size, 0),
-                 point(bounds[-1], size, high_z), point(bounds[-1], 0, high_z)],
-                high_normal,
-            )
-
-    # The two long staircase-profile side faces.
-    # Construct a single staircase-outline polygon on each side so only the
-    # actual silhouette is edged; there are no spurious vertical lines down
-    # through the interior at every step boundary.  For short-stairs and
-    # up-stairs, zero-thickness end segments are excluded entirely.
-    if material_indices:
-        first = material_indices[0]
-        last = material_indices[-1]
-
-        for v, desired_normal in ((0.0, side0_normal), (size, side1_normal)):
-            profile = []
-
-            if upper:
-                # Flat upper edge over the part of the footprint containing
-                # material.
-                profile.append(point(bounds[first], v, height))
-                profile.append(point(bounds[last + 1], v, height))
-
-                # Stair profile from high back toward low.
-                profile.append(point(bounds[last + 1], v, levels[last]))
-                for i in range(last, first - 1, -1):
-                    profile.append(point(bounds[i], v, levels[i]))
-                    if i > first:
-                        profile.append(point(bounds[i], v, levels[i - 1]))
-            else:
-                # Ground edge over the part of the footprint containing
-                # material.
-                profile.append(point(bounds[first], v, 0.0))
-                profile.append(point(bounds[last + 1], v, 0.0))
-
-                # Stair profile from high back toward low.
-                profile.append(point(bounds[last + 1], v, levels[last]))
-                for i in range(last, first - 1, -1):
-                    profile.append(point(bounds[i], v, levels[i]))
-                    if i > first:
-                        profile.append(point(bounds[i], v, levels[i - 1]))
-
-            add_face("side", profile, desired_normal)
+        add("bottom", [(0, s, 0), (s, s, 0), (s, 0, 0), (0, 0, 0)], (0, 0, -1))
 
     return faces
 
 
 # ----------------------------------------------------------------------
-# Main generator
+# Physical edge geometry
+# ----------------------------------------------------------------------
+
+def build_edges(args, camera_vector):
+    """
+    Return only edges that should actually be inked.
+
+    Crucially, this does NOT use rectangle boundaries from build_faces().
+    Therefore a staircase running in X does not acquire full-height seams
+    merely because its Y-side was filled using one rectangle per step.
+    """
+    complementary, short, axis, low_end, level_z = world_levels(args)
+    s = args.box_size
+    h = args.box_height
+    n = args.nsteps
+    ds = s / n
+
+    edges = []
+
+    def add(a, b):
+        if any(abs(x - y) > 1e-12 for x, y in zip(a, b)):
+            edges.append((a, b))
+
+    if axis == "x":
+        # Camera-facing transverse side is y=0 or y=s.
+        near_t = s if camera_vector[1] >= 0 else 0
+        axis_camera = camera_vector[0]
+
+        def p(a, t, z):
+            return (a, t, z)
+
+        def across(a, z):
+            return (a, 0, z), (a, s, z)
+    else:
+        # Camera-facing transverse side is x=0 or x=s.
+        near_t = s if camera_vector[0] >= 0 else 0
+        axis_camera = camera_vector[1]
+
+        def p(a, t, z):
+            return (t, a, z)
+
+        def across(a, z):
+            return (0, a, z), (s, a, z)
+
+    # 1. Staircase outline on ONLY the camera-facing transverse side.
+    # Each step contributes its horizontal tread segment and only the short
+    # vertical riser between adjacent heights -- never a line down to z=0.
+    for i, z in enumerate(level_z):
+        a0 = i * ds
+        a1 = (i + 1) * ds
+        add(p(a0, near_t, z), p(a1, near_t, z))
+        if i + 1 < n:
+            add(p(a1, near_t, z), p(a1, near_t, level_z[i + 1]))
+
+    # Close this visible side against the opposite flat cap.
+    flat_z = h if complementary else 0
+    add(p(0, near_t, flat_z), p(s, near_t, flat_z))
+    add(p(0, near_t, flat_z), p(0, near_t, level_z[0]))
+    add(p(s, near_t, flat_z), p(s, near_t, level_z[-1]))
+
+    # 2. Real step creases across the stair width.
+    # A front-facing riser gets both borders.  For an ordinary back-facing
+    # riser, retain its UPPER tread edge; this is the missing edge on the
+    # 45/30 stairs-x0 / stairs-y1 type views.
+    for i in range(n - 1):
+        z0 = level_z[i]
+        z1 = level_z[i + 1]
+        if abs(z0 - z1) < 1e-12:
+            continue
+
+        a = (i + 1) * ds
+        lo, hi = sorted((z0, z1))
+        sign = -1 if z0 < z1 else 1
+        if complementary:
+            sign = -sign
+
+        riser_faces_camera = sign * axis_camera > 1e-10
+        if riser_faces_camera:
+            e0, e1 = across(a, lo)
+            add(e0, e1)
+            e0, e1 = across(a, hi)
+            add(e0, e1)
+        elif not complementary:
+            e0, e1 = across(a, hi)
+            add(e0, e1)
+
+    # 3. Only the longitudinal END toward the camera gets an across-width
+    # outline.  The opposite/back end is intentionally not inked.
+    near_index = n - 1 if axis_camera >= 0 else 0
+    near_a = s if near_index == n - 1 else 0
+    near_z = level_z[near_index]
+    e0, e1 = across(near_a, h if complementary else near_z)
+    add(e0, e1)
+
+    # Remove duplicates without changing order.
+    result = []
+    seen = set()
+    for a, b in edges:
+        aa = tuple(round(v, 12) for v in a)
+        bb = tuple(round(v, 12) for v in b)
+        key = tuple(sorted((aa, bb)))
+        if key not in seen:
+            seen.add(key)
+            result.append((a, b))
+
+    return result
+
+
+# ----------------------------------------------------------------------
+# Main
 # ----------------------------------------------------------------------
 
 def main():
     args = parse_args()
-
     output = args.output or f"{args.prefix}-{args.shape}.png"
 
     top_color = modify_color(args.color, args.top_brightness, args.top_hue_shift)
@@ -512,31 +478,20 @@ def main():
     bottom_color = modify_color(args.color, args.bottom_brightness, args.bottom_hue_shift)
     edge_color = modify_color(args.color, args.edge_brightness, args.edge_hue_shift)
 
-    faces = build_geometry(
-        args.shape,
-        args.nsteps,
-        args.box_size,
-        args.box_height,
-    )
-
+    s = args.box_size
     az = math.radians(args.camera_rotation)
     el = math.radians(args.camera_elevation)
-
-    # Vector from the object toward the camera.
     camera_vector = (
         math.cos(az) * math.cos(el),
         math.sin(az) * math.cos(el),
         math.sin(el),
     )
 
-    ground_center = (args.box_size / 2, args.box_size / 2, 0)
+    # Same centering rule as the supplied current generate-tile.py.
+    ground_center = (s / 2, s / 2, 0)
     projected_ground_center = project(
-        ground_center,
-        args.camera_rotation,
-        args.camera_elevation,
+        ground_center, args.camera_rotation, args.camera_elevation
     )
-
-    
     vertical_offset = (
         args.box_height / 2
         * math.cos(math.radians(args.camera_elevation))
@@ -544,29 +499,15 @@ def main():
 
     def screen_point(p):
         x, y = p
+        return (
+            args.tile_width / 2 + x - projected_ground_center[0],
+            args.tile_height / 2 + vertical_offset + y - projected_ground_center[1],
+        )
 
-        return (
-            args.tile_width / 2
-            + x
-            - projected_ground_center[0],
-    
-            args.tile_height / 2
-            + vertical_offset
-            + y
-            - projected_ground_center[1],
-        )
-        
-   
-    def aa_point(point3d):
-        x, y = screen_point(project(
-            point3d,
-            args.camera_rotation,
-            args.camera_elevation,
-        ))
-        return (
-            round(x * args.scale * args.aa),
-            round(y * args.scale * args.aa),
-        )
+    def aa_point_3d(point):
+        q = project(point, args.camera_rotation, args.camera_elevation)
+        x, y = screen_point(q)
+        return round(x * args.scale * args.aa), round(y * args.scale * args.aa)
 
     def polygon_area(points):
         area = 0.0
@@ -577,16 +518,11 @@ def main():
         return abs(area) / 2
 
     visible_faces = []
-
-    for face in faces:
-        points = face["points"]
-        normal = polygon_normal(points)
-
-        # Back-face culling.
-        if dot(normal, camera_vector) <= 1e-10:
+    for face in build_faces(args):
+        if not face["force_visible"] and dot(face["normal"], camera_vector) <= 1e-10:
             continue
 
-        polygon = [aa_point(point) for point in points]
+        polygon = [aa_point_3d(p) for p in face["points"]]
         if polygon_area(polygon) <= 0.5:
             continue
 
@@ -595,24 +531,19 @@ def main():
         elif face["kind"] == "bottom":
             color = bottom_color
         else:
-            # Match generate-tile.py: shade vertical faces according to where
-            # they appear horizontally in the projected image.
-            projected_points = [
-                project(point, args.camera_rotation, args.camera_elevation)
-                for point in points
-            ]
-            mean_x = sum(p[0] for p in projected_points) / len(projected_points)
+            projected = [project(p, args.camera_rotation, args.camera_elevation)
+                         for p in face["points"]]
+            mean_x = sum(p[0] for p in projected) / len(projected)
             color = left_color if mean_x < projected_ground_center[0] else right_color
 
         visible_faces.append({
-            "points": points,
+            **face,
             "polygon": polygon,
             "color": color,
-            "depth": average_depth(points, camera_vector),
+            "depth": average_depth(face["points"], camera_vector),
         })
 
-    # Painter's algorithm: far faces first, near faces last.
-    visible_faces.sort(key=lambda face: face["depth"])
+    visible_faces.sort(key=lambda f: f["depth"])
 
     image = Image.new(
         "RGBA",
@@ -624,45 +555,28 @@ def main():
     )
     draw = ImageDraw.Draw(image)
 
+    # Fill only.  Tessellation edges are deliberately ignored.
     for face in visible_faces:
         draw.polygon(face["polygon"], fill=face["color"])
 
-    # Draw boundary edges of visible faces. Coordinate tuples themselves are
-    # used as edge keys because staircase geometry has no fixed vertex names.
-    visible_edges = set()
-    for face in visible_faces:
-        points = face["points"]
-        for i in range(len(points)):
-            a = points[i]
-            b = points[(i + 1) % len(points)]
-            if a == b:
-                continue
-            visible_edges.add(tuple(sorted((a, b))))
-
+    # Now ink only the separately-defined physical stair edges.
     if args.edge_width > 0:
-        edge_width_aa = max(1, round(args.edge_width * args.aa))
-
-        for a, b in visible_edges:
-            p1 = aa_point(a)
-            p2 = aa_point(b)
-            if p1 == p2:
-                continue
-            draw.line([p1, p2], fill=edge_color, width=edge_width_aa)
+        width = max(1, round(args.edge_width * args.aa))
+        for a, b in build_edges(args, camera_vector):
+            p0 = aa_point_3d(a)
+            p1 = aa_point_3d(b)
+            if p0 != p1:
+                draw.line([p0, p1], fill=edge_color, width=width)
 
     image = image.resize(
-        (
-            args.tile_width * args.scale,
-            args.tile_height * args.scale,
-        ),
+        (args.tile_width * args.scale, args.tile_height * args.scale),
         Image.Resampling.LANCZOS,
     )
-
     image.save(output)
 
     print(
         f"Saved {output}: "
-        f"{args.tile_width * args.scale} x "
-        f"{args.tile_height * args.scale} "
+        f"{args.tile_width * args.scale} x {args.tile_height * args.scale} "
         f"({args.shape}, {args.nsteps} steps)"
     )
 

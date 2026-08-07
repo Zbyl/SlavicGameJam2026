@@ -1,46 +1,42 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run from the directory containing this script, so it also works when
-# launched from Git Bash with another current working directory.
+# Run from the directory containing this script
 cd "$(dirname "$0")"
 
-MOD=5
-PREFIX="tile"$MOD
-COLORS=( "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # 
-         "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
-         "dbb568" "e0cbac"                    # Mustard & Straw Yellow
-       )
-
-COLOR=${COLORS[(($MOD-1))]}
-
-SHAPES=(
-    box
-    half
-    up-half
-    slope-x0
-    slope-x1
-    slope-y0
-    slope-y1
-    up-slope-x0
-    up-slope-x1
-    up-slope-y0
-    up-slope-y1
+# Define the color palette array
+COLORS=(
+  "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # Original set
+  "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
+  "dbb568" "e0cbac"                    # Mustard & Straw Yellow
 )
 
-# Common settings for the whole tileset. Edit these as desired.
-COMMON_OPTIONS=(
-    --prefix $PREFIX
-    --color $COLOR
-    --camera-rotation 45
-    --camera-elevation 30
-    --edge-width 0.5
-    --scale 2
-    --aa 2
-)
+# Dynamically count the number of colors in the array
+NUM_COLORS=${#COLORS[@]}
 
-for shape in "${SHAPES[@]}"; do
-    py generate-tile.py \
-        --shape "$shape" \
-        "${COMMON_OPTIONS[@]}"
+echo "Starting generation for $NUM_COLORS color sets..."
+echo "----------------------------------------"
+
+# Loop N from 1 to the total number of colors
+for (( N=1; N<=NUM_COLORS; N++ )); do
+    # Map N (1-based) to the array index (0-based)
+    COLOR_IDX=$(( N - 1 ))
+    COL=${COLORS[$COLOR_IDX]}
+
+    echo "Processing Set #$N with color #$COL..."
+
+    # Check if generator scripts exist and are executable before running
+    if [[ -x "./generate-tiles-set.sh" && -x "./generate-stairs-set.sh" ]]; then
+        #./generate-tiles-set.sh "$N" "$COL"
+        ./generate-stairs-set.sh "$N" "$COL"
+    else
+        echo "Error: Verification failed. Ensure generator scripts are in this folder and executable (chmod +x)."
+        exit 1
+    fi
+    
+    echo "Set #$N finished successfully."
+    echo "----------------------------------------"
 done
+
+echo "All generation tasks completed!"
+exit 0

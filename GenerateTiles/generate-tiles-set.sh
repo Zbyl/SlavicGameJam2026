@@ -5,32 +5,22 @@ set -euo pipefail
 # launched from Git Bash with another current working directory.
 cd "$(dirname "$0")"
 
-MOD=5
+MOD=${1:-1}
+COLOR=${2:-"96dcaa"}
 PREFIX="tile"$MOD
-COLORS=( "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # 
-         "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
-         "dbb568" "e0cbac"                    # Mustard & Straw Yellow
-       )
-
-COLOR=${COLORS[(($MOD-1))]}
 
 SHAPES=(
-  stairs-x0
-  stairs-x1
-  stairs-y0
-  stairs-y1
-  short-stairs-x0
-  short-stairs-x1
-  short-stairs-y0
-  short-stairs-y1
-  up-stairs-x0
-  up-stairs-x1
-  up-stairs-y0
-  up-stairs-y1
-  up-short-stairs-x0
-  up-short-stairs-x1
-  up-short-stairs-y0
-  up-short-stairs-y1
+    box
+    half
+    up-half
+    slope-x0
+    slope-x1
+    slope-y0
+    slope-y1
+    up-slope-x0
+    up-slope-x1
+    up-slope-y0
+    up-slope-y1
 )
 
 # Common settings for the whole tileset. Edit these as desired.
@@ -45,7 +35,7 @@ COMMON_OPTIONS=(
 )
 
 for shape in "${SHAPES[@]}"; do
-    py generate-stairs.py \
+    py generate-tile.py \
         --shape "$shape" \
         "${COMMON_OPTIONS[@]}"
 done
