@@ -6,10 +6,14 @@ cd "$(dirname "$0")"
 
 # Define the color palette array
 COLORS=(
-  "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # Original set
-  "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
-  "dbb568" "e0cbac" "a5a5a5" 
-  "777777" "4a4a4a"  # Mustard & Straw Yellow
+#  "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # Original set
+#  "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
+#  "dbb568" "e0cbac" "a5a5a5" 
+#  "777777" "4a4a4a"  # Mustard & Straw Yellow
+"72dfa0" "a87952" "f49a37" "d1cdc5"
+"dc5f57" "e39aab" "689fc8" "9674b7"
+"e8b94e" "e8c891" "a5a5a5" 
+"777777" "4a4a4a"
 )
 
 # Dynamically count the number of colors in the array
