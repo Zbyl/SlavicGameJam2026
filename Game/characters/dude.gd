@@ -16,6 +16,7 @@ var currentAngle = 8
 var currentState = "None"
 
 @onready var animation: AnimatedSprite2D = $Kunek
+@onready var outline: AnimatedSprite2D = $Outline
 @onready var berek: AnimatedSprite2D = $Berek
 @onready var timer: Timer = $Timer
 
@@ -59,6 +60,9 @@ func calculateAngle(direction: Vector2) -> int:
         angle -= 8
     return angle
 
+func syncAnimations():
+    outline.animation="Outline"+animation.animation
+    outline.frame=animation.frame
 
 func _physics_process(delta):
     var direction = calculateInputDirection()
@@ -84,6 +88,8 @@ func _physics_process(delta):
 
     if changeAnimation:
         animation.play(character+currentState+str(currentAngle))
+
+    syncAnimations()
 
     # Ustawienie prędkości
     if direction == Vector2.ZERO:
