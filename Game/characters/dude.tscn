@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b4w8smkleosv3"]
 
+[ext_resource type="Script" uid="uid://cuqioeyb0tebp" path="res://characters/dude.gd" id="1_s81fl"]
 [ext_resource type="Texture2D" uid="uid://cg14vttmnm6y6" path="res://images/fox/Fox_Run2_dir1.png" id="1_tt1jp"]
 [ext_resource type="Texture2D" uid="uid://buq6tr2ah8gsg" path="res://images/fox/Fox_Run2_dir2.png" id="2_s81fl"]
 [ext_resource type="Texture2D" uid="uid://sa8s664ehpa2" path="res://images/fox/Fox_Run2_dir3.png" id="3_h8yxp"]
@@ -785,6 +786,7 @@ animations = [{
 }]
 
 [node name="Dude" type="CharacterBody2D" unique_id=345096153]
+script = ExtResource("1_s81fl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2020211644]
 position = Vector2(0, -35)
@@ -793,3 +795,4 @@ shape = SubResource("CapsuleShape2D_ytkss")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=706360744]
 sprite_frames = SubResource("SpriteFrames_ytkss")
 animation = &"dir8"
+autoplay = "dir8"
