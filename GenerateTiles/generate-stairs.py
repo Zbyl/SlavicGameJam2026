@@ -9,7 +9,7 @@ import math
 # ----------------------------------------------------------------------
 # Defaults -- copied from current generate-tile.py
 # ----------------------------------------------------------------------
-
+DIR = "tiles"
 TILE_WIDTH = 40
 TILE_HEIGHT = 40
 
@@ -123,7 +123,13 @@ def parse_args():
         help="output PNG filename; default is PREFIX-SHAPE.png",
     )
     parser.add_argument(
-        "-p", "--prefix", default=PREFIX,
+        "-d", "--dir",
+        default=DIR,
+        help=f"directory for the output PNG file (default is \"{DIR}\")",
+    )
+    parser.add_argument(
+        "-p", "--prefix",
+        default=PREFIX,
         help=f"output prefix when --output is omitted (default: {PREFIX})",
     )
 
@@ -478,6 +484,7 @@ def build_edges(args, camera_vector):
 def main():
     args = parse_args()
     output = args.output or f"{args.prefix}-{args.shape}.png"
+    directory = args.dir
 
     top_color = modify_color(args.color, args.top_brightness, args.top_hue_shift)
     left_color = modify_color(args.color, args.left_brightness, args.left_hue_shift)
@@ -579,10 +586,11 @@ def main():
         (args.tile_width * args.scale, args.tile_height * args.scale),
         Image.Resampling.LANCZOS,
     )
-    image.save(output)
+
+    image.save(os.path.join(directory, output))
 
     print(
-        f"Saved {output}: "
+        f"Saved {os.path.join(directory, output)}: "
         f"{args.tile_width * args.scale} x {args.tile_height * args.scale} "
         f"({args.shape}, {args.nsteps} steps)"
     )

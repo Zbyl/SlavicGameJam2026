@@ -9,7 +9,7 @@ import math
 # ----------------------------------------------------------------------
 # Defaults
 # ----------------------------------------------------------------------
-
+DIR = "tiles"
 TILE_WIDTH = 40
 TILE_HEIGHT = 40
 
@@ -133,6 +133,11 @@ def parse_args():
     parser.add_argument(
         "-o", "--output",
         help="output PNG filename; default is PREFIX-SHAPE.png",
+    )
+    parser.add_argument(
+        "-d", "--dir",
+        default=DIR,
+        help=f"directory for the output PNG file (default is \"{DIR}\")",
     )
     parser.add_argument(
         "-p", "--prefix",
@@ -350,6 +355,7 @@ def main():
     args = parse_args()
 
     output = args.output or f"{args.prefix}-{args.shape}.png"
+    directory = args.dir
 
     top_color = modify_color(args.color, args.top_brightness, args.top_hue_shift)
     left_color = modify_color(args.color, args.left_brightness, args.left_hue_shift)
@@ -558,10 +564,10 @@ def main():
         Image.Resampling.LANCZOS,
     )
 
-    image.save(output)
+    image.save(os.path.join(directory, output))
 
     print(
-        f"Saved {output}: "
+        f"Saved {os.path.join(directory, output)}: "
         f"{args.tile_width * args.scale} x "
         f"{args.tile_height * args.scale} "
         f"({args.shape})"
