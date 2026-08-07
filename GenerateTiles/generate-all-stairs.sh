@@ -11,17 +11,22 @@ COLORS=( "96dcaa"  "927b66"  "ec9a4e" )
 COLOR=${COLORS[(($MOD-1))]}
 
 SHAPES=(
-    box
-    half
-    up-half
-    slope-x0
-    slope-x1
-    slope-y0
-    slope-y1
-    up-slope-x0
-    up-slope-x1
-    up-slope-y0
-    up-slope-y1
+  stairs-x0
+  stairs-x1
+  stairs-y0
+  stairs-y1
+  short-stairs-x0
+  short-stairs-x1
+  short-stairs-y0
+  short-stairs-y1
+  up-stairs-x0
+  up-stairs-x1
+  up-stairs-y0
+  up-stairs-y1
+  up-short-stairs-x0
+  up-short-stairs-x1
+  up-short-stairs-y0
+  up-short-stairs-y1
 )
 
 # Common settings for the whole tileset. Edit these as desired.
@@ -40,7 +45,7 @@ COMMON_OPTIONS=(
 )
 
 for shape in "${SHAPES[@]}"; do
-    py generate-tile.py \
+    py generate-stairs.py \
         --shape "$shape" \
         "${COMMON_OPTIONS[@]}"
 done
