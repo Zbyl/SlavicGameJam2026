@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 import argparse
 import colorsys
 import math
+import os
 
 
 # ----------------------------------------------------------------------
@@ -30,11 +31,6 @@ RIGHT_BRIGHTNESS = 0.65
 BOTTOM_BRIGHTNESS = 0.55
 EDGE_BRIGHTNESS = 0.38
 
-# Strength of angle-dependent slope shading. At 1.0, a face blends from the
-# top colour when horizontal all the way to the side colour when vertical.
-# 0.8 gives the standard slopes about the same shade as the former 0.35 blend.
-SLOPE_SHADE = 0.8
-
 TOP_HUE_SHIFT = 0.0
 LEFT_HUE_SHIFT = -2.0
 RIGHT_HUE_SHIFT = 3.0
@@ -51,14 +47,25 @@ SHAPES = (
     "box",
     "half",
     "up-half",
-    "slope-x0",
-    "slope-x1",
-    "slope-y0",
-    "slope-y1",
-    "up-slope-x0",
-    "up-slope-x1",
-    "up-slope-y0",
-    "up-slope-y1",
+    "pole1",
+    "pole2",
+    "pole3",
+    "pole4",
+    "pole5",
+    "mid-x",
+    "mid-y",
+    "half-x0",
+    "half-x1",
+    "half-y0",
+    "half-y1",
+    "wall-x0",
+    "wall-x1",
+    "wall-y0",
+    "wall-y1",
+    "thick-x0",
+    "thick-x1",
+    "thick-y0",
+    "thick-y1",
 )
 
 
@@ -178,16 +185,6 @@ def parse_args():
     parser.add_argument("--right-brightness", type=nonnegative_float, default=RIGHT_BRIGHTNESS)
     parser.add_argument("--bottom-brightness", type=nonnegative_float, default=BOTTOM_BRIGHTNESS)
     parser.add_argument("--edge-brightness", type=nonnegative_float, default=EDGE_BRIGHTNESS)
-    parser.add_argument(
-        "--slope-shade",
-        type=nonnegative_float,
-        default=SLOPE_SHADE,
-        help=(
-            "strength of angle-dependent slope shading; 0 disables it and "
-            f"1 reaches the side colour at 90 degrees (default: {SLOPE_SHADE})"
-        ),
-    )
-
     parser.add_argument("--top-hue-shift", type=float, default=TOP_HUE_SHIFT)
     parser.add_argument("--left-hue-shift", type=float, default=LEFT_HUE_SHIFT)
     parser.add_argument("--right-hue-shift", type=float, default=RIGHT_HUE_SHIFT)
@@ -195,6 +192,10 @@ def parse_args():
     parser.add_argument("--edge-hue-shift", type=float, default=EDGE_HUE_SHIFT)
 
     parser.add_argument("--edge-width", type=nonnegative_float, default=EDGE_WIDTH)
+    parser.add_argument("--x0", type=float, help="custom minimum X fraction (0..1)")
+    parser.add_argument("--x1", type=float, help="custom maximum X fraction (0..1)")
+    parser.add_argument("--y0", type=float, help="custom minimum Y fraction (0..1)")
+    parser.add_argument("--y1", type=float, help="custom maximum Y fraction (0..1)")
     parser.add_argument("--scale", type=positive_int, default=SCALE)
     parser.add_argument("--aa", type=positive_int, default=AA, help="supersampling factor")
 
@@ -205,62 +206,47 @@ def parse_args():
 # Shape definitions
 # ----------------------------------------------------------------------
 
-def get_heights(shape):
-    """
-    Return (bottom, top) height fractions at each corner.
-
-          +Y
-
-      01 -------- 11
-      |            |
-      |            |
-      |            |
-      00 -------- 10      +X
-
-    slope-x1 means the ordinary/lower wedge slopes down toward x=1.
-    up-slope-x1 is its complementary upper wedge.
-    """
-
+def get_prism_bounds(shape):
+    """Return x0, y0, z0, x1, y1, z1 as fractions of a full block."""
     shapes = {
-        "box": {
-            "00": (0, 1), "10": (0, 1), "11": (0, 1), "01": (0, 1),
-        },
-        "half": {
-            "00": (0, 0.5), "10": (0, 0.5), "11": (0, 0.5), "01": (0, 0.5),
-        },
-        "up-half": {
-            "00": (0.5, 1), "10": (0.5, 1), "11": (0.5, 1), "01": (0.5, 1),
-        },
-
-        "slope-x1": {
-            "00": (0, 1), "10": (0, 0), "11": (0, 0), "01": (0, 1),
-        },
-        "slope-x0": {
-            "00": (0, 0), "10": (0, 1), "11": (0, 1), "01": (0, 0),
-        },
-        "slope-y1": {
-            "00": (0, 1), "10": (0, 1), "11": (0, 0), "01": (0, 0),
-        },
-        "slope-y0": {
-            "00": (0, 0), "10": (0, 0), "11": (0, 1), "01": (0, 1),
-        },
-
-        # Complement of the corresponding ordinary/lower slope.
-        "up-slope-x1": {
-            "00": (1, 1), "10": (0, 1), "11": (0, 1), "01": (1, 1),
-        },
-        "up-slope-x0": {
-            "00": (0, 1), "10": (1, 1), "11": (1, 1), "01": (0, 1),
-        },
-        "up-slope-y1": {
-            "00": (1, 1), "10": (1, 1), "11": (0, 1), "01": (0, 1),
-        },
-        "up-slope-y0": {
-            "00": (0, 1), "10": (0, 1), "11": (1, 1), "01": (1, 1),
-        },
+        "box":    (0.00, 0.00, 0.00, 1.00, 1.00, 1.00),
+        "half":   (0.00, 0.00, 0.00, 1.00, 1.00, 0.50),
+        "up-half": (0.00, 0.00, 0.50, 1.00, 1.00, 1.00),
+        "pole1":   (0.45, 0.45, 0.00, 0.55, 0.55, 1.00),
+        "pole2":   (0.35, 0.35, 0.00, 0.65, 0.65, 1.00),
+        "pole3":   (0.25, 0.25, 0.00, 0.75, 0.75, 1.00),
+        "pole4":   (0.15, 0.15, 0.00, 0.85, 0.85, 1.00),
+        "pole5":   (0.05, 0.05, 0.00, 0.95, 0.95, 1.00),
+        "mid-x":   (0.25, 0.00, 0.00, 0.75, 1.00, 1.00),
+        "mid-y":   (0.00, 0.25, 0.00, 1.00, 0.75, 1.00),
+        "half-x0": (0.00, 0.00, 0.00, 0.50, 1.00, 1.00),
+        "half-x1": (0.50, 0.00, 0.00, 1.00, 1.00, 1.00),
+        "half-y0": (0.00, 0.00, 0.00, 1.00, 0.50, 1.00),
+        "half-y1": (0.00, 0.50, 0.00, 1.00, 1.00, 1.00),
+        "wall-x0": (0.00, 0.00, 0.00, 0.10, 1.00, 1.00),
+        "wall-x1": (0.90, 0.00, 0.00, 1.00, 1.00, 1.00),
+        "wall-y0": (0.00, 0.00, 0.00, 1.00, 0.10, 1.00),
+        "wall-y1": (0.00, 0.90, 0.00, 1.00, 1.00, 1.00),
+        "thick-x0": (0.00, 0.00, 0.00, 0.8, 1.00, 1.00),
+        "thick-x1": (0.20, 0.00, 0.00, 1.00, 1.00, 1.00),
+        "thick-y0": (0.00, 0.00, 0.00, 1.00, 0.80, 1.00),
+        "thick-y1": (0.00, 0.20, 0.00, 1.00, 1.00, 1.00),
     }
-
     return shapes[shape]
+
+
+def make_box_vertices(x0, y0, z0, x1, y1, z1, size, height):
+    """Create the eight vertices of an axis-aligned rectangular box."""
+    return {
+        "b00": (x0 * size, y0 * size, z0 * height),
+        "b10": (x1 * size, y0 * size, z0 * height),
+        "b11": (x1 * size, y1 * size, z0 * height),
+        "b01": (x0 * size, y1 * size, z0 * height),
+        "t00": (x0 * size, y0 * size, z1 * height),
+        "t10": (x1 * size, y0 * size, z1 * height),
+        "t11": (x1 * size, y1 * size, z1 * height),
+        "t01": (x0 * size, y1 * size, z1 * height),
+    }
 
 
 # ----------------------------------------------------------------------
@@ -365,29 +351,19 @@ def main():
 
     s = args.box_size
     h = args.box_height
-    heights = get_heights(args.shape)
+    x0, y0, z0, x1, y1, z1 = get_prism_bounds(args.shape)
 
-    bottom = {corner: value[0] * h for corner, value in heights.items()}
-    top = {corner: value[1] * h for corner, value in heights.items()}
+    # Any supplied footprint value overrides the named shape. This makes the
+    # same drawing function useful for arbitrary narrow or partial blocks.
+    x0 = args.x0 if args.x0 is not None else x0
+    x1 = args.x1 if args.x1 is not None else x1
+    y0 = args.y0 if args.y0 is not None else y0
+    y1 = args.y1 if args.y1 is not None else y1
 
-    for corner in ("00", "10", "11", "01"):
-        if bottom[corner] > top[corner]:
-            raise ValueError(
-                f"Bottom is above top at corner {corner}: "
-                f"{bottom[corner]} > {top[corner]}"
-            )
+    if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1 and 0 <= z0 < z1 <= 1):
+        raise ValueError("box bounds must satisfy 0 <= min < max <= 1")
 
-    vertices = {
-        "b00": (0, 0, bottom["00"]),
-        "b10": (s, 0, bottom["10"]),
-        "b11": (s, s, bottom["11"]),
-        "b01": (0, s, bottom["01"]),
-
-        "t00": (0, 0, top["00"]),
-        "t10": (s, 0, top["10"]),
-        "t11": (s, s, top["11"]),
-        "t01": (0, s, top["01"]),
-    }
+    vertices = make_box_vertices(x0, y0, z0, x1, y1, z1, s, h)
 
     projected = {
         name: project(point, args.camera_rotation, args.camera_elevation)
@@ -455,40 +431,6 @@ def main():
         ("bottom", ["b00", "b01", "b11", "b10"]),
     ]
 
-    top_names = next(names for kind, names in face_specs if kind == "top")
-    top_normal = face_normal(top_names, vertices)
-    top_normal_length = math.sqrt(dot(top_normal, top_normal))
-
-    slope_color = top_color
-    if top_normal_length > 1e-12:
-        nx, ny, nz = (component / top_normal_length for component in top_normal)
-        slope_angle = math.acos(max(-1.0, min(1.0, nz)))
-
-        # The horizontal component of the top normal points toward the side
-        # that the ramp descends to.
-        if abs(nx) >= abs(ny):
-            slope_side = "x1" if nx > 0 else "x0"
-        else:
-            slope_side = "y1" if ny > 0 else "y0"
-
-        side_names = next(
-            names for kind, names in face_specs if kind == slope_side
-        )
-        side_mean_x = sum(projected[name][0] for name in side_names) / len(side_names)
-        corresponding_side_color = (
-            left_color
-            if side_mean_x < projected_ground_center[0]
-            else right_color
-        )
-
-        # Horizontal top: amount 0. Vertical face: args.slope_shade.
-        shade_amount = args.slope_shade * slope_angle / (math.pi / 2)
-        slope_color = blend_color(
-            top_color,
-            corresponding_side_color,
-            shade_amount,
-        )
-
     visible_faces = []
 
     for kind, names in face_specs:
@@ -503,9 +445,7 @@ def main():
             continue
 
         if kind == "top":
-            # A ramp's inclined upper face is slightly dimmer than a flat top,
-            # but remains brighter than its corresponding vertical side.
-            color = slope_color
+            color = top_color
         elif kind == "bottom":
             color = bottom_color
         else:
@@ -564,6 +504,7 @@ def main():
         Image.Resampling.LANCZOS,
     )
 
+    os.makedirs(directory, exist_ok=True)
     image.save(os.path.join(directory, output))
 
     print(

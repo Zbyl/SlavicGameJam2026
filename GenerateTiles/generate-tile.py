@@ -9,7 +9,7 @@ import math
 # ----------------------------------------------------------------------
 # Defaults
 # ----------------------------------------------------------------------
-
+DIR = "tiles"
 TILE_WIDTH = 40
 TILE_HEIGHT = 40
 
@@ -29,6 +29,11 @@ LEFT_BRIGHTNESS = 0.82
 RIGHT_BRIGHTNESS = 0.65
 BOTTOM_BRIGHTNESS = 0.55
 EDGE_BRIGHTNESS = 0.38
+
+# Strength of angle-dependent slope shading. At 1.0, a face blends from the
+# top colour when horizontal all the way to the side colour when vertical.
+# 0.8 gives the standard slopes about the same shade as the former 0.35 blend.
+SLOPE_SHADE = 0.8
 
 TOP_HUE_SHIFT = 0.0
 LEFT_HUE_SHIFT = -2.0
@@ -130,6 +135,11 @@ def parse_args():
         help="output PNG filename; default is PREFIX-SHAPE.png",
     )
     parser.add_argument(
+        "-d", "--dir",
+        default=DIR,
+        help=f"directory for the output PNG file (default is \"{DIR}\")",
+    )
+    parser.add_argument(
         "-p", "--prefix",
         default=PREFIX,
         help=f"output prefix when --output is omitted (default: {PREFIX})",
@@ -168,6 +178,15 @@ def parse_args():
     parser.add_argument("--right-brightness", type=nonnegative_float, default=RIGHT_BRIGHTNESS)
     parser.add_argument("--bottom-brightness", type=nonnegative_float, default=BOTTOM_BRIGHTNESS)
     parser.add_argument("--edge-brightness", type=nonnegative_float, default=EDGE_BRIGHTNESS)
+    parser.add_argument(
+        "--slope-shade",
+        type=nonnegative_float,
+        default=SLOPE_SHADE,
+        help=(
+            "strength of angle-dependent slope shading; 0 disables it and "
+            f"1 reaches the side colour at 90 degrees (default: {SLOPE_SHADE})"
+        ),
+    )
 
     parser.add_argument("--top-hue-shift", type=float, default=TOP_HUE_SHIFT)
     parser.add_argument("--left-hue-shift", type=float, default=LEFT_HUE_SHIFT)
@@ -265,6 +284,15 @@ def modify_color(color, brightness=1.0, hue_shift=0.0):
     )
 
 
+def blend_color(first, second, amount):
+    """Linearly blend two RGBA colours; amount is clamped to 0..1."""
+    amount = max(0.0, min(1.0, amount))
+    return tuple(
+        round(a + (b - a) * amount)
+        for a, b in zip(first, second)
+    )
+
+
 # ----------------------------------------------------------------------
 # Vector/projection helpers
 # ----------------------------------------------------------------------
@@ -327,6 +355,7 @@ def main():
     args = parse_args()
 
     output = args.output or f"{args.prefix}-{args.shape}.png"
+    directory = args.dir
 
     top_color = modify_color(args.color, args.top_brightness, args.top_hue_shift)
     left_color = modify_color(args.color, args.left_brightness, args.left_hue_shift)
@@ -426,6 +455,40 @@ def main():
         ("bottom", ["b00", "b01", "b11", "b10"]),
     ]
 
+    top_names = next(names for kind, names in face_specs if kind == "top")
+    top_normal = face_normal(top_names, vertices)
+    top_normal_length = math.sqrt(dot(top_normal, top_normal))
+
+    slope_color = top_color
+    if top_normal_length > 1e-12:
+        nx, ny, nz = (component / top_normal_length for component in top_normal)
+        slope_angle = math.acos(max(-1.0, min(1.0, nz)))
+
+        # The horizontal component of the top normal points toward the side
+        # that the ramp descends to.
+        if abs(nx) >= abs(ny):
+            slope_side = "x1" if nx > 0 else "x0"
+        else:
+            slope_side = "y1" if ny > 0 else "y0"
+
+        side_names = next(
+            names for kind, names in face_specs if kind == slope_side
+        )
+        side_mean_x = sum(projected[name][0] for name in side_names) / len(side_names)
+        corresponding_side_color = (
+            left_color
+            if side_mean_x < projected_ground_center[0]
+            else right_color
+        )
+
+        # Horizontal top: amount 0. Vertical face: args.slope_shade.
+        shade_amount = args.slope_shade * slope_angle / (math.pi / 2)
+        slope_color = blend_color(
+            top_color,
+            corresponding_side_color,
+            shade_amount,
+        )
+
     visible_faces = []
 
     for kind, names in face_specs:
@@ -440,7 +503,9 @@ def main():
             continue
 
         if kind == "top":
-            color = top_color
+            # A ramp's inclined upper face is slightly dimmer than a flat top,
+            # but remains brighter than its corresponding vertical side.
+            color = slope_color
         elif kind == "bottom":
             color = bottom_color
         else:
@@ -499,10 +564,10 @@ def main():
         Image.Resampling.LANCZOS,
     )
 
-    image.save(output)
+    image.save(os.path.join(directory, output))
 
     print(
-        f"Saved {output}: "
+        f"Saved {os.path.join(directory, output)}: "
         f"{args.tile_width * args.scale} x "
         f"{args.tile_height * args.scale} "
         f"({args.shape})"

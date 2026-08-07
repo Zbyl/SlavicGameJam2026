@@ -7,14 +7,28 @@ cd "$(dirname "$0")"
 
 MOD=${1:-1}
 COLOR=${2:-"#96dcaa"}
-#COLOR="70,140,45"
-ALPHA=${3:-200}
-PREFIX="tile"$MOD"-leav"${ALPHA}
+PREFIX="tile"$MOD
 
 SHAPES=(
-    box
-    half
-    up-half
+    "pole1"
+    "pole2"
+    "pole3"
+    "pole4"
+    "pole5"
+    "mid-x"
+    "mid-y"
+    "half-x0"
+    "half-x1"
+    "half-y0"
+    "half-y1"
+    "wall-x0"
+    "wall-x1"
+    "wall-y0"
+    "wall-y1"
+    "thick-x0"
+    "thick-x1"
+    "thick-y0"
+    "thick-y1"
 )
 
 # Common settings for the whole tileset. Edit these as desired.
@@ -29,9 +43,7 @@ COMMON_OPTIONS=(
 )
 
 for shape in "${SHAPES[@]}"; do
-    py generate-tile-transparent.py \
-        --alpha $ALPHA \
-        --mask "x.xxxx..xxx.xx/.x..x...xxxxxx/xxxx..xxxx..xx/..xxxxxxxx..xx/xxxx.xxxx.xxx./xxxx.xx..x.x../xxx..x.x.x.xx./x..x.xxx....x./x.xxxx..xxxx../...xx..x.xxxxx/xxx..xx.xx.xxx/xx.x.xxxxxx.xx/xx.xxxxxxx..xx/..xxxxx.xx...x" \
+    py generate-pole.py \
         --shape "$shape" \
         "${COMMON_OPTIONS[@]}"
 done

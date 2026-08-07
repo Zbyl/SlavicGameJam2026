@@ -5,6 +5,7 @@ import argparse
 import colorsys
 import math
 import os
+import random
 
 try:
     import numpy as np
@@ -129,6 +130,13 @@ def alpha_value(value):
     return value
 
 
+def fraction_value(value):
+    value = float(value)
+    if not 0.0 <= value <= 1.0:
+        raise argparse.ArgumentTypeError("must be in the range 0..1")
+    return value
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Generate an orthographic isometric-style PNG tile."
@@ -221,8 +229,35 @@ def parse_args():
         action="store_true",
         help="invert the mask (swap transparent/opaque cells)",
     )
+    parser.add_argument(
+        "--mask-random",
+        type=fraction_value,
+        default=None,
+        metavar="FILL",
+        help="generate a random mask instead of reading --mask; FILL is 0..1, "
+             "the fraction of cells left opaque (0 = fully transparent tile, "
+             "1 = fully solid). Cannot be combined with --mask.",
+    )
+    parser.add_argument(
+        "--mask-random-size",
+        type=positive_int,
+        default=14,
+        help="grid resolution (NxN) used by --mask-random (default: 14)",
+    )
+    parser.add_argument(
+        "--mask-random-seed",
+        type=int,
+        default=None,
+        help="seed for --mask-random, so the same pattern can be reproduced "
+             "(default: a different random pattern every run)",
+    )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if args.mask is not None and args.mask_random is not None:
+        parser.error("--mask and --mask-random cannot be used together")
+
+    return args
 
 
 # ----------------------------------------------------------------------
@@ -351,6 +386,18 @@ def load_mask(spec, invert=False):
     return grid
 
 
+def generate_random_mask(size, fill, seed=None, invert=False):
+    """Independent per-cell coin flip, each cell opaque with probability fill."""
+
+    rng = random.Random(seed)
+    grid = [[rng.random() < fill for _ in range(size)] for _ in range(size)]
+
+    if invert:
+        grid = [[not cell for cell in row] for row in grid]
+
+    return grid
+
+
 def sample_mask(grid, u, v):
     """Look up a mask cell for local face coordinates u, v in [0, 1].
 
@@ -455,7 +502,7 @@ def invert_bilinear(point, p00, p10, p11, p01):
 
     e = sub2(p10, p00)
     f = sub2(p01, p00)
-    g = sub2(sub2(p00, p10), sub2(p11, p01))
+    g = add2(sub2(p00, p10), sub2(p11, p01))
     h = sub2(point, p00)
 
     k2 = cross2(g, f)
@@ -485,6 +532,10 @@ def invert_bilinear(point, p00, p10, p11, p01):
 
 def sub2(a, b):
     return (a[0] - b[0], a[1] - b[1])
+
+
+def add2(a, b):
+    return (a[0] + b[0], a[1] + b[1])
 
 
 def resize_with_premultiplied_alpha(image, size):
@@ -534,7 +585,15 @@ def main():
     bottom_color = with_alpha(modify_color(args.color, args.bottom_brightness, args.bottom_hue_shift))
     edge_color = with_alpha(modify_color(args.color, args.edge_brightness, args.edge_hue_shift))
 
-    mask_grid = load_mask(args.mask, args.mask_invert)
+    if args.mask_random is not None:
+        mask_grid = generate_random_mask(
+            args.mask_random_size,
+            args.mask_random,
+            args.mask_random_seed,
+            args.mask_invert,
+        )
+    else:
+        mask_grid = load_mask(args.mask, args.mask_invert)
 
     s = args.box_size
     h = args.box_height
