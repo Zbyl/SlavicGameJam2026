@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://b4w8smkleosv3"]
 
 [ext_resource type="Script" uid="uid://cuqioeyb0tebp" path="res://characters/dude.gd" id="1_s81fl"]
+[ext_resource type="AudioStream" uid="uid://p2250kehh6e6" path="res://Sounds/Kunek/Jump.wav" id="5_64te8"]
+[ext_resource type="AudioStream" uid="uid://dvnkg8fvv08bf" path="res://Sounds/Kunek/Slap.wav" id="6_k77yt"]
+[ext_resource type="AudioStream" uid="uid://ccn0f5o71rp2s" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
 [ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="kunek_frames"]
 [ext_resource type="SpriteFrames" uid="uid://bnm5y0u6nh5pe" path="res://characters/dude_magic_frames.tres" id="magic_frames"]
 [ext_resource type="SpriteFrames" uid="uid://dbicsqv1sa4ie" path="res://characters/dude_outline_frames.tres" id="outline_frames"]
@@ -49,6 +52,18 @@ frame_progress = 0.8045777
 [node name="Timer" type="Timer" parent="." unique_id=1340742229]
 wait_time = 0.5
 one_shot = true
+
+[node name="RunPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1645579698]
+
+[node name="JumpPlayer" type="AudioStreamPlayer2D" parent="." unique_id=546973934]
+stream = ExtResource("5_64te8")
+volume_db = -10.0
+
+[node name="DiePlayer" type="AudioStreamPlayer2D" parent="." unique_id=1008268916]
+stream = ExtResource("6_k77yt")
+
+[node name="RespawnPlayer" type="AudioStreamPlayer2D" parent="." unique_id=478866122]
+stream = ExtResource("7_8hsc3")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="resetState"]

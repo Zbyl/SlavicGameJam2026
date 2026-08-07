@@ -19,9 +19,29 @@ var currentState = "None"
 @onready var outline: AnimatedSprite2D = $Outline
 @onready var berek: AnimatedSprite2D = $Berek
 @onready var timer: Timer = $Timer
+@onready var run_player: AudioStreamPlayer2D = $RunPlayer
+@onready var jump_player: AudioStreamPlayer2D = $JumpPlayer
+@onready var die_player: AudioStreamPlayer2D = $DiePlayer
+@onready var respawn_player: AudioStreamPlayer2D = $RespawnPlayer
+@onready var streams = [
+    load("res://Sounds/Kunek/FoxRun.wav"),
+    load("res://Sounds/Kunek/FerretRun.wav"),
+    load("res://Sounds/Kunek/WeaselRun.wav"),
+    load("res://Sounds/Kunek/SnowRun.wav")
+]
+var run_stream: AudioStream
 
 func _ready() -> void:
     setBerek(isBerek)
+    if character == "Fox":
+        run_stream = streams[0]
+    elif character == "Ferret":
+        run_stream = streams[1]
+    elif character == "Weasel":
+        run_stream = streams[2]
+    elif character == "Snow":
+        run_stream = streams[3]
+    run_player.stream = run_stream
 
 func setBerek(state: bool):
     isBerek = state
@@ -56,6 +76,10 @@ func calculateState(direction: Vector2, isJump: bool) -> String:
         return "Dir"
 
 func resetState():
+    if currentState == "Die":
+        get_tree().call_group("Berek", "setBerek", false)
+        respawn_player.play()
+        setBerek(true)
     currentState="None"
 
 func calculateAngle(direction: Vector2) -> int:
@@ -84,6 +108,13 @@ func _physics_process(delta):
         if state == "Jump": # this is temporary solution for canceling jump
             timer.wait_time = 0.5;
             timer.start()
+            jump_player.play()
+
+        if state == "Dir":
+            run_player.play()
+        else:
+            run_player.stop()
+
         changeAnimation = true
 
     if direction != Vector2.ZERO:
@@ -110,7 +141,11 @@ func _physics_process(delta):
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
     if !is_in_group("Berek") && body.is_in_group("Berek"):
-        print("Die sucker!")
+        body.setBerek(false)
+
+        print("I'm dying!")
+
+        die_player.play()
         currentState="Die"
         animation.play(character+currentState+str(currentAngle))
         syncAnimations()
