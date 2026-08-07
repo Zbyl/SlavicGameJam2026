@@ -10,11 +10,11 @@ import math
 # Defaults
 # ----------------------------------------------------------------------
 
-TILE_WIDTH = 41
-TILE_HEIGHT = 41
+TILE_WIDTH = 40
+TILE_HEIGHT = 40
 
-BOX_SIZE = (TILE_WIDTH-1) / math.sqrt(2)
-BOX_HEIGHT = BOX_SIZE * math.sqrt(3) * 0.5
+BOX_SIZE = TILE_WIDTH / math.sqrt(2)
+BOX_HEIGHT = BOX_SIZE * math.sqrt(3) * 0.5 * 0.95
 
 SHAPE = "box"
 PREFIX = "tile"
