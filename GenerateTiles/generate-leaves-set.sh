@@ -23,7 +23,7 @@ COMMON_OPTIONS=(
     --color $COLOR
     --camera-rotation 45
     --camera-elevation 30
-    --edge-width 0.5
+    --edge-width 0
     --scale 2
     --aa 2
 )

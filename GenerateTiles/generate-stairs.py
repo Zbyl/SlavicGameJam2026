@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 import argparse
 import colorsys
 import math
+import os
 
 
 # ----------------------------------------------------------------------

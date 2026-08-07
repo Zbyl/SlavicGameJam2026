@@ -64,5 +64,8 @@ for (( N=1; N<=NUM_COLORS; N++ )); do
     echo "----------------------------------------"
 done
 
+echo "Processing Set #$((NUM_COLORS+1)) with glass..."
+./generate-glass-set.sh  $((NUM_COLORS+1))  "#b2dbdf"  100
+
 echo "All generation tasks completed!"
 exit 0
