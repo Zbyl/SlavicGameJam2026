@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://717e0h0cr8jp"]
+
+[ext_resource type="PackedScene" uid="uid://b4w8smkleosv3" path="res://characters/dude.tscn" id="1_5vsmq"]
+[ext_resource type="Texture2D" uid="uid://cfl24bmwoicry" path="res://images/tile1-box.png" id="1_xmacq"]
+
+[node name="Node2D" type="Node2D" unique_id=1571254884]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=623462596]
+position = Vector2(259, 186)
+texture = ExtResource("1_xmacq")
+
+[node name="Dude1" parent="." unique_id=345096153 instance=ExtResource("1_5vsmq")]
+position = Vector2(177, 210)
+scale = Vector2(0.5, 0.5)
+isBerek = true
+
+[node name="Dude2" parent="." unique_id=20165905 instance=ExtResource("1_5vsmq")]
+position = Vector2(517, 198)
+scale = Vector2(0.5, 0.5)
+character = "Ferret"
+controller = 1
