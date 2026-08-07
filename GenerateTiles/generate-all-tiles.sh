@@ -5,9 +5,13 @@ set -euo pipefail
 # launched from Git Bash with another current working directory.
 cd "$(dirname "$0")"
 
-MOD=3
+MOD=5
 PREFIX="tile"$MOD
-COLORS=( "96dcaa"  "927b66"  "ec9a4e" )
+COLORS=( "96dcaa" "927b66" "ec9a4e" "d1cdc5"  # 
+         "c96a63" "d4a3a3" "7e9cb4" "8c7da1"  # Red, Pink, Blue, Violet
+         "dbb568" "e0cbac"                    # Mustard & Straw Yellow
+       )
+
 COLOR=${COLORS[(($MOD-1))]}
 
 SHAPES=(
