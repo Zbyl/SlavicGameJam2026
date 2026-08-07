@@ -3,7 +3,7 @@ from PIL import Image
 
 # --- CONFIGURATION ---
 TILE_SIZE = 80
-N_SETS = 14  # Maximal number for N
+N_SETS = 16  # Maximal number for N
 ROW_LEN = 24  # Minimum row length (0 means it defaults to the longest list)
 
 LIST1 = ["box", "half", "up-half", "slope-x0", "slope-x1", "slope-y0", "slope-y1", "up-slope-x0", "up-slope-x1", "up-slope-y0", "up-slope-y1"]

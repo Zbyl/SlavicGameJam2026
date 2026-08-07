@@ -5,8 +5,9 @@ set -euo pipefail
 # launched from Git Bash with another current working directory.
 cd "$(dirname "$0")"
 
-MOD=${1:-1}
-COLOR=${2:-"#96dcaa"}
+MOD=14
+COLOR="#b2dbdf"
+ALPHA=100
 PREFIX="tile"$MOD
 
 SHAPES=(
@@ -35,7 +36,7 @@ COMMON_OPTIONS=(
 )
 
 for shape in "${SHAPES[@]}"; do
-    py generate-tile2.py \
+    py generate-tile-transparent.py --alpha $ALPHA \
         --shape "$shape" \
         "${COMMON_OPTIONS[@]}"
 done

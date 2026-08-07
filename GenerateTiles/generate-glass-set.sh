@@ -5,7 +5,7 @@ set -euo pipefail
 # launched from Git Bash with another current working directory.
 cd "$(dirname "$0")"
 
-MOD=14
+MOD=17
 COLOR="#b2dbdf"
 ALPHA=100
 PREFIX="tile"$MOD
