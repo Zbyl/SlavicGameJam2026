@@ -5,23 +5,16 @@ set -euo pipefail
 # launched from Git Bash with another current working directory.
 cd "$(dirname "$0")"
 
-MOD=14
-COLOR="#b2dbdf"
-ALPHA=100
-PREFIX="tile"$MOD
+MOD=${1:-1}
+COLOR=${2:-"#96dcaa"}
+#COLOR="70,140,45"
+ALPHA=${3:-200}
+PREFIX="tile"$MOD"-leav"${ALPHA}
 
 SHAPES=(
     box
     half
     up-half
-    slope-x0
-    slope-x1
-    slope-y0
-    slope-y1
-    up-slope-x0
-    up-slope-x1
-    up-slope-y0
-    up-slope-y1
 )
 
 # Common settings for the whole tileset. Edit these as desired.
@@ -36,7 +29,9 @@ COMMON_OPTIONS=(
 )
 
 for shape in "${SHAPES[@]}"; do
-    py generate-tile-transparent.py --alpha $ALPHA \
+    py generate-tile-transparent3.py \
+        --alpha $ALPHA \
+        --mask "x.xxxx..xxx.xx/.x..x...xxxxxx/xxxx..xxxx..xx/..xxxxxxxx..xx/xxxx.xxxx.xxx./xxxx.xx..x.x../xxx..x.x.x.xx./x..x.xxx....x./x.xxxx..xxxx../...xx..x.xxxxx/xxx..xx.xx.xxx/xx.x.xxxxxx.xx/xx.xxxxxxx..xx/..xxxxx.xx...x" \
         --shape "$shape" \
         "${COMMON_OPTIONS[@]}"
 done

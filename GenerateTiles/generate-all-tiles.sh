@@ -50,8 +50,10 @@ for (( N=1; N<=NUM_COLORS; N++ )); do
 
     # Check if generator scripts exist and are executable before running
     if [[ -x "./generate-tiles-set.sh" && -x "./generate-stairs-set.sh" ]]; then
-        ./generate-tiles-set.sh "$N" "$COL"
-        ./generate-stairs-set.sh "$N" "$COL"
+        #./generate-tiles-set.sh "$N" "$COL"
+        #./generate-stairs-set.sh "$N" "$COL"
+        ./generate-leaves-set.sh "$N" "$COL" 170
+        ./generate-leaves-set.sh "$N" "$COL" 210
     else
         echo "Error: Verification failed. Ensure generator scripts are in this folder and executable (chmod +x)."
         exit 1
