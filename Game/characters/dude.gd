@@ -8,6 +8,7 @@ const WORLD_ASPECT_FACTOR = 0.5
 @export var speed = 300
 @export var character = "Fox"
 @export var controller = 0
+@export var jumpButton = JOY_BUTTON_A
 @export var isBerek = false
 
 var direction = Vector2.ZERO
@@ -16,6 +17,7 @@ var currentState = "None"
 
 @onready var animation: AnimatedSprite2D = $Kunek
 @onready var berek: AnimatedSprite2D = $Berek
+@onready var timer: Timer = $Timer
 
 func _ready() -> void:
     setBerek(isBerek)
@@ -33,11 +35,21 @@ func calculateInputDirection() -> Vector2:
     dir.y *= WORLD_ASPECT_FACTOR
     return dir
 
-func calculateState(direction: Vector2) -> String:
-    if direction == Vector2.ZERO:
+func isJumpButtonPressed() -> bool:
+    return Input.is_joy_button_pressed(controller, jumpButton)
+
+func calculateState(direction: Vector2, isJump: bool) -> String:
+    if isJump:
+        return "Jump"
+    elif currentState=="Jump":
+        return "Jump"
+    elif direction == Vector2.ZERO:
         return "Idle"
     else:
         return "Dir"
+
+func cancelJump():
+    currentState="None"
 
 func calculateAngle(direction: Vector2) -> int:
     var angle = roundi((rad_to_deg(atan2(direction.y, direction.x))+270.0)/45.0)
@@ -50,13 +62,17 @@ func calculateAngle(direction: Vector2) -> int:
 
 func _physics_process(delta):
     var direction = calculateInputDirection()
+
+    var isJump = isJumpButtonPressed()
+
     var changeAnimation = false
 
-    var state = calculateState(direction)
-
+    var state = calculateState(direction, isJump)
 
     if state != currentState:
         currentState = state
+        if state == "Jump": # this is temporary solution for canceling jump
+            timer.start()
         changeAnimation = true
 
     if direction != Vector2.ZERO:
