@@ -24,6 +24,11 @@ window/stretch/aspect="expand"
 
 project/assembly_name="Game"
 
+[global_group]
+
+Dude="This is some dude"
+Berek="This dude is berek"
+
 [layer_names]
 
 2d_physics/layer_1="Player"

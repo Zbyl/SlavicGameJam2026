@@ -25,6 +25,10 @@ func _ready() -> void:
 
 func setBerek(state: bool):
     isBerek = state
+    if isBerek:
+        add_to_group("Berek")
+    else:
+        remove_from_group("Berek")
     berek.visible = isBerek
 
 func calculateInputDirection() -> Vector2:
@@ -40,7 +44,9 @@ func isJumpButtonPressed() -> bool:
     return Input.is_joy_button_pressed(controller, jumpButton)
 
 func calculateState(direction: Vector2, isJump: bool) -> String:
-    if isJump:
+    if currentState=="Die":
+        return "Die"
+    elif isJump:
         return "Jump"
     elif currentState=="Jump":
         return "Jump"
@@ -49,7 +55,7 @@ func calculateState(direction: Vector2, isJump: bool) -> String:
     else:
         return "Dir"
 
-func cancelJump():
+func resetState():
     currentState="None"
 
 func calculateAngle(direction: Vector2) -> int:
@@ -76,6 +82,7 @@ func _physics_process(delta):
     if state != currentState:
         currentState = state
         if state == "Jump": # this is temporary solution for canceling jump
+            timer.wait_time = 0.5;
             timer.start()
         changeAnimation = true
 
@@ -99,3 +106,13 @@ func _physics_process(delta):
 
     # Ruch z obsługą kolizji
     move_and_slide()
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+    if !is_in_group("Berek") && body.is_in_group("Berek"):
+        print("Die sucker!")
+        currentState="Die"
+        animation.play(character+currentState+str(currentAngle))
+        syncAnimations()
+        timer.wait_time = 2.0;
+        timer.start()
