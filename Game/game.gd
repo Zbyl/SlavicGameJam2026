@@ -6,7 +6,7 @@ const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
 @onready var hud: CanvasLayer = $Hud
 
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
-const LEVEL_2 = preload("res://Levels/Level1.tscn")
+const LEVEL_2 = preload("res://Levels/Level4.tscn")
 const LEVEL_3 = preload("res://Levels/Level1.tscn")
 const DUDE = preload("res://characters/dude.tscn")
 
