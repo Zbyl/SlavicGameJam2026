@@ -94,13 +94,20 @@ func setBerek(state: bool):
 
 func isDead():
     return currentState == DudeState.Dead
-    
-func getInputDirectin() -> Vector2:
+
+func normalizeDirection(direction: Vector2) -> Vector2:
+    if direction.length() >= DEADZONE:
+        direction /= direction.length()
+        return direction
+    else:
+        return Vector2.ZERO
+
+func calculateInputDirection() -> Vector2:
     if controllerData["type"]=="pad":
         var controller = controllerData["pad"]
         var x = Input.get_joy_axis(controller, JOY_AXIS_LEFT_X)
         var y = Input.get_joy_axis(controller, JOY_AXIS_LEFT_Y)
-        return Vector2(x, y)
+        return normalizeDirection(Vector2(x, y))
     elif controllerData["type"]=="keyboard":
         var up = Input.is_key_pressed(controllerData["up"])
         var down = Input.is_key_pressed(controllerData["down"])
@@ -116,15 +123,9 @@ func getInputDirectin() -> Vector2:
             x = -1
         elif !left && right:
             x = 1
-        return Vector2(x, y)
+        return normalizeDirection(Vector2(x, y))
     else:
         return Vector2.ZERO
-
-func calculateInputDirection() -> Vector2:
-    var dir = getInputDirectin()
-    if dir.length() < DEADZONE:
-        dir = Vector2.ZERO
-    return dir
 
 func isJumpButtonPressedRaw() -> bool:
     var pressed := false
@@ -133,7 +134,7 @@ func isJumpButtonPressedRaw() -> bool:
     elif controllerData["type"]=="keyboard":
         pressed = Input.is_key_pressed(controllerData["jump"])
     return pressed
-    
+
 var wasJumpPressedLastFrame := false
 var wasJumpJustPressed := false
 func updateJumpButton() -> void:
@@ -157,7 +158,7 @@ func isJumpButtonPressed() -> bool:
 
     if (Time.get_ticks_msec() - lastTimeJumpPressed) <= JUMP_BUFFER_TIME:
         return true
-        
+
     return false
 
 func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeState:
@@ -209,20 +210,20 @@ func _physics_process(delta: float):
         return
     
     updateJumpButton()
-    
+
     var direction = calculateInputDirection()
     #var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
     var isJumpPressed = isJumpButtonPressed()
     #var isJump = Input.is_action_just_pressed("ui_accept")
-    
+
     if currentState == DudeState.Dead:
         direction = Vector2.ZERO
         isJumpPressed = false
 
     var preMapPosition := GameData.layerHelpers.mapPositionFromScreenPosition(global_position, currentZ)
     var preGroundInfo := GameData.layerHelpers.groundInfoFromMapPosition(preMapPosition, currentZ)
-   
+
     # Add the gravity.
     var currentlyOnGround := false
     if preGroundInfo.groundType != LayerHelpers.GroundType.EMPTY:
@@ -341,7 +342,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         var zDist = absf(currentZ - body.currentZ)
         if zDist > GameData.layerHelpers.layerHeight:
             return
-        
+
         body.setBerek(false)
 
         print("I'm dying!")
