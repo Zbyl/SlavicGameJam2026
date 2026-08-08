@@ -35,6 +35,11 @@ Berek="This dude is berek"
 2d_physics/layer_17="Layer0"
 2d_physics/layer_18="Layer1"
 2d_physics/layer_19="Layer2"
+2d_physics/layer_20="Layer3"
+2d_physics/layer_21="Layer4"
+2d_physics/layer_22="Layer5"
+2d_physics/layer_23="Layer6"
+2d_physics/layer_24="Layer7"
 
 [physics]
 

@@ -1,6 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://b71im4ui7gk2j"]
 
 [ext_resource type="Texture2D" uid="uid://cu3ayt8k7tbmt" path="res://TileSets/merge_tiles.png" id="1_quei5"]
+[ext_resource type="Texture2D" uid="uid://buxp7twq4nks4" path="res://TileSets/special_tiles.png" id="2_lngfh"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_wcc2u"]
 tile_data = PackedInt32Array(131072, 851968, 0, 1, 851968, 0, 65536, 917504, 0, 131073, 1179648, 8, 196608, 917504, 0, 262145, 851968, 0, 65537, 917504, 0, 131074, 851968, 0, 196609, 917504, 0)
@@ -1524,28 +1525,52 @@ texture_region_size = Vector2i(80, 80)
 19:1/0 = 0
 19:1/0/texture_origin = Vector2i(0, -20)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kq4nf"]
+texture = ExtResource("2_lngfh")
+texture_region_size = Vector2i(80, 80)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -20)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -20)
+0:2/0/physics_layer_1/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:4/0 = 0
+0:4/0/texture_origin = Vector2i(0, -20)
+0:4/0/physics_layer_2/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:6/0 = 0
+0:6/0/texture_origin = Vector2i(0, -20)
+0:6/0/physics_layer_3/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:8/0 = 0
+0:8/0/texture_origin = Vector2i(0, -20)
+0:8/0/physics_layer_4/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:10/0 = 0
+0:10/0/texture_origin = Vector2i(0, -20)
+0:10/0/physics_layer_5/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:12/0 = 0
+0:12/0/texture_origin = Vector2i(0, -20)
+0:12/0/physics_layer_6/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:14/0 = 0
+0:14/0/texture_origin = Vector2i(0, -20)
+0:14/0/physics_layer_7/polygon_0/points = PackedVector2Array(0, -20, -40, 0, 0, 20, 40, 0)
+0:16/0 = 0
+0:16/0/texture_origin = Vector2i(0, -20)
+
 [resource]
 tile_shape = 1
 tile_size = Vector2i(80, 40)
-physics_layer_0/collision_layer = 0
-physics_layer_0/collision_mask = 65536
-physics_layer_1/collision_layer = 0
-physics_layer_1/collision_mask = 131072
-physics_layer_2/collision_layer = 0
-physics_layer_2/collision_mask = 262144
-physics_layer_3/collision_layer = 0
-physics_layer_3/collision_mask = 524288
-physics_layer_4/collision_layer = 0
-physics_layer_4/collision_mask = 1048576
-physics_layer_5/collision_layer = 0
-physics_layer_5/collision_mask = 2097152
-physics_layer_6/collision_layer = 0
-physics_layer_6/collision_mask = 4194304
-physics_layer_7/collision_layer = 0
-physics_layer_7/collision_mask = 8388608
+physics_layer_0/collision_layer = 65536
+physics_layer_0/collision_mask = 65537
+physics_layer_1/collision_layer = 131072
+physics_layer_2/collision_layer = 262144
+physics_layer_3/collision_layer = 524288
+physics_layer_4/collision_layer = 1048576
+physics_layer_5/collision_layer = 2097152
+physics_layer_6/collision_layer = 4194304
+physics_layer_7/collision_layer = 8388608
 custom_data_layer_0/name = "Slope"
 custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_3anf8")
+sources/1 = SubResource("TileSetAtlasSource_kq4nf")
 pattern_0 = SubResource("TileMapPattern_wcc2u")
 pattern_1 = SubResource("TileMapPattern_nn734")
 pattern_2 = SubResource("TileMapPattern_506po")
