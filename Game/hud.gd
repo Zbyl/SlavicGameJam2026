@@ -1,6 +1,8 @@
 extends CanvasLayer
 class_name Hud
 
+const PLAYER_PICKER = preload("res://player_picker.tscn")
+
 signal new_game_pressed()
 
 @onready var player_1_hud: Control = $Screen/Gauges/Player1Hud
@@ -8,9 +10,12 @@ signal new_game_pressed()
 @onready var player_3_hud: Control = $Screen/Gauges/Player3Hud
 @onready var player_4_hud: Control = $Screen/Gauges/Player4Hud
 @onready var new_game_button: Button = $Screen/Menu/VBoxContainer/NewGameButton
+@onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
 @onready var menu: Control = $Screen/Menu
 @onready var gauges: Control = $Screen/Gauges
+
+var playerData = {}
 
 func getPlayerLabel(player_hud: Control) -> Label:
     return player_hud.get_node("PlayerLabel")
@@ -59,3 +64,18 @@ func _on_full_screen_button_pressed() -> void:
 
 func _on_exit_button_pressed() -> void:
     get_tree().quit()
+
+
+func _on_controls_button_pressed() -> void:
+    menu.visible = false
+    var picker = PLAYER_PICKER.instantiate()
+    picker.tree_exited.connect(_on_player_picker_destroy)
+    add_child(picker)
+
+func updatePlayerData(pd: Dictionary):
+    playerData = pd
+    new_game_button.disabled = false
+
+func _on_player_picker_destroy():
+    menu.visible = true
+    controls_button.grab_focus.call_deferred()

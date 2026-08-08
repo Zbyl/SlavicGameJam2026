@@ -45,6 +45,7 @@ offset_bottom = 148.0
 
 [node name="NewGameButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
 layout_mode = 2
+disabled = true
 text = "Nowa gra"
 
 [node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
@@ -195,5 +196,6 @@ offset_bottom = 84.0
 text = "XXX"
 
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/ControlsButton" to="." method="_on_controls_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

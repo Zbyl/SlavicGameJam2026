@@ -1,6 +1,8 @@
 extends Node2D
 class_name Game
 
+const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
+
 @onready var hud: CanvasLayer = $Hud
 
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
@@ -16,7 +18,7 @@ func _ready() -> void:
 
 func _on_new_game_pressed():
     await _switch_level(LEVEL_1)
-    
+
 func _switch_level(new_level_scene):
     # Cleanup
     # - Unregister Players with camera
@@ -25,7 +27,7 @@ func _switch_level(new_level_scene):
     # - Wait for all timers and things to finish.
     # - Hide menu
     # - Stop music?
-    
+
     # Set up:
     # - Add Level
     # - Pre-process level before adding Players.
@@ -53,17 +55,24 @@ func _switch_level(new_level_scene):
     add_child(level)
     GameData.layerHelpers.initTileMaps(level) # Must be run when level is already in the tree (as it uses get_nodes_in_group()).
 
-    var dude: Dude = DUDE.instantiate()
-    var spawnPoint = GameData.layerHelpers.spawnPoints[0]
-    add_child(dude)
-    dude.global_position = Vector2(spawnPoint.x, spawnPoint.y)
-    dude.currentZ = spawnPoint.z
-    dude.debugLabel = GameData.hud.get_node("./%DebugLabel")
+    var first = true
+    for key in hud.playerData.keys():
+        var charData = hud.playerData[key]
+        var dude: Dude = DUDE.instantiate()
+        dude.isBerek = first
+        dude.character = CHARACTERS[key]
+        dude.controller = charData["pad"]
+        first = false
+        var spawnPoint = GameData.layerHelpers.spawnPoints[key]
+        add_child(dude)
+        dude.global_position = Vector2(spawnPoint.x, spawnPoint.y)
+        dude.currentZ = spawnPoint.z
+        dude.debugLabel = GameData.hud.get_node("./%DebugLabel")
 
     var newDudes: Array[Node] = get_tree().get_nodes_in_group('Dude')
     var ddudes: Array[Dude] = []
     for newDude in newDudes:
         ddudes.append(newDude as Dude)
     gameCamera.dudes = ddudes
-    
+
     GameData.hud.show_menu(false)

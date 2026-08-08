@@ -138,7 +138,7 @@ func _physics_process(delta: float):
         var distFromGround := currentZ - preGroundInfo.groundHeight
         var heightToConsiderOnGround := layerHeight / 20.0
         currentlyOnGround = distFromGround < heightToConsiderOnGround
-        
+
     if currentlyOnGround:
         velocityZ = 0.0
     else:
@@ -172,7 +172,7 @@ func _physics_process(delta: float):
             deltaZ = postGroundInfo.groundHeight - currentZ
 
     currentZ += deltaZ
-    
+
     global_position = GameData.layerHelpers.screenPositionFromMapPosition(postMapPosition.mapCoords, postMapPosition.offsetWithinTile, currentZ)
     var curLayer := GameData.layerHelpers.layerFromZ(currentZ)
     baseImage.offset.y = baseImageOffsetY - (currentZ - curLayer * layerHeight) * zToYOffsetRatio / baseImage.scale.y
@@ -243,7 +243,7 @@ func positionOfKunek() -> Vector2:
     return screenPosition + Vector2(0, -currentZ * zToYOffsetRatio)
     #var imageOffset = baseImage.offset.y - baseImageOffsetY
     #return global_position + Vector2(0, imageOffset)
-    
+
 func setLayerCollisionMask(layer: int, value: bool) -> void:
     if (layer >= 0) and (layer < 16):
         set_collision_mask_value(17 + layer, value)

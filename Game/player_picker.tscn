@@ -16,12 +16,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_14c3u")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2762343]
+modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
+layout_mode = 0
+offset_left = 111.0
+offset_top = 31.0
+offset_right = 1056.0
+offset_bottom = 617.0
+
 [node name="GridContainer" type="GridContainer" parent="." unique_id=922876545]
 layout_mode = 0
-offset_left = 190.0
-offset_top = 105.0
-offset_right = 868.0
-offset_bottom = 621.0
+offset_left = 150.0
+offset_top = 52.0
+offset_right = 1018.0
+offset_bottom = 603.0
 columns = 2
 
 [node name="Kunek" type="HBoxContainer" parent="GridContainer" unique_id=485204543 groups=["PlayerBox"]]
@@ -37,11 +45,13 @@ layout_mode = 2
 
 [node name="PlayerEnable" type="CheckBox" parent="GridContainer/Kunek/Buttons" unique_id=1368732391 groups=["PlayerEnable"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../../../Ferret/Buttons/PlayerEnable")
 text = "Kunek Boguś"
 
 [node name="Controls" type="Button" parent="GridContainer/Kunek/Buttons" unique_id=1341727989 groups=["PlayerControls"]]
 visible = false
 layout_mode = 2
+focus_neighbor_right = NodePath("../../../Ferret/Buttons/Controls")
 text = "Sterowanie"
 
 [node name="SettingsInfo" type="RichTextLabel" parent="GridContainer/Kunek/Buttons" unique_id=758081833]
@@ -128,6 +138,15 @@ layout_mode = 2
 fit_content = true
 scroll_active = false
 
+[node name="CancelButton" type="Button" parent="GridContainer" unique_id=1584686900]
+layout_mode = 2
+text = "Wróć"
+
+[node name="OkButton" type="Button" parent="GridContainer" unique_id=420547287]
+layout_mode = 2
+disabled = true
+text = "OK"
+
 [connection signal="toggled" from="GridContainer/Kunek/Buttons/PlayerEnable" to="GridContainer/Kunek" method="_on_player_enable_toggled"]
 [connection signal="pressed" from="GridContainer/Kunek/Buttons/Controls" to="GridContainer/Kunek" method="_on_controls_pressed"]
 [connection signal="toggled" from="GridContainer/Ferret/Buttons/PlayerEnable" to="GridContainer/Ferret" method="_on_player_enable_toggled"]
@@ -136,3 +155,5 @@ scroll_active = false
 [connection signal="pressed" from="GridContainer/Weasel/Buttons/Controls" to="GridContainer/Weasel" method="_on_controls_pressed"]
 [connection signal="toggled" from="GridContainer/Snow/Buttons/PlayerEnable" to="GridContainer/Snow" method="_on_player_enable_toggled"]
 [connection signal="pressed" from="GridContainer/Snow/Buttons/Controls" to="GridContainer/Snow" method="_on_controls_pressed"]
+[connection signal="pressed" from="GridContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="GridContainer/OkButton" to="." method="_on_ok_button_pressed"]

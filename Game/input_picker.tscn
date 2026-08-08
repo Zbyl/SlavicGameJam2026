@@ -33,6 +33,8 @@ popup/item_1/id = 1
 
 [node name="SelectedController" type="OptionButton" parent="VBoxContainer" unique_id=575680442 groups=["ControllerCtrl"]]
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../GridContainer/Up")
+focus_next = NodePath("../GridContainer/Up")
 item_count = 4
 popup/item_0/text = "Kontroler 1"
 popup/item_0/id = 0
@@ -53,7 +55,12 @@ layout_mode = 2
 
 [node name="Up" type="Button" parent="VBoxContainer/GridContainer" unique_id=1140603074 groups=["KeyboardCtrl"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Left")
+focus_neighbor_top = NodePath("../../SelectedController")
+focus_neighbor_right = NodePath("../Right")
+focus_neighbor_bottom = NodePath("../Left")
 focus_next = NodePath("../Left")
+focus_previous = NodePath("../../SelectedController")
 text = "▲"
 
 [node name="RightUp" type="Control" parent="VBoxContainer/GridContainer" unique_id=1404690650 groups=["KeyboardCtrl"]]
@@ -65,6 +72,7 @@ focus_neighbor_top = NodePath("../Up")
 focus_neighbor_right = NodePath("../Right")
 focus_neighbor_bottom = NodePath("../Down")
 focus_next = NodePath("../Right")
+focus_previous = NodePath("../Up")
 text = "◄"
 
 [node name="Center" type="Control" parent="VBoxContainer/GridContainer" unique_id=396851437 groups=["KeyboardCtrl"]]
@@ -74,8 +82,10 @@ layout_mode = 2
 layout_mode = 2
 focus_neighbor_left = NodePath("../Left")
 focus_neighbor_top = NodePath("../Up")
+focus_neighbor_right = NodePath(".")
 focus_neighbor_bottom = NodePath("../Down")
 focus_next = NodePath("../Down")
+focus_previous = NodePath("../Left")
 text = "►"
 
 [node name="LeftDown" type="Control" parent="VBoxContainer/GridContainer" unique_id=1435638860 groups=["KeyboardCtrl"]]
@@ -83,7 +93,12 @@ layout_mode = 2
 
 [node name="Down" type="Button" parent="VBoxContainer/GridContainer" unique_id=848823560 groups=["KeyboardCtrl"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Left")
+focus_neighbor_top = NodePath("../Up")
+focus_neighbor_right = NodePath("../Right")
+focus_neighbor_bottom = NodePath("../../Jump")
 focus_next = NodePath("../../Jump")
+focus_previous = NodePath("../Right")
 text = "▼"
 
 [node name="RightDown" type="Control" parent="VBoxContainer/GridContainer" unique_id=1215136797 groups=["KeyboardCtrl"]]
@@ -91,16 +106,28 @@ layout_mode = 2
 
 [node name="Jump" type="Button" parent="VBoxContainer" unique_id=1743892500 groups=["KeyboardCtrl"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../GridContainer/Left")
+focus_neighbor_top = NodePath("../GridContainer/Down")
+focus_neighbor_right = NodePath("../GridContainer/Right")
+focus_neighbor_bottom = NodePath("../Duck")
 focus_next = NodePath("../Duck")
+focus_previous = NodePath("../GridContainer/Down")
 text = "Skok"
 
 [node name="Duck" type="Button" parent="VBoxContainer" unique_id=72237679 groups=["KeyboardCtrl"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../GridContainer/Left")
+focus_neighbor_top = NodePath("../Jump")
+focus_neighbor_right = NodePath("../GridContainer/Right")
+focus_neighbor_bottom = NodePath("../OkButton")
 focus_next = NodePath("../OkButton")
+focus_previous = NodePath("../Jump")
 text = "Kucnij"
 
 [node name="OkButton" type="Button" parent="VBoxContainer" unique_id=692754225]
 layout_mode = 2
+focus_neighbor_top = NodePath("../Duck")
+focus_previous = NodePath("../Duck")
 text = "Wyjście"
 
 [connection signal="gui_input" from="VBoxContainer/PressSomething" to="." method="_on_press_something_gui_input"]
