@@ -94,6 +94,10 @@ text = "Łapaj!"
 layout_mode = 2
 text = "Capaj!"
 
+[node name="HSeparator" type="HSeparator" parent="Screen/Menu/VBoxContainer" unique_id=2067736781]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
 [node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
 layout_mode = 2
 text = "Gracze
