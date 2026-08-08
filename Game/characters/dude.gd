@@ -12,8 +12,9 @@ const WORLD_ASPECT_FACTOR = 0.5
 
 var controllerData : Dictionary
 
-const JUMP_VELOCITY: float = 200.0
-var gravity: float = 400.0
+const JUMP_VELOCITY: float = 300.0
+var gravity: float = 800.0
+
 
 var currentAngle: int = 8 # 1 to 8,  1 - SW, 2 - W, ..., 8 - S
 
@@ -293,6 +294,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
         print("I'm dying!")
 
+        run_player.stop()
         die_player.play()
         currentState = DudeState.Dead
         animation.play(character + stateToAnim(currentState) + str(currentAngle))
