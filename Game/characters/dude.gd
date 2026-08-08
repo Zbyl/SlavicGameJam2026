@@ -332,6 +332,11 @@ func _physics_process(delta: float):
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
     if !is_in_group("Berek") && body.is_in_group("Berek"):
+        # Check if we are close enough in z.
+        var zDist = absf(currentZ - body.currentZ)
+        if zDist > GameData.layerHelpers.layerHeight:
+            return
+        
         body.setBerek(false)
 
         print("I'm dying!")

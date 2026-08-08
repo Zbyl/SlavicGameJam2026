@@ -11,14 +11,17 @@
 - Przycisk duck: Mam cię! Kwa kwa!
 - Hack na nie przysłanianie kunka przez klocek wyżej przy skoku.
 - Berek speed boost
-- Bug: Można zberkować kogoś na moście spod mostu.
 - Potknięcie przy 
 - Znacznik berka ma być dużo barziej wyraźny, i działać narożnych kolorach.
 - Znacznik berka nie jest widoczny pod mostem. Jak to naprawić???
 - Może hamowanie powinno być mocniejsze/słabsze od przyspieszania.
 - Czołganie.
 
+# KNOWN BUGS
+- Kuna na moście koliduje z kuną pod mostem. Will not fix...
+
 # DONE
 
 - Coyotee time.
 - Jump button press time tolerancy.
+- Bug: Można zberkować kogoś na moście spod mostu.
