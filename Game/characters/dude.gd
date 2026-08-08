@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Dude
 
 const DEADZONE = 0.1
 const ACCELERATION_FACTOR = 700
@@ -94,7 +95,6 @@ func calculateInputDirection() -> Vector2:
     var dir = Vector2(x, y)
     if dir.length() < DEADZONE:
         dir = Vector2.ZERO
-    dir.y *= WORLD_ASPECT_FACTOR
     return dir
 
 func isJumpButtonPressed() -> bool:
@@ -162,7 +162,7 @@ func _physics_process(delta: float):
     if direction == Vector2.ZERO:
         velocity = velocity.move_toward(Vector2.ZERO, delta*DECELERATION_FACTOR)
     else:
-        velocity = velocity.move_toward(direction * Vector2(speed, speed / 2.0), delta*ACCELERATION_FACTOR)
+        velocity = velocity.move_toward(direction * Vector2(speed, speed * WORLD_ASPECT_FACTOR), delta*ACCELERATION_FACTOR)
 
     move_and_slide()
 
@@ -354,6 +354,14 @@ func screenPositionFromMapPosition(mapCoords: Vector2i, offsetWithinTile: Vector
     var yOffsetFromZ :=  layer * layerHeight * zToYOffsetRatio
     globalCoords.y = globalCoords.y - yOffsetFromZ
     return globalCoords
+    
+# Calculated global_position shifted up using image offset to give screen position of Kunek.
+func positionOfKunek() -> Vector2:
+    var mapPosition := mapPositionFromScreenPosition(global_position, currentZ)
+    var screenPosition := screenPositionFromMapPosition(mapPosition.mapCoords, mapPosition.offsetWithinTile, 0)
+    return screenPosition + Vector2(0, -currentZ * zToYOffsetRatio)
+    #var imageOffset = baseImage.offset.y - baseImageOffsetY
+    #return global_position + Vector2(0, imageOffset)
     
 func groundInfoFromMapPositionRaw(mapPosition: MapPositionInfo, z: float) -> GroundInfo:
     var layer := layerFromZ(z)

@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://7vh5ua3bmum8"]
 
 [ext_resource type="Script" uid="uid://b8xaps7mwxc36" path="res://TestMap.gd" id="1_3h1ab"]
-[ext_resource type="PackedScene" uid="uid://dj606h5locj3n" path="res://Levels/Level2.tscn" id="2_onbnv"]
+[ext_resource type="PackedScene" uid="uid://c1ig145mee8rw" path="res://Levels/Level1.tscn" id="2_xxdj2"]
+[ext_resource type="Script" uid="uid://fyv5fqv17jl4" path="res://GameCamera.gd" id="3_onbnv"]
 [ext_resource type="PackedScene" uid="uid://b4w8smkleosv3" path="res://characters/dude.tscn" id="4_onbnv"]
 
 [node name="TestMap" type="Node2D" unique_id=1902347863 node_paths=PackedStringArray("level")]
 y_sort_enabled = true
 script = ExtResource("1_3h1ab")
-level = NodePath("Level2")
+level = NodePath("Level1")
 
-[node name="Level2" parent="." unique_id=664743491 instance=ExtResource("2_onbnv")]
-position = Vector2(286, 301)
+[node name="Level1" parent="." unique_id=664743491 instance=ExtResource("2_xxdj2")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=370395955]
 
@@ -22,6 +22,10 @@ offset_right = 132.0
 offset_bottom = 84.0
 text = "XXX"
 
+[node name="GameCamera" type="Camera2D" parent="." unique_id=1875518502]
+position = Vector2(615, 429)
+script = ExtResource("3_onbnv")
+
 [node name="Dude" parent="." unique_id=345096153 node_paths=PackedStringArray("debugLabel", "level") instance=ExtResource("4_onbnv")]
 position = Vector2(615, 429)
 speed = 300.0
@@ -30,4 +34,4 @@ controller = 0
 jumpButton = 0
 isBerek = false
 debugLabel = NodePath("../CanvasLayer/DebugLabel")
-level = NodePath("../Level2")
+level = NodePath("../Level1")
