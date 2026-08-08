@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://b4w8smkleosv3"]
 
 [ext_resource type="Script" uid="uid://cuqioeyb0tebp" path="res://characters/dude.gd" id="1_s81fl"]
-[ext_resource type="AudioStream" uid="uid://bltfhfjtbpik7" path="res://Sounds/Kunek/Jump.wav" id="5_64te8"]
+[ext_resource type="AudioStream" uid="uid://o8jwpbeqbo6g" path="res://Sounds/Kunek/Jump.wav" id="5_64te8"]
 [ext_resource type="AudioStream" uid="uid://drswjhe6veebk" path="res://Sounds/Kunek/Slap.wav" id="6_k77yt"]
-[ext_resource type="AudioStream" uid="uid://ccn0f5o71rp2s" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
+[ext_resource type="AudioStream" uid="uid://n6q0kyyprkfu" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
 [ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="kunek_frames"]
 [ext_resource type="SpriteFrames" uid="uid://bnm5y0u6nh5pe" path="res://characters/dude_magic_frames.tres" id="magic_frames"]
 [ext_resource type="SpriteFrames" uid="uid://dbicsqv1sa4ie" path="res://characters/dude_outline_frames.tres" id="outline_frames"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lfj2m"]
-radius = 20.0
+radius = 11
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d5dh0"]
 radius = 20.0
@@ -30,6 +30,7 @@ position = Vector2(0, -12.465)
 shape = SubResource("CapsuleShape2D_d5dh0")
 
 [node name="Kunek" type="AnimatedSprite2D" parent="." unique_id=706360744]
+y_sort_enabled = true
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("kunek_frames")
 animation = &"FoxDie1"

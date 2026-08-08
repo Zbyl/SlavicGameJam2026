@@ -53,6 +53,8 @@ func _switch_level(new_level_scene):
     add_child(level)
     var dude := DUDE.instantiate()
     add_child(dude)
+    dude.debugLabel = GameData.hud.get_node("./%DebugLabel")
+    
 
     var newDudes: Array[Node] = get_tree().get_nodes_in_group('Dude') as Array[Node]
     var ddudes: Array[Dude] = []

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c5ej57awhlwb3" path="res://GameCamera.tscn" id="4_fc0e3"]
 
 [node name="Game" type="Node2D" unique_id=1767426143 groups=["Game"]]
+y_sort_enabled = true
 script = ExtResource("1_feb5d")
 
 [node name="Hud" parent="." unique_id=180480945 instance=ExtResource("1_e2o6t")]

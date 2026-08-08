@@ -185,6 +185,15 @@ offset_bottom = 65.0
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("3_61f8s")
 
+[node name="DebugLabel" type="Label" parent="Screen/Gauges" unique_id=657669731]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 31.0
+offset_top = 33.0
+offset_right = 132.0
+offset_bottom = 84.0
+text = "XXX"
+
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
