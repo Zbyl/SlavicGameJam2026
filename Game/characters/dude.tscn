@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://n6q0kyyprkfu" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
 [ext_resource type="AudioStream" uid="uid://bfy4f6p4sdj26" path="res://Sounds/Kunek/Landing.wav" id="7_s81fl"]
 [ext_resource type="PackedScene" uid="uid://cauxcx362hp4n" path="res://Shadow.tscn" id="8_tt1jp"]
+[ext_resource type="AudioStream" uid="uid://hyhgnphg8wln" path="res://Sounds/Kunek/mam_cie.wav" id="11_kn2et"]
 [ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="kunek_frames"]
 [ext_resource type="SpriteFrames" uid="uid://bnm5y0u6nh5pe" path="res://characters/dude_magic_frames.tres" id="magic_frames"]
 [ext_resource type="SpriteFrames" uid="uid://dbicsqv1sa4ie" path="res://characters/dude_outline_frames.tres" id="outline_frames"]
@@ -82,6 +83,15 @@ stream = ExtResource("6_k77yt")
 
 [node name="RespawnPlayer" type="AudioStreamPlayer2D" parent="." unique_id=478866122]
 stream = ExtResource("7_8hsc3")
+
+[node name="GotchaPlayer" type="AudioStreamPlayer2D" parent="." unique_id=2090562046]
+stream = ExtResource("11_kn2et")
+
+[node name="DuckPlayer" type="AudioStreamPlayer2D" parent="." unique_id=358034799]
+
+[node name="DuckCooldown" type="Timer" parent="." unique_id=1289391164]
+wait_time = 1.5
+one_shot = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="RespawnTimer" to="." method="respawn"]

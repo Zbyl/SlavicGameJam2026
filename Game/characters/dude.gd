@@ -43,11 +43,27 @@ var currentState: DudeState = DudeState.Idle
 @onready var landing_player: AudioStreamPlayer2D = $LandingPlayer
 @onready var die_player: AudioStreamPlayer2D = $DiePlayer
 @onready var respawn_player: AudioStreamPlayer2D = $RespawnPlayer
+@onready var gotcha_player: AudioStreamPlayer2D = $GotchaPlayer
+@onready var duck_player: AudioStreamPlayer2D = $DuckPlayer
+@onready var duck_cooldown: Timer = $DuckCooldown
 @onready var streams = [
     load("res://Sounds/Kunek/FoxRun.wav"),
     load("res://Sounds/Kunek/FerretRun.wav"),
     load("res://Sounds/Kunek/WeaselRun.wav"),
     load("res://Sounds/Kunek/SnowRun.wav")
+]
+@onready var duckBerek = [
+    load("res://Sounds/Kunek/ech.wav"),
+    load("res://Sounds/Kunek/jestem_straszny.wav"),
+    load("res://Sounds/Kunek/rrrrr.wav"),
+    load("res://Sounds/Kunek/lasice_sa_szybkie.wav"),
+    load("res://Sounds/Kunek/lapie.wav")
+]
+@onready var duck = [
+    load("res://Sounds/Kunek/hi_hi.wav"),
+    load("res://Sounds/Kunek/o_zaba.wav"),
+    load("res://Sounds/Kunek/nie_zlapiesz_mnie.wav"),
+    load("res://Sounds/Kunek/uciekam.wav")
 ]
 var run_stream: AudioStream
 
@@ -138,6 +154,14 @@ func isJumpButtonPressedRaw() -> bool:
         pressed = Input.is_key_pressed(controllerData["jump"])
     return pressed
 
+func isDuckButtonPressed() -> bool:
+    var pressed := false
+    if controllerData["type"]=="pad":
+        pressed = Input.is_joy_button_pressed(controllerData["pad"], JOY_BUTTON_B)
+    elif controllerData["type"]=="keyboard":
+        pressed = Input.is_key_pressed(controllerData["duck"])
+    return pressed
+
 var wasJumpPressedLastFrame := false
 var wasJumpJustPressed := false
 func updateJumpButton() -> void:
@@ -153,6 +177,18 @@ func updateJumpButton() -> void:
         justPressed = false
         wasJumpPressedLastFrame = false
     wasJumpJustPressed = justPressed
+
+func updateDuckButton():
+    if isDuckButtonPressed() && duck_cooldown.is_stopped():
+        var quacks: Array
+        if isBerek:
+            quacks = duckBerek
+        else:
+            quacks = duck
+        var idx = randi_range(0, quacks.size()-1)
+        duck_player.stream = quacks[idx]
+        duck_player.play()
+        duck_cooldown.start()
 
 func isJumpButtonPressed() -> bool:
     if wasJumpJustPressed:
@@ -213,6 +249,7 @@ func _physics_process(delta: float):
         return
 
     updateJumpButton()
+    updateDuckButton()
 
     var direction = calculateInputDirection()
     #var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -355,6 +392,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
         run_player.stop()
         die_player.play()
+        gotcha_player.play()
         currentState = DudeState.Dead
         animation.play(character + stateToAnim(currentState) + str(currentAngle))
         syncAnimations()

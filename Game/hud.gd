@@ -18,7 +18,7 @@ signal game_won(info: String)
 
 var playerData = {
     0:{"type":"pad","pad":0},
-    1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE}
+    1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_0}
 }
 
 var player_huds: Dictionary = {}
@@ -57,9 +57,9 @@ func initPlayers(ddudes: Array[Dude]):
 
         for dude in ddudes:
             playerOffsetsRev.append(playerNumber[dude.character])
-            
+
         playerOffsetsRev.sort()
-        
+
         var playerOffsets: Dictionary = Dictionary()
         for i in range(playerOffsetsRev.size()):
             # i order, playerOffsetsRev[i] - playernumber
