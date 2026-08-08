@@ -53,9 +53,21 @@ func initPlayers(ddudes: Array[Dude]):
         player_huds[h].visible = false
 
     if ddudes.size() > 1:
+        var playerOffsetsRev:Array = Array()
+
+        for dude in ddudes:
+            playerOffsetsRev.append(playerNumber[dude.character])
+        playerOffsetsRev.sort()
+        var playerOffsets = Dictionary()
+        for i in playerOffsetsRev:
+            # i order, playerOffsetsRev[i] - playernumber
+            playerOffsets[playerOffsetsRev[i]] = i
+
         for dude in ddudes:
             dudes[dude.character] = dude
-            player_huds[playerNumber[dude.character]].visible = true
+            var pn = playerNumber[dude.character]
+            player_huds[pn].visible = true
+            player_huds[pn].position.y = 13 * playerOffsets[pn]
             if ! dude.isBerek:
                 player_anims[playerNumber[dude.character]].play()
 
@@ -63,10 +75,13 @@ func _ready() -> void:
 
     for i in range(4):
         player_huds[i] = get_node("Screen/Gauges/Player%dHud" % (i + 1) )
+        player_huds[i].position.y = 0
     for i in range(4):
         player_anims[i] = get_node("Screen/Gauges/Player%dHud/Anim" % (i + 1) )
+        player_anims[i].position.y = 22
     for i in range(4):
         player_bars[i] = get_node("Screen/Gauges/Player%dHud/Bar" % (i + 1) )
+        player_bars[i].position.y = player_anims[i].position.y - 4
 
     show_menu(true, false)
 
