@@ -10,7 +10,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
     var averagePosition := Vector2.ZERO
     var averagePosition2 := Vector2.ZERO
     
@@ -21,6 +21,7 @@ func _process(_delta: float) -> void:
         averagePosition2.y += posOfKun.y ** 2
         
     var stdOfPosition = Vector2.ZERO
+    var zoomIncreaseMaxRelVelocity =  0.05
     var viewWidthAtZoom0 = 1280.0
     var viewHeightAtZoom0 = 640.0
     
@@ -31,8 +32,11 @@ func _process(_delta: float) -> void:
         stdOfPosition.y = sqrt(averagePosition2.y - averagePosition.y ** 2) 
         var neededZoomX = viewWidthAtZoom0 / (3 * stdOfPosition.x)
         var neededZoomY = viewHeightAtZoom0 / (3 * stdOfPosition.y)
-        var neededZoom = min(neededZoomX, neededZoomY)
+        var neededZoom = min(1.0, neededZoomX, neededZoomY)
         position = averagePosition
-        zoom.x = min(1.0, neededZoom)
-        zoom.y = min(1.0, neededZoom)
+        var oldZoom = zoom.x
+        var zoomVelocity = (neededZoom - oldZoom) / delta
+        
+        zoom.x = min(zoomVelocity / oldZoom, zoomIncreaseMaxRelVelocity) * oldZoom * delta + oldZoom
+        zoom.y = zoom.x
         
