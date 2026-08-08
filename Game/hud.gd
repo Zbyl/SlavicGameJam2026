@@ -15,6 +15,9 @@ signal new_game_pressed()
 @onready var menu: Control = $Screen/Menu
 @onready var gauges: Control = $Screen/Gauges
 
+@onready var menu_music: AudioStreamPlayer = $Music/MenuMusic
+@onready var level_music: AudioStreamPlayer = $Music/LevelMusic
+
 var playerData = {
     0:{"type":"pad","pad":0},
     1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE}
@@ -47,6 +50,7 @@ func _ready() -> void:
     show_menu(true)
 
 func show_menu(do_show: bool):
+    playMusic(do_show)
     background.visible = do_show
     menu.visible = do_show
     gauges.visible = !do_show
@@ -82,3 +86,10 @@ func updatePlayerData(pd: Dictionary):
 func _on_player_picker_destroy():
     menu.visible = true
     controls_button.grab_focus.call_deferred()
+
+func playMusic(forMenu: bool) -> void:
+    var player := menu_music if forMenu else level_music
+    var otherPlayer := menu_music if not forMenu else level_music
+    otherPlayer.stop()
+    if not player.playing:
+        player.play()

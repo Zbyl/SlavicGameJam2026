@@ -12,7 +12,6 @@ const DUDE = preload("res://characters/dude.tscn")
 
 var level: Node2D = null # Current level, or null
 
-
 func _ready() -> void:
     hud.new_game_pressed.connect(_on_new_game_pressed)
 
@@ -50,6 +49,8 @@ func _switch_level(new_level_scene):
     # Hack to make sure we instantiate new level once old level is actually freed.
     # Otherwise we might have two Players at once etc.
     await get_tree().create_timer(0.01).timeout
+
+    GameData.hud.playMusic(false)
 
     level = new_level_scene.instantiate()
     add_child(level)
