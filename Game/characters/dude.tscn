@@ -30,6 +30,7 @@ position = Vector2(0, -35)
 shape = SubResource("CapsuleShape2D_d5dh0")
 
 [node name="Kunek" type="AnimatedSprite2D" parent="." unique_id=706360744]
+scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("kunek_frames")
 animation = &"FoxDie1"
 autoplay = "FoxIdle8"
@@ -38,13 +39,14 @@ frame_progress = 1.0
 
 [node name="Outline" type="AnimatedSprite2D" parent="." unique_id=812345678]
 z_index = 100
+scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("outline_frames")
 animation = &"OutlineFerretDir1"
 autoplay = "OutlineWeaselJump8"
 
 [node name="Berek" type="AnimatedSprite2D" parent="." unique_id=501282073]
 z_index = -1
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.12, 0.12)
 sprite_frames = ExtResource("magic_frames")
 autoplay = "default"
 frame_progress = 0.8045777

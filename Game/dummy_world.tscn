@@ -12,23 +12,19 @@ texture = ExtResource("1_xmacq")
 
 [node name="Dude1" parent="." unique_id=345096153 instance=ExtResource("1_5vsmq")]
 position = Vector2(177, 210)
-scale = Vector2(0.5, 0.5)
 isBerek = true
 
 [node name="Dude2" parent="." unique_id=20165905 instance=ExtResource("1_5vsmq")]
 position = Vector2(517, 198)
-scale = Vector2(0.5, 0.5)
 character = "Ferret"
 controller = 1
 
 [node name="Dude3" parent="." unique_id=1484367369 instance=ExtResource("1_5vsmq")]
 position = Vector2(382, 294)
-scale = Vector2(0.5, 0.5)
 character = "Weasel"
 controller = 2
 
 [node name="Dude4" parent="." unique_id=7024679 instance=ExtResource("1_5vsmq")]
 position = Vector2(652, 329)
-scale = Vector2(0.5, 0.5)
 character = "Snow"
 controller = 3
