@@ -8,9 +8,9 @@ const WORLD_ASPECT_FACTOR = 0.5
 
 @export var speed: float = 300.0
 @export var character: String = "Fox"
-@export var controller: int = 0
-@export var jumpButton = JOY_BUTTON_A
 @export var isBerek: bool = false
+
+var controllerData : Dictionary
 
 const JUMP_VELOCITY: float = 200.0
 var gravity: float = 400.0
@@ -84,16 +84,44 @@ func setBerek(state: bool):
         remove_from_group("Berek")
     berek.visible = isBerek
 
+func getInputDirectin() -> Vector2:
+    if controllerData["type"]=="pad":
+        var controller = controllerData["pad"]
+        var x = Input.get_joy_axis(controller, JOY_AXIS_LEFT_X)
+        var y = Input.get_joy_axis(controller, JOY_AXIS_LEFT_Y)
+        return Vector2(x, y)
+    elif controllerData["type"]=="keyboard":
+        var up = Input.is_key_pressed(controllerData["up"])
+        var down = Input.is_key_pressed(controllerData["down"])
+        var left = Input.is_key_pressed(controllerData["left"])
+        var right = Input.is_key_pressed(controllerData["right"])
+        var x = 0
+        var y = 0
+        if up && !down:
+            y = -1
+        elif !up && down:
+            y = 1
+        if left && !right:
+            x = -1
+        elif !left && right:
+            x = 1
+        return Vector2(x, y)
+    else:
+        return Vector2.ZERO
+
 func calculateInputDirection() -> Vector2:
-    var x = Input.get_joy_axis(controller, JOY_AXIS_LEFT_X)
-    var y = Input.get_joy_axis(controller, JOY_AXIS_LEFT_Y)
-    var dir = Vector2(x, y)
+    var dir = getInputDirectin()
     if dir.length() < DEADZONE:
         dir = Vector2.ZERO
     return dir
 
 func isJumpButtonPressed() -> bool:
-    return Input.is_joy_button_pressed(controller, jumpButton)
+    if controllerData["type"]=="pad":
+        return Input.is_joy_button_pressed(controllerData["pad"], JOY_BUTTON_A)
+    elif controllerData["type"]=="keyboard":
+        return Input.is_key_pressed(controllerData["jump"])
+    else:
+        return false
 
 func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeState:
     if currentState == DudeState.Dead:

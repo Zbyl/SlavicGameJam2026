@@ -57,11 +57,11 @@ func _switch_level(new_level_scene):
 
     var first = true
     for key in hud.playerData.keys():
-        var charData = hud.playerData[key]
+        var controllerData = hud.playerData[key]
         var dude: Dude = DUDE.instantiate()
         dude.isBerek = first
         dude.character = CHARACTERS[key]
-        dude.controller = charData["pad"]
+        dude.controllerData = controllerData
         first = false
         var spawnPoint = GameData.layerHelpers.spawnPoints[key]
         add_child(dude)

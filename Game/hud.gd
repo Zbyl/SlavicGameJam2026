@@ -15,7 +15,10 @@ signal new_game_pressed()
 @onready var menu: Control = $Screen/Menu
 @onready var gauges: Control = $Screen/Gauges
 
-var playerData = {1:{"type":"pad", "pad":0}}
+var playerData = {
+    0:{"type":"pad","pad":0},
+    1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE}
+}
 
 func getPlayerLabel(player_hud: Control) -> Label:
     return player_hud.get_node("PlayerLabel")
