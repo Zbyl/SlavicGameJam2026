@@ -15,6 +15,10 @@ var controllerData : Dictionary
 const JUMP_VELOCITY: float = 300.0
 var gravity: float = 800.0
 
+const JUMP_BUFFER_TIME: int = 150 # How much time before landing can we push jump button. In milliseconds.
+var lastTimeJumpPressed: int = 0 # Last time we pressed the jump button. In milliseconds.
+const COYOTE_TIME: int = 100 # How much time after loosing ground can we jump. In milliseconds.
+var lastTimeOnTheGround: int = 0 # Last time we touched the ground. In milliseconds.
 
 var currentAngle: int = 8 # 1 to 8,  1 - SW, 2 - W, ..., 8 - S
 
@@ -119,13 +123,39 @@ func calculateInputDirection() -> Vector2:
         dir = Vector2.ZERO
     return dir
 
-func isJumpButtonPressed() -> bool:
+func isJumpButtonPressedRaw() -> bool:
+    var pressed := false
     if controllerData["type"]=="pad":
-        return Input.is_joy_button_pressed(controllerData["pad"], JOY_BUTTON_A)
+        pressed = Input.is_joy_button_pressed(controllerData["pad"], JOY_BUTTON_A)
     elif controllerData["type"]=="keyboard":
-        return Input.is_key_pressed(controllerData["jump"])
+        pressed = Input.is_key_pressed(controllerData["jump"])
+    return pressed
+    
+var wasJumpPressedLastFrame := false
+var wasJumpJustPressed := false
+func updateJumpButton() -> void:
+    var pressed = isJumpButtonPressedRaw()
+    var justPressed := false
+    if pressed:
+        if wasJumpPressedLastFrame:
+            justPressed = false
+        else:
+            justPressed = true
+        wasJumpPressedLastFrame = true
     else:
-        return false
+        justPressed = false
+        wasJumpPressedLastFrame = false
+    wasJumpJustPressed = justPressed
+
+func isJumpButtonPressed() -> bool:
+    if wasJumpJustPressed:
+        lastTimeJumpPressed = Time.get_ticks_msec()
+        return true
+
+    if (Time.get_ticks_msec() - lastTimeJumpPressed) <= JUMP_BUFFER_TIME:
+        return true
+        
+    return false
 
 func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeState:
     if currentState == DudeState.Dead:
@@ -168,6 +198,8 @@ func syncAnimations():
     outline.frame=animation.frame
 
 func _physics_process(delta: float):
+    updateJumpButton()
+    
     var direction = calculateInputDirection()
     #var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
@@ -187,6 +219,8 @@ func _physics_process(delta: float):
         var distFromGround := currentZ - preGroundInfo.groundHeight
         var heightToConsiderOnGround := layerHeight / 20.0
         currentlyOnGround = distFromGround < heightToConsiderOnGround
+    if currentlyOnGround:
+        lastTimeOnTheGround = Time.get_ticks_msec()
 
     if currentlyOnGround:
         velocityZ = 0.0
@@ -195,10 +229,13 @@ func _physics_process(delta: float):
 
     # Handle jump.
     var didJustJump := false
-    if isJumpPressed and currentlyOnGround:
+    var isCoyoteTimeActive =  (Time.get_ticks_msec() - lastTimeOnTheGround) <= COYOTE_TIME
+    if isJumpPressed and (currentlyOnGround or isCoyoteTimeActive):
         velocityZ = JUMP_VELOCITY
         didJustJump = true
         currentlyOnGround = false
+        lastTimeJumpPressed = 0 # Turn off jump buffer time when we just used it.
+        lastTimeOnTheGround = 0 # Turn off coyote time when we just used it.
 
     # Ustawienie prędkości
     if direction == Vector2.ZERO:
@@ -284,8 +321,10 @@ func _physics_process(delta: float):
     syncAnimations()
 
     if debugLabel != null:
-        debugLabel.text = "state={state} imageOffset={imageOffset} z_index={z_index} gravity={gravity} deltaZ={deltaZ} velocityZ={velocityZ}\nonGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
-            format({"state": currentState, "imageOffset": baseImage.offset.y - baseImageOffsetY, "z_index": z_index, "gravity": gravity, "deltaZ": deltaZ, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
+        #debugLabel.text = "state={state} imageOffset={imageOffset} z_index={z_index} gravity={gravity} deltaZ={deltaZ} velocityZ={velocityZ}\nonGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
+        #    format({"state": currentState, "imageOffset": baseImage.offset.y - baseImageOffsetY, "z_index": z_index, "gravity": gravity, "deltaZ": deltaZ, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
+        debugLabel.text = "isJumpPressed={isJumpPressed}".\
+            format({"isJumpPressed": isJumpPressed})
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
