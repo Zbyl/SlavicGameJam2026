@@ -3,10 +3,10 @@ class_name Hud
 
 const PLAYER_PICKER = preload("res://player_picker.tscn")
 
-signal new_game_pressed()
+signal new_game_pressed(levelIdx: int)
 signal game_won(info: String)
 
-@onready var new_game_button: Button = $Screen/Menu/VBoxContainer/NewGameButton
+@onready var new_game_button0: Button = $Screen/Menu/VBoxContainer/NewGameButton0
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
 @onready var backgroundForLevel: TextureRect = $Screen/BackgroundForLevel
@@ -139,12 +139,12 @@ func show_menu(do_show: bool, in_level: bool):
     menu.visible = do_show
     gauges.visible = !do_show
     if do_show:
-        new_game_button.grab_focus.call_deferred()
+        new_game_button0.grab_focus.call_deferred()
 
 
-func _on_new_game_button_pressed() -> void:
+func _on_new_game_button_pressed(levelIdx: int) -> void:
     countPointsReset()
-    new_game_pressed.emit()
+    new_game_pressed.emit(levelIdx)
 
 
 func _on_full_screen_button_pressed() -> void:
@@ -168,7 +168,6 @@ func _on_controls_button_pressed() -> void:
 
 func updatePlayerData(pd: Dictionary):
     playerData = pd
-    new_game_button.disabled = false
 
 func _on_player_picker_destroy():
     menu.visible = true

@@ -82,9 +82,17 @@ offset_top = 12.0
 offset_right = 293.0
 offset_bottom = 148.0
 
-[node name="NewGameButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
+[node name="NewGameButton0" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
 layout_mode = 2
 text = "Poluj!"
+
+[node name="NewGameButton1" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=23288239]
+layout_mode = 2
+text = "Łapaj!"
+
+[node name="NewGameButton2" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=403209621]
+layout_mode = 2
+text = "Capaj!"
 
 [node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
 layout_mode = 2
@@ -246,7 +254,9 @@ volume_db = -24.0
 stream = ExtResource("9_gpiub")
 volume_db = -34.0
 
-[connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton0" to="." method="_on_new_game_button_pressed" binds= [0]]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton1" to="." method="_on_new_game_button_pressed" binds= [1]]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton2" to="." method="_on_new_game_button_pressed" binds= [2]]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ControlsButton" to="." method="_on_controls_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

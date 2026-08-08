@@ -6,6 +6,8 @@ const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
 @onready var hud: CanvasLayer = $Hud
 
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
+const LEVEL_2 = preload("res://Levels/Level1.tscn")
+const LEVEL_3 = preload("res://Levels/Level1.tscn")
 const DUDE = preload("res://characters/dude.tscn")
 
 @onready var gameCamera: GameCamera = $GameCamera
@@ -15,8 +17,17 @@ var level: Node2D = null # Current level, or null
 func _ready() -> void:
     hud.new_game_pressed.connect(_on_new_game_pressed)
 
-func _on_new_game_pressed():
-    await _switch_level(LEVEL_1)
+func _on_new_game_pressed(levelIdx: int):
+    if levelIdx == 0:
+        await _switch_level(LEVEL_1)
+        return
+    if levelIdx == 1:
+        await _switch_level(LEVEL_2)
+        return
+    if levelIdx == 2:
+        await _switch_level(LEVEL_3)
+        return
+    assert(false, "Invalid level index.")
 
 func _switch_level(new_level_scene):
     # Cleanup
