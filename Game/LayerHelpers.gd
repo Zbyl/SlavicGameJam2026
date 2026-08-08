@@ -5,6 +5,7 @@ var layerHeight: float = 40.0
 var zToYOffsetRatio: float = 1.0 # Multiply z by this much to get y offset. But note that Z goes up, but y goes down.
 
 var tile_map_layers: Array[TileMapLayer] = []  # Used by level preprocessing, Dudes and Shadow.
+var spawnPoints: Array[Vector3] = [] # @note Order of spawn points does not correspond to names inside Level.
 
 # Empty tile Level0 is in source 1, tile 23,0
 # Empty tile Level1 is in source 1, tile 0,2
@@ -49,6 +50,19 @@ func initTileMaps(level: Node2D):
             break
         tile_map_layers.append(tileMap)
 
+    # Load spawn points
+    var spawnPointMarkers: Array[Node] = level.get_tree().get_nodes_in_group('SpawnPoint')
+    for spawnPointMarker in spawnPointMarkers:
+        var spawnParentName = spawnPointMarker.get_parent().name
+        assert(spawnParentName.substr(0, "TileMapLayer".length()) == "TileMapLayer", "Invalid spawn parent name")
+        var idxStr = spawnParentName.substr("TileMapLayer".length())
+        var layer = int(idxStr)
+        var spawnPoint := Vector3(spawnPointMarker.global_position.x, spawnPointMarker.global_position.y, layer * layerHeight)
+        spawnPoints.append(spawnPoint)
+
+    assert(spawnPoints.size() == 4, "Must have 4 spawn points in a level")
+
+    # Generate collisions
     var tile_map_layer_0: TileMapLayer = level.get_node("TileMapLayer0")
     var previousLayer: TileMapLayer = tile_map_layer_0
     for i in range(100):

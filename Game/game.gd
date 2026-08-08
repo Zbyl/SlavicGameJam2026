@@ -50,25 +50,14 @@ func _switch_level(new_level_scene):
     await get_tree().create_timer(0.01).timeout
 
     level = new_level_scene.instantiate()
-    GameData.layerHelpers.initTileMaps(level)
     add_child(level)
-
-    var spawnPointMarkers: Array[Node] = get_tree().get_nodes_in_group('SpawnPoint')
-    var spawnPoints: Array[Vector3] = [] # @note Order of spawn points does not correspond to names inside Level.
-    for spawnPointMarker in spawnPointMarkers:
-        var spawnParentName = spawnPointMarker.get_parent().name
-        assert(spawnParentName.substr(0, "TileMapLayer".length()) == "TileMapLayer", "Invalid spawn parent name")
-        var idxStr = spawnParentName.substr("TileMapLayer".length())
-        var layer = int(idxStr)
-        var spawnPoint := Vector3(spawnPointMarker.global_position.x, spawnPointMarker.global_position.y, layer * GameData.layerHelpers.layerHeight)
-        spawnPoints.append(spawnPoint)
-
-    assert(spawnPoints.size() == 4, "Must have 4 spawn points in a level")
+    GameData.layerHelpers.initTileMaps(level) # Must be run when level is already in the tree (as it uses get_nodes_in_group()).
 
     var dude: Dude = DUDE.instantiate()
+    var spawnPoint = GameData.layerHelpers.spawnPoints[0]
     add_child(dude)
-    dude.global_position = Vector2(spawnPoints[0].x, spawnPoints[0].y)
-    dude.currentZ = spawnPoints[0].z
+    dude.global_position = Vector2(spawnPoint.x, spawnPoint.y)
+    dude.currentZ = spawnPoint.z
     dude.debugLabel = GameData.hud.get_node("./%DebugLabel")
 
     var newDudes: Array[Node] = get_tree().get_nodes_in_group('Dude')
