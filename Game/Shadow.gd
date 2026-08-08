@@ -21,5 +21,4 @@ func _process(delta: float) -> void:
         layer -= 1
     
     var screenPosition := GameData.layerHelpers.screenPositionFromMapPosition(mapPosition.mapCoords, mapPosition.offsetWithinTile, layer * GameData.layerHelpers.layerHeight)
-    z_index = layer + 1
     global_position = screenPosition
