@@ -6,7 +6,7 @@ const ACCELERATION_FACTOR = 700
 const DECELERATION_FACTOR = 2*ACCELERATION_FACTOR
 const WORLD_ASPECT_FACTOR = 0.5
 
-@export var speed: float = 300.0
+@export var speed: float = 450.0
 @export var character: String = "Fox"
 @export var isBerek: bool = false
 
@@ -220,6 +220,17 @@ func _physics_process(delta: float):
         if postGroundInfo.groundType != LayerHelpers.GroundType.EMPTY:
             movedOnGround = true
             deltaZ = postGroundInfo.groundHeight - currentZ
+
+    # Hack for falling through the level.
+    # We only handle falling through the floor, not jumping through the ceilling (for simplicity).
+    var groundEpsilon := layerHeight / 20.0
+    var lowerZ = min(currentZ, currentZ + deltaZ) - groundEpsilon
+    var upperZ = max(currentZ, currentZ + deltaZ) + groundEpsilon
+    var beetweenGrounds := GameData.layerHelpers.groundHeightsBeetweenZs(postMapPosition.mapCoords, postMapPosition.offsetWithinTile, lowerZ, upperZ)
+    if deltaZ < 0:
+        if beetweenGrounds.size() >= 1:
+            # Stop on the highest ground.
+            deltaZ = beetweenGrounds[beetweenGrounds.size() - 1] - currentZ
 
     currentZ += deltaZ
 

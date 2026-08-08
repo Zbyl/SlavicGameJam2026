@@ -240,3 +240,42 @@ func slopeGroundHeight(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, lay
         return null
     var groundHeight := planarOffsetWithinTile.y * layerHeight + (layer - 1) * layerHeight
     return groundHeight
+
+# Returns heights of all grounds on given map coordinates. Sorted from bottom to top.
+# If nothing elso would be found one element equal to zero is returned.
+func allGroundHeightsInPosition(mapCoords: Vector2i, planarOffsetWithinTile: Vector2) -> Array[float]:
+    var grounds: Array[float] = []
+    for layer in range(tile_map_layers.size()):
+        var tileMap := getTileMapForLayer(layer)
+        if isSolidTile(tileMap, mapCoords):
+            grounds.append(layer * layerHeight)
+            continue
+        if isSlope(tileMap, mapCoords):
+            grounds.append(slopeGroundHeight(mapCoords, planarOffsetWithinTile, layer))
+            continue
+
+    if grounds.size() == 0:
+        grounds = [0.0]
+
+    return grounds
+            
+# Returs height of the highest ground below or equal to given z.
+# If z is < 0 will return 0.
+func groundHeightBelow(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, z: float) -> float:
+    var grounds := allGroundHeightsInPosition(mapCoords, planarOffsetWithinTile)
+    var lastLowerGround := 0.0
+    for ground in grounds:
+        if ground <= z:
+            lastLowerGround = z
+    return lastLowerGround
+    
+# Returns all ground heights between, and including, lower and upper z. Sorted ascending.
+# Can return an empty array.
+func groundHeightsBeetweenZs(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, lowerZ: float, upperZ: float) -> Array[float]:
+    var grounds := allGroundHeightsInPosition(mapCoords, planarOffsetWithinTile)
+    var beetweenGrounds: Array[float] = []
+    for ground in grounds:
+        if (ground >= lowerZ) and (ground <= upperZ):
+            beetweenGrounds.append(ground)
+    return beetweenGrounds
+    
