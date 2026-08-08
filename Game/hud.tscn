@@ -45,7 +45,6 @@ offset_bottom = 148.0
 
 [node name="NewGameButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
 layout_mode = 2
-disabled = true
 text = "Nowa gra"
 
 [node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
