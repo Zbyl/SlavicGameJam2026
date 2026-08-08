@@ -16,19 +16,23 @@ const JUMP_VELOCITY: float = 200.0
 var gravity: float = 400.0
 
 var currentAngle: int = 8 # 1 to 8,  1 - SW, 2 - W, ..., 8 - S
-var currentState: String = "None"
-#  - None - unused, invalid
-#  - Idle
-#  - Die
-#  - Jump
-#  - Dir - running (Dir name is used because animations are named Dir)
+
+enum DudeState {
+    Idle,
+    Dead,
+    Jump,           # Just jumped.
+    Falling,        # In air.
+    Running,        # Running.
+}
+var currentState: DudeState = DudeState.Idle
 
 @onready var animation: AnimatedSprite2D = $Kunek
 @onready var outline: AnimatedSprite2D = $Outline
 @onready var berek: AnimatedSprite2D = $Berek
-@onready var timer: Timer = $Timer
+@onready var respawnTimer: Timer = $RespawnTimer
 @onready var run_player: AudioStreamPlayer2D = $RunPlayer
 @onready var jump_player: AudioStreamPlayer2D = $JumpPlayer
+@onready var landing_player: AudioStreamPlayer2D = $LandingPlayer
 @onready var die_player: AudioStreamPlayer2D = $DiePlayer
 @onready var respawn_player: AudioStreamPlayer2D = $RespawnPlayer
 @onready var streams = [
@@ -91,24 +95,28 @@ func calculateInputDirection() -> Vector2:
 func isJumpButtonPressed() -> bool:
     return Input.is_joy_button_pressed(controller, jumpButton)
 
-func calculateState(dir: Vector2, isJump: bool) -> String:
-    if currentState=="Die":
-        return "Die"
-    elif isJump:
-        return "Jump"
-    elif currentState=="Jump":
-        return "Jump"
-    elif dir == Vector2.ZERO:
-        return "Idle"
-    else:
-        return "Dir"
+func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeState:
+    if currentState == DudeState.Dead:
+        return DudeState.Dead
 
-func resetState():
-    if currentState == "Die":
+    if justJumped:
+        return DudeState.Jump
+
+    if not isOnGround:
+        return DudeState.Falling
+        
+    if dir == Vector2.ZERO:
+        return DudeState.Idle
+
+    return DudeState.Running
+
+# Respawns a player after dying.
+func respawn():
+    if currentState == DudeState.Dead:
         get_tree().call_group("Berek", "setBerek", false)
         respawn_player.play()
         setBerek(true)
-    currentState="None"
+    currentState = DudeState.Idle
 
 func calculateAngle(dir: Vector2) -> int:
     var angle = roundi((rad_to_deg(atan2(dir.y, dir.x))+270.0)/45.0)
@@ -126,7 +134,7 @@ func _physics_process(delta: float):
     var direction = calculateInputDirection()
     #var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
-    var isJump = isJumpButtonPressed()
+    var isJumpPressed = isJumpButtonPressed()
     #var isJump = Input.is_action_just_pressed("ui_accept")
 
     var preMapPosition := GameData.layerHelpers.mapPositionFromScreenPosition(global_position, currentZ)
@@ -145,8 +153,10 @@ func _physics_process(delta: float):
         velocityZ -= gravity * delta
 
     # Handle jump.
-    if isJump and currentlyOnGround:
+    var didJustJump := false
+    if isJumpPressed and currentlyOnGround:
         velocityZ = JUMP_VELOCITY
+        didJustJump = true
         currentlyOnGround = false
 
     # Ustawienie prędkości
@@ -189,18 +199,21 @@ func _physics_process(delta: float):
 
     # State changes and animation handling.
 
-    var changeAnimation = false
-    var state = calculateState(direction, isJump)
+    var changeAnimation := false
+    var oldState := currentState
+    currentState = calculateState(direction, didJustJump, currentlyOnGround)
 
-    if state != currentState:
-        currentState = state
-        if state == "Jump": # this is temporary solution for canceling jump
-            timer.wait_time = 0.5;
-            timer.start()
+    if currentState != oldState:
+        if currentState == DudeState.Jump: # this is temporary solution for canceling jump
             jump_player.play()
+            
+        # If we just landed play the landing sound.
+        if ((oldState == DudeState.Jump) or (oldState == DudeState.Falling)) and currentlyOnGround:
+            landing_player.play()
 
-        if state == "Dir":
-            run_player.play()
+        if currentState == DudeState.Running:
+            if not run_player.playing:
+                run_player.play()
         else:
             run_player.stop()
 
@@ -214,13 +227,13 @@ func _physics_process(delta: float):
             changeAnimation = true
 
     if changeAnimation:
-        animation.play(character+currentState+str(currentAngle))
+        animation.play(character + stateToAnim(currentState) + str(currentAngle))
 
     syncAnimations()
 
     if debugLabel != null:
-        debugLabel.text = "imageOffset={imageOffset} z_index={z_index} gravity={gravity} deltaZ={deltaZ} velocityZ={velocityZ}\nonGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
-            format({"imageOffset": baseImage.offset.y - baseImageOffsetY, "z_index": z_index, "gravity": gravity, "deltaZ": deltaZ, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
+        debugLabel.text = "state={state} imageOffset={imageOffset} z_index={z_index} gravity={gravity} deltaZ={deltaZ} velocityZ={velocityZ}\nonGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
+            format({"state": currentState, "imageOffset": baseImage.offset.y - baseImageOffsetY, "z_index": z_index, "gravity": gravity, "deltaZ": deltaZ, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -230,11 +243,11 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         print("I'm dying!")
 
         die_player.play()
-        currentState="Die"
-        animation.play(character+currentState+str(currentAngle))
+        currentState = DudeState.Dead
+        animation.play(character + stateToAnim(currentState) + str(currentAngle))
         syncAnimations()
-        timer.wait_time = 2.0;
-        timer.start()
+        respawnTimer.wait_time = 2.0;
+        respawnTimer.start()
 
 # Calculated global_position shifted up using image offset to give screen position of Kunek.
 func positionOfKunek() -> Vector2:
@@ -251,3 +264,12 @@ func setLayerCollisionMask(layer: int, value: bool) -> void:
 func clearLayerCollisionMask() -> void:
     for layer in range(16):
         setLayerCollisionMask(layer, false)
+
+func stateToAnim(state: DudeState) -> String:
+    if state == DudeState.Dead:
+        return "Die"
+    if state == DudeState.Running:
+        return "Dir"
+    if state == DudeState.Falling:
+        return "Dir"
+    return str(state)

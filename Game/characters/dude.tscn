@@ -56,13 +56,16 @@ sprite_frames = ExtResource("magic_frames")
 autoplay = "default"
 frame_progress = 0.8045777
 
-[node name="Timer" type="Timer" parent="." unique_id=1340742229]
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1340742229]
 wait_time = 0.5
 one_shot = true
 
 [node name="RunPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1645579698]
 
 [node name="JumpPlayer" type="AudioStreamPlayer2D" parent="." unique_id=546973934]
+stream = ExtResource("5_64te8")
+
+[node name="LandingPlayer" type="AudioStreamPlayer2D" parent="." unique_id=431287227]
 stream = ExtResource("5_64te8")
 
 [node name="DiePlayer" type="AudioStreamPlayer2D" parent="." unique_id=1008268916]
@@ -72,4 +75,4 @@ stream = ExtResource("6_k77yt")
 stream = ExtResource("7_8hsc3")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="timeout" from="Timer" to="." method="resetState"]
+[connection signal="timeout" from="RespawnTimer" to="." method="resetState"]
