@@ -9,6 +9,10 @@ signal new_game_pressed()
 @onready var player_2_hud: Control = $Screen/Gauges/Player2Hud
 @onready var player_3_hud: Control = $Screen/Gauges/Player3Hud
 @onready var player_4_hud: Control = $Screen/Gauges/Player4Hud
+@onready var player_1_anim: AnimatedSprite2D = $Screen/Gauges/Player1Hud/Anim
+@onready var player_2_anim: AnimatedSprite2D = $Screen/Gauges/Player2Hud/Anim
+@onready var player_3_anim: AnimatedSprite2D = $Screen/Gauges/Player3Hud/Anim
+@onready var player_4_anim: AnimatedSprite2D = $Screen/Gauges/Player4Hud/Anim
 @onready var new_game_button: Button = $Screen/Menu/VBoxContainer/NewGameButton
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
@@ -44,9 +48,21 @@ func initPlayers(count: int):
     player_3_hud.visible = count>=3
     player_2_hud.visible = count>=2
     player_1_hud.visible = count>=1
-    setBerek(1)
+    #setBerek(1)
+    if count >= 1:
+        player_1_anim.play()
+    if count >= 2:
+        player_2_anim.play()
+    if count >= 3:
+        player_3_anim.play()
+    if count >= 4:
+        player_4_anim.play()
 
 func _ready() -> void:
+    #player_1_anim.play()
+    #player_2_anim.play()
+    #player_3_anim.play()
+    #player_4_anim.play()
     show_menu(true)
 
 func show_menu(do_show: bool):

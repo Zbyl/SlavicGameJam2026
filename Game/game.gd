@@ -75,5 +75,5 @@ func _switch_level(new_level_scene):
     for newDude in newDudes:
         ddudes.append(newDude as Dude)
     gameCamera.dudes = ddudes
-
+    GameData.hud.initPlayers(ddudes.size())
     GameData.hud.show_menu(false)

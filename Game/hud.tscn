@@ -3,18 +3,48 @@
 [ext_resource type="Texture2D" uid="uid://dshehsdmdnme6" path="res://images/start_screen.png" id="1_1xsix"]
 [ext_resource type="Script" uid="uid://2mtppe2o7dt6" path="res://hud.gd" id="1_rftc2"]
 [ext_resource type="Texture2D" uid="uid://buowutrxtt43m" path="res://images/fox/icon_Fox.png" id="2_rftc2"]
-[ext_resource type="Texture2D" uid="uid://dq8emj6i0e5ud" path="res://images/arrow_left.png" id="3_61f8s"]
 [ext_resource type="Texture2D" uid="uid://drtvoym8hvqfu" path="res://images/ferret/icon_Ferret.png" id="4_g10ll"]
+[ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="4_gpiub"]
 [ext_resource type="Texture2D" uid="uid://v12gs52e5ysb" path="res://images/weasel/icon_Weasel.png" id="5_gpiub"]
 [ext_resource type="Texture2D" uid="uid://bn20o8elmktkp" path="res://images/snow/icon_Snow.png" id="6_amv7k"]
 [ext_resource type="AudioStream" uid="uid://cdb5jowymrgje" path="res://Sounds/Music/Oniku Loop2(1).wav" id="8_g10ll"]
 [ext_resource type="AudioStream" uid="uid://blfwbp3h1dalr" path="res://Sounds/Music/getaway-driver-21-on-the-block-main-version-45640-01-44.mp3" id="9_gpiub"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_ytkss"]
-font_size = 34
-font_color = Color(1, 1, 0.85490197, 1)
-outline_size = 5
-outline_color = Color(0, 0, 0, 1)
+[sub_resource type="Gradient" id="Gradient_g10ll"]
+colors = PackedColorArray(0.93, 0.13949998, 0, 0.7058824, 0.93, 0.13949998, 0, 0.7058824)
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gpiub"]
+gradient = SubResource("Gradient_g10ll")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_amv7k"]
+colors = PackedColorArray(0.9, 0.495, 0, 0.7058824, 1, 0.55, 0, 0.7058824)
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l8vms"]
+gradient = SubResource("Gradient_amv7k")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_1fv7p"]
+colors = PackedColorArray(0.71, 0.71, 0.71, 0.7058824, 0.51240003, 0.60024005, 0.61, 0.7058824)
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4u2vk"]
+gradient = SubResource("Gradient_1fv7p")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_4q17s"]
+colors = PackedColorArray(0, 0.42549992, 0.69, 0.7058824, 0.23000002, 0.70483327, 1, 0.7058824)
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2d608"]
+gradient = SubResource("Gradient_4q17s")
+width = 1
 
 [node name="Hud" type="CanvasLayer" unique_id=180480945 groups=["Hud"]]
 script = ExtResource("1_rftc2")
@@ -47,7 +77,7 @@ offset_bottom = 148.0
 
 [node name="NewGameButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
 layout_mode = 2
-text = "Nowa gra"
+text = "Poluj!"
 
 [node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
 layout_mode = 2
@@ -74,121 +104,124 @@ offset_bottom = 40.0
 metadata/_edit_use_anchors_ = true
 
 [node name="PlayerIcon" type="TextureRect" parent="Screen/Gauges/Player1Hud" unique_id=1338729113]
+visible = false
 layout_mode = 0
-offset_right = 256.0
-offset_bottom = 256.0
-scale = Vector2(0.4, 0.4)
+offset_left = -31.0
+offset_top = -1.0
+offset_right = 225.0
+offset_bottom = 255.0
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_rftc2")
 
-[node name="PlayerLabel" type="Label" parent="Screen/Gauges/Player1Hud" unique_id=238223365]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 4.0
-offset_right = 163.0
-offset_bottom = 51.0
-text = "0 sek"
-label_settings = SubResource("LabelSettings_ytkss")
+[node name="Anim" type="AnimatedSprite2D" parent="Screen/Gauges/Player1Hud" unique_id=1309863369]
+z_index = 11
+position = Vector2(8, 33)
+scale = Vector2(0.3, 0.3)
+sprite_frames = ExtResource("4_gpiub")
+animation = &"FoxDir6"
 
-[node name="PlayerBerek" type="TextureRect" parent="Screen/Gauges/Player1Hud" unique_id=2078154059]
+[node name="Bar" type="TextureRect" parent="Screen/Gauges/Player1Hud" unique_id=1938484841]
+z_index = 10
 layout_mode = 0
-offset_left = 79.0
-offset_right = 169.0
-offset_bottom = 65.0
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("3_61f8s")
+offset_top = 30.0
+offset_right = 1.0
+offset_bottom = 35.0
+texture = SubResource("GradientTexture1D_gpiub")
 
 [node name="Player2Hud" type="Control" parent="Screen/Gauges" unique_id=556072477]
 anchors_preset = 0
-offset_left = 194.0
-offset_right = 234.0
+offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PlayerIcon" type="TextureRect" parent="Screen/Gauges/Player2Hud" unique_id=137699213]
-layout_mode = 0
-offset_right = 256.0
-offset_bottom = 256.0
-scale = Vector2(0.4, 0.4)
+visible = false
+layout_mode = 1
+offset_left = -31.0
+offset_top = -1.0
+offset_right = 225.0
+offset_bottom = 255.0
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_g10ll")
 
-[node name="PlayerLabel" type="Label" parent="Screen/Gauges/Player2Hud" unique_id=1772840342]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 4.0
-offset_right = 163.0
-offset_bottom = 51.0
-text = "0 sek"
-label_settings = SubResource("LabelSettings_ytkss")
+[node name="Anim" type="AnimatedSprite2D" parent="Screen/Gauges/Player2Hud" unique_id=1063659658]
+z_index = 12
+position = Vector2(8, 57)
+scale = Vector2(0.3, 0.3)
+sprite_frames = ExtResource("4_gpiub")
+animation = &"FerretDir6"
 
-[node name="PlayerBerek" type="TextureRect" parent="Screen/Gauges/Player2Hud" unique_id=467052377]
+[node name="Bar" type="TextureRect" parent="Screen/Gauges/Player2Hud" unique_id=918374780]
+z_index = 11
 layout_mode = 0
-offset_left = 79.0
-offset_right = 169.0
-offset_bottom = 65.0
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("3_61f8s")
+offset_top = 54.0
+offset_right = 1.0
+offset_bottom = 59.0
+texture = SubResource("GradientTexture1D_l8vms")
 
 [node name="Player3Hud" type="Control" parent="Screen/Gauges" unique_id=1029914968]
 anchors_preset = 0
-offset_left = 383.0
-offset_right = 423.0
+offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PlayerIcon" type="TextureRect" parent="Screen/Gauges/Player3Hud" unique_id=819708367]
-layout_mode = 0
-offset_right = 256.0
-offset_bottom = 256.0
-scale = Vector2(0.4, 0.4)
+visible = false
+layout_mode = 1
+offset_left = -31.0
+offset_top = -1.0
+offset_right = 225.0
+offset_bottom = 255.0
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("5_gpiub")
 
-[node name="PlayerLabel" type="Label" parent="Screen/Gauges/Player3Hud" unique_id=899690865]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 4.0
-offset_right = 163.0
-offset_bottom = 51.0
-text = "0 sek"
-label_settings = SubResource("LabelSettings_ytkss")
+[node name="Anim" type="AnimatedSprite2D" parent="Screen/Gauges/Player3Hud" unique_id=289965379]
+z_index = 13
+position = Vector2(8, 81)
+scale = Vector2(0.3, 0.3)
+sprite_frames = ExtResource("4_gpiub")
+animation = &"WeaselDir6"
+frame_progress = 0.64694434
 
-[node name="PlayerBerek" type="TextureRect" parent="Screen/Gauges/Player3Hud" unique_id=323551167]
+[node name="Bar" type="TextureRect" parent="Screen/Gauges/Player3Hud" unique_id=1381718195]
+z_index = 12
 layout_mode = 0
-offset_left = 79.0
-offset_right = 169.0
-offset_bottom = 65.0
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("3_61f8s")
+offset_top = 78.0
+offset_right = 1.0
+offset_bottom = 83.0
+texture = SubResource("GradientTexture1D_4u2vk")
 
 [node name="Player4Hud" type="Control" parent="Screen/Gauges" unique_id=1720546676]
 anchors_preset = 0
-offset_left = 576.0
-offset_right = 616.0
+offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PlayerIcon" type="TextureRect" parent="Screen/Gauges/Player4Hud" unique_id=1197717412]
+visible = false
 layout_mode = 0
-offset_right = 256.0
-offset_bottom = 256.0
-scale = Vector2(0.4, 0.4)
+offset_left = -31.0
+offset_top = -1.0
+offset_right = 225.0
+offset_bottom = 255.0
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("6_amv7k")
 
-[node name="PlayerLabel" type="Label" parent="Screen/Gauges/Player4Hud" unique_id=208489973]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 4.0
-offset_right = 163.0
-offset_bottom = 51.0
-text = "0 sek"
-label_settings = SubResource("LabelSettings_ytkss")
+[node name="Anim" type="AnimatedSprite2D" parent="Screen/Gauges/Player4Hud" unique_id=1617124135]
+z_index = 14
+position = Vector2(8, 105)
+scale = Vector2(0.3, 0.3)
+sprite_frames = ExtResource("4_gpiub")
+animation = &"SnowDir6"
 
-[node name="PlayerBerek" type="TextureRect" parent="Screen/Gauges/Player4Hud" unique_id=197051095]
+[node name="Bar" type="TextureRect" parent="Screen/Gauges/Player4Hud" unique_id=2044974298]
+z_index = 13
 layout_mode = 0
-offset_left = 79.0
-offset_right = 169.0
-offset_bottom = 65.0
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("3_61f8s")
+offset_top = 102.0
+offset_right = 1.0
+offset_bottom = 107.0
+texture = SubResource("GradientTexture1D_2d608")
 
 [node name="DebugLabel" type="Label" parent="Screen/Gauges" unique_id=657669731]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 31.0
 offset_top = 33.0
