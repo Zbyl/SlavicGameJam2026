@@ -3,10 +3,13 @@ class_name Dude
 
 const DEADZONE = 0.1
 const ACCELERATION_FACTOR = 700
+const BEREK_ACCELERATION_FACTOR = ACCELERATION_FACTOR
 const DECELERATION_FACTOR = 2*ACCELERATION_FACTOR
 const WORLD_ASPECT_FACTOR = 0.5
 
-@export var speed: float = 450.0
+const MAX_SPEED: float = 450.0
+const BEREK_MAX_SPEED: float = MAX_SPEED * 1.1
+
 @export var character: String = "Fox"
 @export var isBerek: bool = false
 
@@ -208,7 +211,7 @@ func syncAnimations():
 func _physics_process(delta: float):
     if GameData.hud.isMenuOpen():
         return
-    
+
     updateJumpButton()
 
     var direction = calculateInputDirection()
@@ -252,7 +255,9 @@ func _physics_process(delta: float):
     if direction == Vector2.ZERO:
         velocity = velocity.move_toward(Vector2.ZERO, delta*DECELERATION_FACTOR)
     else:
-        velocity = velocity.move_toward(direction * Vector2(speed, speed * WORLD_ASPECT_FACTOR), delta*ACCELERATION_FACTOR)
+        var max_speed = BEREK_MAX_SPEED if isBerek else MAX_SPEED
+        var acceleration_factor = BEREK_ACCELERATION_FACTOR if isBerek else ACCELERATION_FACTOR
+        velocity = velocity.move_toward(direction * Vector2(max_speed, max_speed * WORLD_ASPECT_FACTOR), delta*acceleration_factor)
 
     move_and_slide()
 
