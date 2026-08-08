@@ -74,6 +74,7 @@ stream = ExtResource("5_64te8")
 
 [node name="LandingPlayer" type="AudioStreamPlayer2D" parent="." unique_id=431287227]
 stream = ExtResource("7_s81fl")
+volume_db = -10.0
 
 [node name="DiePlayer" type="AudioStreamPlayer2D" parent="." unique_id=1008268916]
 stream = ExtResource("6_k77yt")
