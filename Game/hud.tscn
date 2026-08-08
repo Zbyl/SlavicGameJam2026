@@ -49,7 +49,7 @@ text = "Nowa gra"
 
 [node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
 layout_mode = 2
-text = "Kontrolery
+text = "Gracze
 "
 
 [node name="FullScreenButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352484776]

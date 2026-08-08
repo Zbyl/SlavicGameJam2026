@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://b6eu6lkdp5y3n"]
+
+[ext_resource type="Script" uid="uid://dqye5h23emewq" path="res://input_picker.gd" id="1_ym16w"]
+
+[node name="InputPicker" type="Control" unique_id=1125146912]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ym16w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=281656630]
+layout_mode = 0
+offset_left = 509.0
+offset_top = 217.0
+offset_right = 549.0
+offset_bottom = 257.0
+
+[node name="PressSomething" type="Button" parent="VBoxContainer" unique_id=845517427]
+layout_mode = 2
+text = "Naciśnij coś"
+
+[node name="ControllerType" type="OptionButton" parent="VBoxContainer" unique_id=1678381057]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Kontroler"
+popup/item_0/id = 0
+popup/item_1/text = "Klawiatura"
+popup/item_1/id = 1
+
+[node name="SelectedController" type="OptionButton" parent="VBoxContainer" unique_id=575680442 groups=["ControllerCtrl"]]
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "Kontroler 1"
+popup/item_0/id = 0
+popup/item_1/text = "Kontroler 2"
+popup/item_1/id = 1
+popup/item_2/text = "Kontroler 3"
+popup/item_2/id = 2
+popup/item_3/text = "Kontroler 4"
+popup/item_3/id = 3
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=886018038 groups=["KeyboardCtrl"]]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 3
+
+[node name="LeftUp" type="Control" parent="VBoxContainer/GridContainer" unique_id=82329343 groups=["KeyboardCtrl"]]
+layout_mode = 2
+
+[node name="Up" type="Button" parent="VBoxContainer/GridContainer" unique_id=1140603074 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_next = NodePath("../Left")
+text = "▲"
+
+[node name="RightUp" type="Control" parent="VBoxContainer/GridContainer" unique_id=1404690650 groups=["KeyboardCtrl"]]
+layout_mode = 2
+
+[node name="Left" type="Button" parent="VBoxContainer/GridContainer" unique_id=1465988626 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Up")
+focus_neighbor_right = NodePath("../Right")
+focus_neighbor_bottom = NodePath("../Down")
+focus_next = NodePath("../Right")
+text = "◄"
+
+[node name="Center" type="Control" parent="VBoxContainer/GridContainer" unique_id=396851437 groups=["KeyboardCtrl"]]
+layout_mode = 2
+
+[node name="Right" type="Button" parent="VBoxContainer/GridContainer" unique_id=40301745 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Left")
+focus_neighbor_top = NodePath("../Up")
+focus_neighbor_bottom = NodePath("../Down")
+focus_next = NodePath("../Down")
+text = "►"
+
+[node name="LeftDown" type="Control" parent="VBoxContainer/GridContainer" unique_id=1435638860 groups=["KeyboardCtrl"]]
+layout_mode = 2
+
+[node name="Down" type="Button" parent="VBoxContainer/GridContainer" unique_id=848823560 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_next = NodePath("../../Jump")
+text = "▼"
+
+[node name="RightDown" type="Control" parent="VBoxContainer/GridContainer" unique_id=1215136797 groups=["KeyboardCtrl"]]
+layout_mode = 2
+
+[node name="Jump" type="Button" parent="VBoxContainer" unique_id=1743892500 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_next = NodePath("../Duck")
+text = "Skok"
+
+[node name="Duck" type="Button" parent="VBoxContainer" unique_id=72237679 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_next = NodePath("../OkButton")
+text = "Kucnij"
+
+[node name="OkButton" type="Button" parent="VBoxContainer" unique_id=692754225]
+layout_mode = 2
+text = "Wyjście"
+
+[connection signal="gui_input" from="VBoxContainer/PressSomething" to="." method="_on_press_something_gui_input"]
+[connection signal="item_selected" from="VBoxContainer/ControllerType" to="." method="_on_controller_type_item_selected"]
+[connection signal="gui_input" from="VBoxContainer/GridContainer/Up" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/Up" to="." method="_on_up_pressed"]
+[connection signal="gui_input" from="VBoxContainer/GridContainer/Left" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/Left" to="." method="_on_left_pressed"]
+[connection signal="gui_input" from="VBoxContainer/GridContainer/Right" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/Right" to="." method="_on_right_pressed"]
+[connection signal="gui_input" from="VBoxContainer/GridContainer/Down" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/Down" to="." method="_on_down_pressed"]
+[connection signal="gui_input" from="VBoxContainer/Jump" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/Jump" to="." method="_on_jump_pressed"]
+[connection signal="gui_input" from="VBoxContainer/Duck" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/Duck" to="." method="_on_duck_pressed"]
+[connection signal="pressed" from="VBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]
