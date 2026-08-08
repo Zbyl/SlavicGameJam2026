@@ -76,6 +76,9 @@ func _ready() -> void:
         run_stream = streams[3]
     run_player.stream = run_stream
 
+    # Set initial animation.
+    animation.play(character + stateToAnim(currentState) + str(currentAngle))
+
 func setBerek(state: bool):
     isBerek = state
     if isBerek:
@@ -169,6 +172,10 @@ func _physics_process(delta: float):
 
     var isJumpPressed = isJumpButtonPressed()
     #var isJump = Input.is_action_just_pressed("ui_accept")
+    
+    if currentState == DudeState.Dead:
+        direction = Vector2.ZERO
+        isJumpPressed = false
 
     var preMapPosition := GameData.layerHelpers.mapPositionFromScreenPosition(global_position, currentZ)
     var preGroundInfo := GameData.layerHelpers.groundInfoFromMapPosition(preMapPosition, currentZ)
@@ -270,6 +277,7 @@ func _physics_process(delta: float):
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
+    return
     if !is_in_group("Berek") && body.is_in_group("Berek"):
         body.setBerek(false)
 
