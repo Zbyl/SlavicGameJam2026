@@ -63,6 +63,7 @@ scroll_active = false
 [node name="Ferret" type="HBoxContainer" parent="GridContainer" unique_id=1635296641 groups=["PlayerBox"]]
 layout_mode = 2
 script = ExtResource("2_iwnco")
+playerIndex = 1
 
 [node name="TextureRect" type="TextureRect" parent="GridContainer/Ferret" unique_id=1579750572]
 layout_mode = 2
@@ -89,6 +90,7 @@ scroll_active = false
 [node name="Weasel" type="HBoxContainer" parent="GridContainer" unique_id=1525316262 groups=["PlayerBox"]]
 layout_mode = 2
 script = ExtResource("2_iwnco")
+playerIndex = 2
 
 [node name="TextureRect" type="TextureRect" parent="GridContainer/Weasel" unique_id=650481325]
 layout_mode = 2
@@ -115,6 +117,7 @@ scroll_active = false
 [node name="Snow" type="HBoxContainer" parent="GridContainer" unique_id=673850317 groups=["PlayerBox"]]
 layout_mode = 2
 script = ExtResource("2_iwnco")
+playerIndex = 3
 
 [node name="TextureRect" type="TextureRect" parent="GridContainer/Snow" unique_id=967247576]
 layout_mode = 2
@@ -125,7 +128,7 @@ layout_mode = 2
 
 [node name="PlayerEnable" type="CheckBox" parent="GridContainer/Snow/Buttons" unique_id=1510167081 groups=["PlayerEnable"]]
 layout_mode = 2
-text = "Zmarznięty Gronostaj"
+text = "Mrożony Gronostaj"
 
 [node name="Controls" type="Button" parent="GridContainer/Snow/Buttons" unique_id=1640160640 groups=["PlayerControls"]]
 visible = false
@@ -147,6 +150,10 @@ layout_mode = 2
 disabled = true
 text = "OK"
 
+[node name="Timer" type="Timer" parent="." unique_id=270552737]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="toggled" from="GridContainer/Kunek/Buttons/PlayerEnable" to="GridContainer/Kunek" method="_on_player_enable_toggled"]
 [connection signal="pressed" from="GridContainer/Kunek/Buttons/Controls" to="GridContainer/Kunek" method="_on_controls_pressed"]
 [connection signal="toggled" from="GridContainer/Ferret/Buttons/PlayerEnable" to="GridContainer/Ferret" method="_on_player_enable_toggled"]
@@ -157,3 +164,4 @@ text = "OK"
 [connection signal="pressed" from="GridContainer/Snow/Buttons/Controls" to="GridContainer/Snow" method="_on_controls_pressed"]
 [connection signal="pressed" from="GridContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="GridContainer/OkButton" to="." method="_on_ok_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

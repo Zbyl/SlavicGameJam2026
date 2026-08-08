@@ -4,22 +4,20 @@ extends Control
 @onready var ferret: HBoxContainer = $GridContainer/Ferret
 @onready var weasel: HBoxContainer = $GridContainer/Weasel
 @onready var snow: HBoxContainer = $GridContainer/Snow
+@onready var dudes = [kunek, ferret, weasel, snow]
 @onready var ok_button: Button = $GridContainer/OkButton
+@onready var timer: Timer = $Timer
 
 var playerData = {}
 
 func  _ready() -> void:
     player_enable.grab_focus.call_deferred()
+    playerData = GameData.hud.playerData
+    timer.start()
 
-func updateControls(node: Node, keyMap: Dictionary):
-    if node==kunek:
-        playerData[0]=keyMap
-    elif node==ferret:
-        playerData[1]=keyMap
-    elif node==weasel:
-        playerData[2]=keyMap
-    elif node==snow:
-        playerData[3]=keyMap
+func updateControls(idx:int, keyMap: Dictionary):
+    print("updateControls")
+    playerData[idx]=keyMap
     for key in playerData.keys():
         if playerData[key].keys().size()==0:
             playerData.erase(key)
@@ -27,6 +25,8 @@ func updateControls(node: Node, keyMap: Dictionary):
     ok_button.disabled = !validate()
 
 func validateKeyMap(map: Dictionary) -> bool:
+    print("Validate")
+    print(map)
     var type:String =  map.get("type", "")
 
     if type=="pad":
@@ -56,3 +56,9 @@ func _on_ok_button_pressed() -> void:
 
 func _on_cancel_button_pressed() -> void:
     queue_free()
+
+
+func _on_timer_timeout() -> void:
+    for key in playerData.keys():
+        dudes[key].initiateWithData(playerData[key])
+    ok_button.disabled = !validate()

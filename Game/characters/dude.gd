@@ -169,7 +169,7 @@ func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeSta
 
     if not isOnGround:
         return DudeState.Falling
-        
+
     if dir == Vector2.ZERO:
         return DudeState.Idle
 
@@ -298,7 +298,7 @@ func _physics_process(delta: float):
     if currentState != oldState:
         if currentState == DudeState.Jump: # this is temporary solution for canceling jump
             jump_player.play()
-            
+
         # If we just landed play the landing sound.
         if ((oldState == DudeState.Jump) or (oldState == DudeState.Falling)) and currentlyOnGround:
             landing_player.play()
