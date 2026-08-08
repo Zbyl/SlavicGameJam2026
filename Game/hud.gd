@@ -51,10 +51,12 @@ func initPlayers(ddudes: Array[Dude]):
     for h in player_huds: 
         player_huds[h].visible = false
         
-    for dude in ddudes:
-        dudes[dude.character] = dude
-        player_huds[playerNumber[dude.character]].visible = true
-        player_anims[playerNumber[dude.character]].play()
+    if ddudes.size() > 1:   
+        for dude in ddudes:
+            dudes[dude.character] = dude
+            player_huds[playerNumber[dude.character]].visible = true
+            if ! dude.isBerek:
+                player_anims[playerNumber[dude.character]].play()
         
 func _ready() -> void:
 
@@ -70,6 +72,7 @@ func _ready() -> void:
 func countPointsDudeGotMe(victim, hunter):
     countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
     countPointsSet(hunter.character, playerPoints[hunter.character] + pointsCatchGain)
+    player_anims[playerNumber[victim.character]].stop()
     
 func pointsToScreen(p):
     var screen_size = get_viewport().get_visible_rect().size
@@ -77,10 +80,11 @@ func pointsToScreen(p):
     return (p / pointsMax) * maxScreenCoord
  
     
-func countPointsSet(ch, p):
-    if p > pointsMax: game_won.emit(ch)
-    
+func countPointsSet(ch, points):
+    var p = max(0.001, min(pointsMax, points))
     playerPoints[ch] = p
+    if points > pointsMax: game_won.emit(ch)
+    
     var bar: TextureRect = player_bars[playerNumber[ch]]
     var player_hud: Control = player_huds[playerNumber[ch]]
     var sp = pointsToScreen(playerPoints[ch])
@@ -92,15 +96,17 @@ func countPointsReset():
     for ch in playerPoints:
         countPointsSet(ch, 0.0)
     
-    
 func _process(delta: float) -> void:
     
     var elapsed = Time.get_ticks_msec()
     
     for ch in playerPoints:
         if dudes[ch] != null:
-            if ! dudes[ch].isBerek:
+            if dudes[ch].isBerek or dudes[ch].isDead():
+                player_anims[playerNumber[ch]].stop()
+            else:
                 countPointsSet(ch, playerPoints[ch] + elapsed * 0.00001)
+                player_anims[playerNumber[ch]].play()
 
 func show_menu(do_show: bool):
     playMusic(do_show)

@@ -92,6 +92,9 @@ func setBerek(state: bool):
         remove_from_group("Berek")
     berek.visible = isBerek
 
+func isDead():
+    return currentState == DudeState.Dead
+    
 func getInputDirectin() -> Vector2:
     if controllerData["type"]=="pad":
         var controller = controllerData["pad"]

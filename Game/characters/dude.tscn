@@ -55,8 +55,8 @@ autoplay = "OutlineWeaselJump8"
 
 [node name="Berek" type="AnimatedSprite2D" parent="." unique_id=501282073 node_paths=PackedStringArray("dude")]
 y_sort_enabled = true
-position = Vector2(0, -10)
-scale = Vector2(0.085, 0.085)
+position = Vector2(0, -11.7)
+scale = Vector2(0.1, 0.1)
 sprite_frames = ExtResource("magic_frames")
 autoplay = "default"
 frame_progress = 0.8045777
