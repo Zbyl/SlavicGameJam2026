@@ -138,13 +138,18 @@ func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeSta
 
     return DudeState.Running
 
-# Respawns a player after dying.
+# Respawns a player after dying. Called by respawnTimer().
 func respawn():
-    if currentState == DudeState.Dead:
-        get_tree().call_group("Berek", "setBerek", false)
-        respawn_player.play()
-        setBerek(true)
+    if currentState != DudeState.Dead:
+        print("Canot respawn! I'm not Dead!")
+        return
+
+    print("Respawning")
+    get_tree().call_group("Berek", "setBerek", false)
+    respawn_player.play()
+    setBerek(true)
     currentState = DudeState.Idle
+    animation.play(character + stateToAnim(currentState) + str(currentAngle))
 
 func calculateAngle(dir: Vector2) -> int:
     var angle = roundi((rad_to_deg(atan2(dir.y, dir.x))+270.0)/45.0)
@@ -274,7 +279,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         currentState = DudeState.Dead
         animation.play(character + stateToAnim(currentState) + str(currentAngle))
         syncAnimations()
-        respawnTimer.wait_time = 2.0;
         respawnTimer.start()
 
 # Calculated global_position shifted up using image offset to give screen position of Kunek.
@@ -300,4 +304,4 @@ func stateToAnim(state: DudeState) -> String:
         return "Dir"
     if state == DudeState.Falling:
         return "Dir"
-    return str(state)
+    return DudeState.find_key(state)
