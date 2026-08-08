@@ -98,19 +98,20 @@ func countPointsReset():
         countPointsSet(ch, 0.0)
     
     
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
     if isInLevel() and (not isPickerActive):
         if Input.is_action_just_pressed("ui_menu"):
             show_menu(not isMenuOpen(), true)
     
-    var elapsed = Time.get_ticks_msec()
+    const POINTS_PER_SECOND := 6.0
+    var elapsed: float = 0.0 if isMenuOpen() else delta
     
     for ch in playerPoints:
         if dudes[ch] != null:
             if dudes[ch].isBerek or dudes[ch].isDead():
                 player_anims[playerNumber[ch]].stop()
             else:
-                countPointsSet(ch, playerPoints[ch] + elapsed * 0.00001)
+                countPointsSet(ch, playerPoints[ch] + elapsed * POINTS_PER_SECOND)
                 player_anims[playerNumber[ch]].play()
 
 func show_menu(do_show: bool, in_level: bool):
