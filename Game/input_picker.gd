@@ -103,6 +103,7 @@ func _on_press_something_gui_input(event: InputEvent) -> void:
     elif event is InputEventJoypadButton:
         optionChanged(OPTION_CONTROLLER)
         selected_controller.select(event.device)
+        player_picker.keyMap.set("pad", event.device)
 
 
 func waitFor(key: String):
