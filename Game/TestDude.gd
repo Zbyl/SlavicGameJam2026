@@ -4,6 +4,7 @@ extends CharacterBody2D
 var tile_map_layers: Array[TileMapLayer] = []
 @export var debugLabel: Label
 
+@onready var image: Node2D = $Image # Image of Boguś. Will be moved relative to CollisionShape to simulate jumping.
 
 const SPEED = 6000.0
 const JUMP_VELOCITY = 200.0
@@ -78,6 +79,7 @@ class GroundInfo:
         self.useBelowCollision = useBelowCollision
 
 func _ready():
+    #debugLabel = get_node("../../%DebugLabel")
     for i in range(100):
         var tileMapName = "TileMapLayer{idx}".format({"idx": i})
         var tileMap: TileMapLayer = level.get_node_or_null(tileMapName)
@@ -248,6 +250,7 @@ func _physics_process(delta: float) -> void:
     setLayerCollisionMask(postGroundInfo.layer, postGroundInfo.useThisCollision)
     setLayerCollisionMask(postGroundInfo.layer - 1, postGroundInfo.useBelowCollision)
     #z_index = postGroundInfo.layer + 1
+    z_index = 1
 
     var movedOnGround := false
     if currentlyOnGround: # We know we did not apply gravity nor jumped.
@@ -259,8 +262,8 @@ func _physics_process(delta: float) -> void:
     currentZ += deltaZ
     global_position.y -= deltaZ * zToYOffsetRatio
 
-    #debugLabel.text = "gravity={gravity} delta={delta} velocityZ={velocityZ} onGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
-    #    format({"gravity": gravity, "delta": delta, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
+    debugLabel.text = "z_index={z_index} gravity={gravity} delta={delta} velocityZ={velocityZ} onGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
+        format({"z_index": z_index, "gravity": gravity, "delta": delta, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
 
 func setLayerCollisionMask(layer: int, value: bool) -> void:
     if (layer >= 0) and (layer < 16):
