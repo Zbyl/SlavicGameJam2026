@@ -7,13 +7,19 @@
 radius = 8.0
 
 [node name="TestDude" type="CharacterBody2D" unique_id=1449815505]
+y_sort_enabled = true
 collision_mask = 65536
 motion_mode = 1
 script = ExtResource("1_jhilp")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=2076097250]
-scale = Vector2(0.11621093, 0.10760277)
+z_index = 1
+y_sort_enabled = true
+position = Vector2(0, -43.999996)
+scale = Vector2(0.11621093, 0.34286392)
 texture = ExtResource("2_gw8co")
+centered = false
+offset = Vector2(-56.785, 15.01)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1583419225]
 shape = SubResource("CircleShape2D_0v0hr")
