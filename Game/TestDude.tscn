@@ -14,7 +14,7 @@ script = ExtResource("1_jhilp")
 
 [node name="Image" type="Sprite2D" parent="." unique_id=2076097250]
 y_sort_enabled = true
-position = Vector2(0, 7.9999924)
+position = Vector2(0, 8.12)
 scale = Vector2(0.11621093, 0.34286392)
 texture = ExtResource("2_gw8co")
 centered = false
