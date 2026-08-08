@@ -5,6 +5,8 @@ var tile_map_layers: Array[TileMapLayer] = []
 @export var debugLabel: Label
 
 @onready var image: Node2D = $Image # Image of Boguś. Will be moved relative to CollisionShape to simulate jumping.
+var baseOffsetY: float = 0.0
+
 
 const SPEED = 6000.0
 const JUMP_VELOCITY = 200.0
@@ -15,8 +17,6 @@ var zToYOffsetRatio: float = 1.0 # Multiply z by this much to get y offset. But 
 
 var currentZ: float = 0.0
 var velocityZ: float = 0.0
-
-var baseOffsetY: float = 0.0
 
 # Returns tilemap for layer or null if this layer doesn't have a tilemap.
 func getTileMapForLayer(layer: int) -> TileMapLayer:
@@ -100,6 +100,9 @@ func _ready():
     print(Vector2(1, 0))
     print(tileOffsetToPlanarOffset(Vector2(0, 0)))
     print(Vector2(0.5, 0.5))
+
+func layerFromZ(z: float) -> int:
+    return floori(z / layerHeight)
 
 # tileOffset - screen offset from the center of the tile (assuming z == 0)
 #         /\ 0,-20
@@ -209,9 +212,6 @@ func isOnSlope(mapCoords: Vector2i, feetLayer: int) -> OnSlope:
     
     return OnSlope.NO
 
-
-func layerFromZ(z: float) -> int:
-    return floori(z / layerHeight)
 
 func _physics_process(delta: float) -> void:
     var preMapPosition := mapPositionFromScreenPosition(global_position, currentZ)

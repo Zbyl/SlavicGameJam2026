@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://7vh5ua3bmum8"]
 
 [ext_resource type="Script" uid="uid://b8xaps7mwxc36" path="res://TestMap.gd" id="1_3h1ab"]
-[ext_resource type="PackedScene" uid="uid://sqxg3gnq0lut" path="res://TestDude.tscn" id="1_gfjgm"]
 [ext_resource type="PackedScene" uid="uid://dj606h5locj3n" path="res://Levels/Level2.tscn" id="2_onbnv"]
+[ext_resource type="PackedScene" uid="uid://b4w8smkleosv3" path="res://characters/dude.tscn" id="4_onbnv"]
 
 [node name="TestMap" type="Node2D" unique_id=1902347863 node_paths=PackedStringArray("level")]
 y_sort_enabled = true
@@ -22,7 +22,12 @@ offset_right = 132.0
 offset_bottom = 84.0
 text = "XXX"
 
-[node name="TestDude" parent="." unique_id=1449815505 node_paths=PackedStringArray("level", "debugLabel") instance=ExtResource("1_gfjgm")]
-position = Vector2(565, 394)
-level = NodePath("../Level2")
+[node name="Dude" parent="." unique_id=345096153 node_paths=PackedStringArray("debugLabel", "level") instance=ExtResource("4_onbnv")]
+position = Vector2(615, 429)
+speed = 300.0
+character = "Fox"
+controller = 0
+jumpButton = 0
+isBerek = false
 debugLabel = NodePath("../CanvasLayer/DebugLabel")
+level = NodePath("../Level2")
