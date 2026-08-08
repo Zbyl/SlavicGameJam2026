@@ -19,6 +19,7 @@ height = 50.0
 
 [node name="Dude" type="CharacterBody2D" unique_id=345096153 groups=["Dude"]]
 y_sort_enabled = true
+collision_mask = 9
 script = ExtResource("1_s81fl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2020211644]
