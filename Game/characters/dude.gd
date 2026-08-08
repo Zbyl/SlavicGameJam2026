@@ -180,7 +180,7 @@ func _physics_process(delta: float):
 
     var preMapPosition := GameData.layerHelpers.mapPositionFromScreenPosition(global_position, currentZ)
     var preGroundInfo := GameData.layerHelpers.groundInfoFromMapPosition(preMapPosition, currentZ)
-
+   
     # Add the gravity.
     var currentlyOnGround := false
     if preGroundInfo.groundType != LayerHelpers.GroundType.EMPTY:
@@ -293,6 +293,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         body.setBerek(false)
 
         print("I'm dying!")
+        GameData.hud.countPointsDudeGotMe(self, body)
 
         run_player.stop()
         die_player.play()

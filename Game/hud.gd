@@ -13,6 +13,10 @@ signal new_game_pressed()
 @onready var player_2_anim: AnimatedSprite2D = $Screen/Gauges/Player2Hud/Anim
 @onready var player_3_anim: AnimatedSprite2D = $Screen/Gauges/Player3Hud/Anim
 @onready var player_4_anim: AnimatedSprite2D = $Screen/Gauges/Player4Hud/Anim
+@onready var player_1_bar: TextureRect = $Screen/Gauges/Player1Hud/Bar
+@onready var player_2_bar: TextureRect = $Screen/Gauges/Player2Hud/Bar
+@onready var player_3_bar: TextureRect = $Screen/Gauges/Player3Hud/Bar
+@onready var player_4_bar: TextureRect = $Screen/Gauges/Player4Hud/Bar
 @onready var new_game_button: Button = $Screen/Menu/VBoxContainer/NewGameButton
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
@@ -26,6 +30,9 @@ var playerData = {
     0:{"type":"pad","pad":0},
     1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE}
 }
+
+#var playerPoints = {"Fox"": 0.0, "Ferret":0.0, "Weasel":0.0, "Snow":0.0}
+#var playerNumer = {"Fox"": 1, "Ferret": 2, "Weasel": 3, "Snow": 4}
 
 func getPlayerLabel(player_hud: Control) -> Label:
     return player_hud.get_node("PlayerLabel")
@@ -43,7 +50,8 @@ func setBerek(playerNo: int):
     _setBerek(player_3_hud, playerNo==3)
     _setBerek(player_4_hud, playerNo==4)
 
-func initPlayers(count: int):
+func initPlayers(ddudes: Array[Dude]):
+    var count = ddudes.size()
     player_4_hud.visible = count>=4
     player_3_hud.visible = count>=3
     player_2_hud.visible = count>=2
@@ -64,6 +72,12 @@ func _ready() -> void:
     #player_3_anim.play()
     #player_4_anim.play()
     show_menu(true)
+    
+func countPointsDudeGotMe(victim, hunter):
+    pass 
+    
+func _process(delta: float) -> void:
+    Time.get_ticks_msec()
 
 func show_menu(do_show: bool):
     playMusic(do_show)
