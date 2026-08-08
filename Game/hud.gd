@@ -48,3 +48,7 @@ func _on_full_screen_button_pressed() -> void:
         DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
     else:
         DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+
+
+func _on_exit_button_pressed() -> void:
+    get_tree().quit()

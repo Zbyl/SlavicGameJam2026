@@ -186,3 +186,4 @@ scale = Vector2(0.8, 0.8)
 texture = ExtResource("3_61f8s")
 
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
