@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cauxcx362hp4n"]
+
+[ext_resource type="Script" uid="uid://dla5m60n7r451" path="res://Shadow.gd" id="1_qsfen"]
+[ext_resource type="Texture2D" uid="uid://besigk85k3lso" path="res://images/Shadow.png" id="2_qsfen"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tt1jp"]
+
+[node name="Shadow" type="Node2D" unique_id=823129769]
+y_sort_enabled = true
+script = ExtResource("1_qsfen")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=48857610]
+modulate = Color(1, 1, 1, 0.34901962)
+y_sort_enabled = true
+material = SubResource("CanvasItemMaterial_tt1jp")
+position = Vector2(-4.7683716e-07, 0)
+scale = Vector2(0.32, 0.16000001)
+texture = ExtResource("2_qsfen")

@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://o8jwpbeqbo6g" path="res://Sounds/Kunek/Jump.wav" id="5_64te8"]
 [ext_resource type="AudioStream" uid="uid://drswjhe6veebk" path="res://Sounds/Kunek/Slap.wav" id="6_k77yt"]
 [ext_resource type="AudioStream" uid="uid://n6q0kyyprkfu" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
+[ext_resource type="PackedScene" uid="uid://cauxcx362hp4n" path="res://Shadow.tscn" id="8_tt1jp"]
 [ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="kunek_frames"]
 [ext_resource type="SpriteFrames" uid="uid://bnm5y0u6nh5pe" path="res://characters/dude_magic_frames.tres" id="magic_frames"]
 [ext_resource type="SpriteFrames" uid="uid://dbicsqv1sa4ie" path="res://characters/dude_outline_frames.tres" id="outline_frames"]
@@ -28,6 +29,9 @@ shape = SubResource("CircleShape2D_lfj2m")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2020486256]
 position = Vector2(0, -12.465)
 shape = SubResource("CapsuleShape2D_d5dh0")
+
+[node name="Shadow" parent="." unique_id=823129769 node_paths=PackedStringArray("dude") instance=ExtResource("8_tt1jp")]
+dude = NodePath("..")
 
 [node name="Kunek" type="AnimatedSprite2D" parent="." unique_id=706360744]
 y_sort_enabled = true
