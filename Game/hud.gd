@@ -4,19 +4,8 @@ class_name Hud
 const PLAYER_PICKER = preload("res://player_picker.tscn")
 
 signal new_game_pressed()
+signal game_won(info: String)
 
-@onready var player_1_hud: Control = $Screen/Gauges/Player1Hud
-@onready var player_2_hud: Control = $Screen/Gauges/Player2Hud
-@onready var player_3_hud: Control = $Screen/Gauges/Player3Hud
-@onready var player_4_hud: Control = $Screen/Gauges/Player4Hud
-@onready var player_1_anim: AnimatedSprite2D = $Screen/Gauges/Player1Hud/Anim
-@onready var player_2_anim: AnimatedSprite2D = $Screen/Gauges/Player2Hud/Anim
-@onready var player_3_anim: AnimatedSprite2D = $Screen/Gauges/Player3Hud/Anim
-@onready var player_4_anim: AnimatedSprite2D = $Screen/Gauges/Player4Hud/Anim
-@onready var player_1_bar: TextureRect = $Screen/Gauges/Player1Hud/Bar
-@onready var player_2_bar: TextureRect = $Screen/Gauges/Player2Hud/Bar
-@onready var player_3_bar: TextureRect = $Screen/Gauges/Player3Hud/Bar
-@onready var player_4_bar: TextureRect = $Screen/Gauges/Player4Hud/Bar
 @onready var new_game_button: Button = $Screen/Menu/VBoxContainer/NewGameButton
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
@@ -31,53 +20,87 @@ var playerData = {
     1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE}
 }
 
-#var playerPoints = {"Fox"": 0.0, "Ferret":0.0, "Weasel":0.0, "Snow":0.0}
-#var playerNumer = {"Fox"": 1, "Ferret": 2, "Weasel": 3, "Snow": 4}
+var player_huds: Dictionary = {}
+var player_anims: Dictionary = {}
+var player_bars: Dictionary = {}
+var playerNumber: Dictionary = {"Fox": 0, "Ferret": 1, "Weasel": 2, "Snow": 3}      
+var playerPoints: Dictionary = {"Fox": 0.0, "Ferret": 0.0, "Weasel": 0.0, "Snow": 0.0}
+var dudes: Dictionary = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": null}
+var pointsCatchGain = 40.0
+var pointsCatchPenalty = 20.0
+var pointsMax = 1000.0
 
-func getPlayerLabel(player_hud: Control) -> Label:
-    return player_hud.get_node("PlayerLabel")
+#func getPlayerLabel(player_hud: Control) -> Label:
+#    return player_hud.get_node("PlayerLabel")
 
-func getPlayerBerek(player_hud: Control) -> TextureRect:
-    return player_hud.get_node("PlayerBerek")
+#func getPlayerBerek(player_hud: Control) -> TextureRect:
+#    return player_hud.get_node("PlayerBerek")
 
-func _setBerek(player_hud: Control, berek: bool):
-    getPlayerBerek(player_hud).visible = berek
-    getPlayerLabel(player_hud).visible = !berek
+#func _setBerek(player_hud: Control, berek: bool):
+#    getPlayerBerek(player_hud).visible = berek
+#    getPlayerLabel(player_hud).visible = !berek
 
-func setBerek(playerNo: int):
-    _setBerek(player_1_hud, playerNo==1)
-    _setBerek(player_2_hud, playerNo==2)
-    _setBerek(player_3_hud, playerNo==3)
-    _setBerek(player_4_hud, playerNo==4)
+#func setBerek(playerNo: int):
+#    for(dude_hud in player_huds)
+#    _setBerek(player_1_hud, playerNo==1)
+#    _setBerek(player_2_hud, playerNo==2)
+#    _setBerek(player_3_hud, playerNo==3)
+#    _setBerek(player_4_hud, playerNo==4)
 
 func initPlayers(ddudes: Array[Dude]):
-    var count = ddudes.size()
-    player_4_hud.visible = count>=4
-    player_3_hud.visible = count>=3
-    player_2_hud.visible = count>=2
-    player_1_hud.visible = count>=1
-    #setBerek(1)
-    if count >= 1:
-        player_1_anim.play()
-    if count >= 2:
-        player_2_anim.play()
-    if count >= 3:
-        player_3_anim.play()
-    if count >= 4:
-        player_4_anim.play()
-
+    for h in player_huds: 
+        player_huds[h].visible = false
+        
+    for dude in ddudes:
+        dudes[dude.character] = dude
+        player_huds[playerNumber[dude.character]].visible = true
+        player_anims[playerNumber[dude.character]].play()
+        
 func _ready() -> void:
-    #player_1_anim.play()
-    #player_2_anim.play()
-    #player_3_anim.play()
-    #player_4_anim.play()
+
+    for i in range(4):
+        player_huds[i] = get_node("Screen/Gauges/Player%dHud" % (i + 1) )
+    for i in range(4):
+        player_anims[i] = get_node("Screen/Gauges/Player%dHud/Anim" % (i + 1) )
+    for i in range(4):
+        player_bars[i] = get_node("Screen/Gauges/Player%dHud/Bar" % (i + 1) )
+        
     show_menu(true)
     
 func countPointsDudeGotMe(victim, hunter):
-    pass 
+    countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
+    countPointsSet(hunter.character, playerPoints[hunter.character] + pointsCatchGain)
+    
+func pointsToScreen(p):
+    var screen_size = get_viewport().get_visible_rect().size
+    var maxScreenCoord = screen_size.x - 20
+    return (p / pointsMax) * maxScreenCoord
+ 
+    
+func countPointsSet(ch, p):
+    if p > pointsMax: game_won.emit(ch)
+    
+    playerPoints[ch] = p
+    var bar: TextureRect = player_bars[playerNumber[ch]]
+    var player_hud: Control = player_huds[playerNumber[ch]]
+    var sp = pointsToScreen(playerPoints[ch])
+    bar.size.x = sp
+    bar.position.x = -sp
+    player_hud.position.x = sp
+    
+func countPointsReset():
+    for ch in playerPoints:
+        countPointsSet(ch, 0.0)
+    
     
 func _process(delta: float) -> void:
-    Time.get_ticks_msec()
+    
+    var elapsed = Time.get_ticks_msec()
+    
+    for ch in playerPoints:
+        if dudes[ch] != null:
+            if ! dudes[ch].isBerek:
+                countPointsSet(ch, playerPoints[ch] + elapsed * 0.00001)
 
 func show_menu(do_show: bool):
     playMusic(do_show)
@@ -89,6 +112,7 @@ func show_menu(do_show: bool):
 
 
 func _on_new_game_button_pressed() -> void:
+    countPointsReset()
     new_game_pressed.emit()
 
 
