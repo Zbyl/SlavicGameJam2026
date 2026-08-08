@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://br65ovqjab54d"]
+
+[ext_resource type="Texture2D" uid="uid://dshehsdmdnme6" path="res://images/start_screen.png" id="1_1xsix"]
+[ext_resource type="Texture2D" uid="uid://buowutrxtt43m" path="res://images/fox/icon_Fox.png" id="2_rftc2"]
+[ext_resource type="Texture2D" uid="uid://dq8emj6i0e5ud" path="res://images/arrow_left.png" id="3_61f8s"]
+[ext_resource type="Texture2D" uid="uid://drtvoym8hvqfu" path="res://images/ferret/icon_Ferret.png" id="4_g10ll"]
+[ext_resource type="Texture2D" uid="uid://v12gs52e5ysb" path="res://images/weasel/icon_Weasel.png" id="5_gpiub"]
+[ext_resource type="Texture2D" uid="uid://bn20o8elmktkp" path="res://images/snow/icon_Snow.png" id="6_amv7k"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ytkss"]
+font_size = 34
+font_color = Color(1, 1, 0.85490197, 1)
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Hud" type="CanvasLayer" unique_id=180480945]
+
+[node name="Screen" type="Control" parent="." unique_id=1265834220]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="Screen" unique_id=1874571239]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_1xsix")
+
+[node name="Menu" type="Control" parent="Screen" unique_id=188339773]
+anchors_preset = 0
+offset_left = 544.0
+offset_top = 271.0
+offset_right = 584.0
+offset_bottom = 311.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Screen/Menu" unique_id=1453249164]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 12.0
+offset_right = 293.0
+offset_bottom = 148.0
+
+[node name="NewGameButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
+layout_mode = 2
+text = "Nowa gra"
+
+[node name="ControlsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=391219273]
+layout_mode = 2
+text = "Kontrolery
+"
+
+[node name="FullScreenButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352484776]
+layout_mode = 2
+text = "Pełny ekran"
+
+[node name="ExitButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=1322218388]
+layout_mode = 2
+text = "Wyjście"
+
+[node name="Gauges" type="Control" parent="Screen" unique_id=889350484]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Player1Hud" type="Control" parent="Screen/Gauges" unique_id=484281621]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Player1Icon" type="TextureRect" parent="Screen/Gauges/Player1Hud" unique_id=1338729113]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 256.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_rftc2")
+
+[node name="Player1Label" type="Label" parent="Screen/Gauges/Player1Hud" unique_id=238223365]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 4.0
+offset_right = 163.0
+offset_bottom = 51.0
+text = "0 sek"
+label_settings = SubResource("LabelSettings_ytkss")
+
+[node name="Player1Berek" type="TextureRect" parent="Screen/Gauges/Player1Hud" unique_id=2078154059]
+layout_mode = 0
+offset_left = 79.0
+offset_right = 169.0
+offset_bottom = 65.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_61f8s")
+
+[node name="Player2Hud" type="Control" parent="Screen/Gauges" unique_id=556072477]
+anchors_preset = 0
+offset_left = 194.0
+offset_right = 234.0
+offset_bottom = 40.0
+
+[node name="Player2Icon" type="TextureRect" parent="Screen/Gauges/Player2Hud" unique_id=137699213]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 256.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("4_g10ll")
+
+[node name="Player2Label" type="Label" parent="Screen/Gauges/Player2Hud" unique_id=1772840342]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 4.0
+offset_right = 163.0
+offset_bottom = 51.0
+text = "0 sek"
+label_settings = SubResource("LabelSettings_ytkss")
+
+[node name="Player2Berek" type="TextureRect" parent="Screen/Gauges/Player2Hud" unique_id=467052377]
+layout_mode = 0
+offset_left = 79.0
+offset_right = 169.0
+offset_bottom = 65.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_61f8s")
+
+[node name="Player3Hud" type="Control" parent="Screen/Gauges" unique_id=1029914968]
+anchors_preset = 0
+offset_left = 383.0
+offset_right = 423.0
+offset_bottom = 40.0
+
+[node name="Player3Icon" type="TextureRect" parent="Screen/Gauges/Player3Hud" unique_id=819708367]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 256.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("5_gpiub")
+
+[node name="Player3Label" type="Label" parent="Screen/Gauges/Player3Hud" unique_id=899690865]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 4.0
+offset_right = 163.0
+offset_bottom = 51.0
+text = "0 sek"
+label_settings = SubResource("LabelSettings_ytkss")
+
+[node name="Player3Berek" type="TextureRect" parent="Screen/Gauges/Player3Hud" unique_id=323551167]
+layout_mode = 0
+offset_left = 79.0
+offset_right = 169.0
+offset_bottom = 65.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_61f8s")
+
+[node name="Player4Hud" type="Control" parent="Screen/Gauges" unique_id=1720546676]
+anchors_preset = 0
+offset_left = 576.0
+offset_right = 616.0
+offset_bottom = 40.0
+
+[node name="Player4Icon" type="TextureRect" parent="Screen/Gauges/Player4Hud" unique_id=1197717412]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 256.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("6_amv7k")
+
+[node name="Player4Label" type="Label" parent="Screen/Gauges/Player4Hud" unique_id=208489973]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 4.0
+offset_right = 163.0
+offset_bottom = 51.0
+text = "0 sek"
+label_settings = SubResource("LabelSettings_ytkss")
+
+[node name="Player4Berek" type="TextureRect" parent="Screen/Gauges/Player4Hud" unique_id=197051095]
+layout_mode = 0
+offset_left = 79.0
+offset_right = 169.0
+offset_bottom = 65.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_61f8s")
