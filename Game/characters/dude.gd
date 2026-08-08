@@ -177,6 +177,10 @@ func calculateState(dir: Vector2, justJumped: bool, isOnGround: bool) -> DudeSta
 
 # Respawns a player after dying. Called by respawnTimer().
 func respawn():
+    if GameData.hud.isMenuOpen():
+        respawnTimer.start() # Try again later!
+        return
+
     if currentState != DudeState.Dead:
         print("Canot respawn! I'm not Dead!")
         return
@@ -201,6 +205,9 @@ func syncAnimations():
     outline.frame=animation.frame
 
 func _physics_process(delta: float):
+    if GameData.hud.isMenuOpen():
+        return
+    
     updateJumpButton()
     
     var direction = calculateInputDirection()
