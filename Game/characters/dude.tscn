@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cuqioeyb0tebp" path="res://characters/dude.gd" id="1_s81fl"]
 [ext_resource type="AudioStream" uid="uid://o8jwpbeqbo6g" path="res://Sounds/Kunek/Jump.wav" id="5_64te8"]
 [ext_resource type="AudioStream" uid="uid://drswjhe6veebk" path="res://Sounds/Kunek/Slap.wav" id="6_k77yt"]
+[ext_resource type="Script" uid="uid://m5uhr7hfbyv7" path="res://characters/berek.gd" id="6_s81fl"]
 [ext_resource type="AudioStream" uid="uid://n6q0kyyprkfu" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
 [ext_resource type="AudioStream" uid="uid://bfy4f6p4sdj26" path="res://Sounds/Kunek/Landing.wav" id="7_s81fl"]
 [ext_resource type="PackedScene" uid="uid://cauxcx362hp4n" path="res://Shadow.tscn" id="8_tt1jp"]
@@ -51,12 +52,16 @@ sprite_frames = ExtResource("outline_frames")
 animation = &"OutlineFerretDir1"
 autoplay = "OutlineWeaselJump8"
 
-[node name="Berek" type="AnimatedSprite2D" parent="." unique_id=501282073]
-z_index = -1
-scale = Vector2(0.12, 0.12)
+[node name="Berek" type="AnimatedSprite2D" parent="." unique_id=501282073 node_paths=PackedStringArray("dude")]
+y_sort_enabled = true
+position = Vector2(0, -10)
+scale = Vector2(0.085, 0.085)
 sprite_frames = ExtResource("magic_frames")
 autoplay = "default"
 frame_progress = 0.8045777
+offset = Vector2(0, 118)
+script = ExtResource("6_s81fl")
+dude = NodePath("..")
 
 [node name="RespawnTimer" type="Timer" parent="." unique_id=1340742229]
 wait_time = 0.5
