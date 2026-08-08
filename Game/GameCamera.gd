@@ -13,12 +13,16 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     var averagePosition := Vector2.ZERO
     var averagePosition2 := Vector2.ZERO
+    var minPosOfKuns := Vector2(1e10, 1e10)
+    var maxPosOfKuns := Vector2(-1e10, -1e10)
     
     for dude in dudes:
         var posOfKun = dude.positionOfKunek()
         averagePosition += posOfKun
         averagePosition2.x += posOfKun.x ** 2
         averagePosition2.y += posOfKun.y ** 2
+        minPosOfKuns = minPosOfKuns.min(posOfKun)
+        maxPosOfKuns = maxPosOfKuns.max(posOfKun)
         
     var stdOfPosition = Vector2.ZERO
     var zoomIncreaseMaxRelVelocity =  0.05
@@ -30,8 +34,8 @@ func _process(delta: float) -> void:
         averagePosition2 /= dudes.size()
         stdOfPosition.x = sqrt(averagePosition2.x - averagePosition.x ** 2) 
         stdOfPosition.y = sqrt(averagePosition2.y - averagePosition.y ** 2) 
-        var neededZoomX = viewWidthAtZoom0 / (3 * stdOfPosition.x)
-        var neededZoomY = viewHeightAtZoom0 / (3 * stdOfPosition.y)
+        var neededZoomX = viewWidthAtZoom0 / max(maxPosOfKuns.x - minPosOfKuns.x + 0.05 * viewWidthAtZoom0, 3 * stdOfPosition.x)
+        var neededZoomY = viewHeightAtZoom0 / max(maxPosOfKuns.y - minPosOfKuns.y + 0.05 * viewHeightAtZoom0, 3 * stdOfPosition.y)
         var neededZoom = min(1.0, neededZoomX, neededZoomY)
         position = averagePosition
         var oldZoom = zoom.x
