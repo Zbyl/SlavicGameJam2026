@@ -1,7 +1,7 @@
 # TODO
 
+- Backgorund for menu in level.
 - Przy skoku czasem mruga.
-- Menu in level.
 - Full screen check.
 - Slopes.
 - Jumping no-run animation.
@@ -25,3 +25,4 @@
 - Coyotee time.
 - Jump button press time tolerancy.
 - Bug: Można zberkować kogoś na moście spod mostu.
+- Menu in level.
