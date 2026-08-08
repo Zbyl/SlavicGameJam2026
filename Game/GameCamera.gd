@@ -35,10 +35,11 @@ func _process(delta: float) -> void:
         averagePosition2 /= dudes.size()
         stdOfPosition.x = sqrt(averagePosition2.x - averagePosition.x ** 2) 
         stdOfPosition.y = sqrt(averagePosition2.y - averagePosition.y ** 2) 
-        var neededZoomX = viewWidthAtZoom0 / max(maxPosOfKuns.x - minPosOfKuns.x + 0.05 * viewWidthAtZoom0, 3 * stdOfPosition.x)
-        var neededZoomY = viewHeightAtZoom0 / max(maxPosOfKuns.y - minPosOfKuns.y + 0.05 * viewHeightAtZoom0, 3 * stdOfPosition.y)
+        position.x = (maxPosOfKuns.x + minPosOfKuns.x) * 0.5
+        position.y = (maxPosOfKuns.y + minPosOfKuns.y) * 0.5
+        var neededZoomX = viewWidthAtZoom0 / max(maxPosOfKuns.x - minPosOfKuns.x + 0.05 * viewWidthAtZoom0, 2.7 * stdOfPosition.x)
+        var neededZoomY = viewHeightAtZoom0 / max(maxPosOfKuns.y - minPosOfKuns.y + 0.05 * viewHeightAtZoom0, 2.7 * stdOfPosition.y)
         var neededZoom = min(1.0, neededZoomX, neededZoomY)
-        position = averagePosition
         var oldZoom = zoom.x
         var zoomVelocity = (neededZoom - oldZoom) / delta
 
