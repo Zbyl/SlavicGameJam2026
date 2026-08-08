@@ -255,11 +255,9 @@ func _physics_process(delta: float):
     var postMapPosition := GameData.layerHelpers.mapPositionFromScreenPosition(global_position, currentZ)
     var postGroundInfo := GameData.layerHelpers.groundInfoFromMapPosition(postMapPosition, currentZ)
 
-    var movedOnGround := false
     if currentlyOnGround: # We know we did not apply gravity nor jumped.
         # If we are still on ground, glue player to the ground.
         if postGroundInfo.groundType != LayerHelpers.GroundType.EMPTY:
-            movedOnGround = true
             deltaZ = postGroundInfo.groundHeight - currentZ
 
     # Hack for falling through the level.

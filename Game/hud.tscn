@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dshehsdmdnme6" path="res://images/start_screen.png" id="1_1xsix"]
 [ext_resource type="Script" uid="uid://2mtppe2o7dt6" path="res://hud.gd" id="1_rftc2"]
 [ext_resource type="Texture2D" uid="uid://buowutrxtt43m" path="res://images/fox/icon_Fox.png" id="2_rftc2"]
+[ext_resource type="Texture2D" uid="uid://dyl5bb2tcj6af" path="res://images/menu_backgroun_for_level.png" id="3_gpiub"]
 [ext_resource type="Texture2D" uid="uid://drtvoym8hvqfu" path="res://images/ferret/icon_Ferret.png" id="4_g10ll"]
 [ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="4_gpiub"]
 [ext_resource type="Texture2D" uid="uid://v12gs52e5ysb" path="res://images/weasel/icon_Weasel.png" id="5_gpiub"]
@@ -60,6 +61,12 @@ layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 655.0
 texture = ExtResource("1_1xsix")
+
+[node name="BackgroundForLevel" type="TextureRect" parent="Screen" unique_id=2074522170]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 655.0
+texture = ExtResource("3_gpiub")
 
 [node name="Menu" type="Control" parent="Screen" unique_id=188339773]
 anchors_preset = 0
@@ -221,7 +228,6 @@ texture = SubResource("GradientTexture1D_2d608")
 
 [node name="DebugLabel" type="Label" parent="Screen/Gauges" unique_id=657669731]
 unique_name_in_owner = true
-visible = false
 layout_mode = 0
 offset_left = 31.0
 offset_top = 33.0

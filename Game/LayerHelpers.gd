@@ -46,6 +46,7 @@ func make_blocks(collisionMapLower: TileMapLayer, tileMapAbove: TileMapLayer, bl
 
 func initTileMaps(level: Node2D):
     tile_map_layers = []
+    collision_map_layers = []
     for i in range(100):
         var tileMapName = "TileMapLayer{idx}".format({"idx": i})
         var collisionMapName = "CollisionLayer{idx}".format({"idx": i})
@@ -59,6 +60,7 @@ func initTileMaps(level: Node2D):
 
     # Load spawn points
     var spawnPointMarkers: Array[Node] = level.get_tree().get_nodes_in_group('SpawnPoint')
+    spawnPoints = []
     for spawnPointMarker in spawnPointMarkers:
         var spawnParentName = spawnPointMarker.get_parent().name
         assert(spawnParentName.substr(0, "TileMapLayer".length()) == "TileMapLayer", "Invalid spawn parent name")
@@ -67,7 +69,7 @@ func initTileMaps(level: Node2D):
         var spawnPoint := Vector3(spawnPointMarker.global_position.x, spawnPointMarker.global_position.y, layer * layerHeight)
         spawnPoints.append(spawnPoint)
 
-    assert(spawnPoints.size() == 4, "Must have 4 spawn points in a level")
+    assert(spawnPoints.size() == 4, "Must have 4 spawn points in a level: {spawnPoints}".format({"spawnPoints": spawnPoints}))
 
     # Generate collisions
     for i in range(100):

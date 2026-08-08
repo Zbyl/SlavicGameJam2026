@@ -9,6 +9,7 @@ signal game_won(info: String)
 @onready var new_game_button: Button = $Screen/Menu/VBoxContainer/NewGameButton
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
+@onready var backgroundForLevel: TextureRect = $Screen/BackgroundForLevel
 @onready var menu: Control = $Screen/Menu
 @onready var gauges: Control = $Screen/Gauges
 
@@ -67,7 +68,7 @@ func _ready() -> void:
     for i in range(4):
         player_bars[i] = get_node("Screen/Gauges/Player%dHud/Bar" % (i + 1) )
         
-    show_menu(true)
+    show_menu(true, false)
     
 func countPointsDudeGotMe(victim, hunter):
     countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
@@ -96,7 +97,11 @@ func countPointsReset():
     for ch in playerPoints:
         countPointsSet(ch, 0.0)
     
-func _process(delta: float) -> void:
+    
+func _process(_delta: float) -> void:
+    if isInLevel() and (not isPickerActive):
+        if Input.is_action_just_pressed("ui_menu"):
+            show_menu(not isMenuOpen(), true)
     
     var elapsed = Time.get_ticks_msec()
     
@@ -108,9 +113,11 @@ func _process(delta: float) -> void:
                 countPointsSet(ch, playerPoints[ch] + elapsed * 0.00001)
                 player_anims[playerNumber[ch]].play()
 
-func show_menu(do_show: bool):
-    playMusic(do_show)
-    background.visible = do_show
+func show_menu(do_show: bool, in_level: bool):
+    var musicForMenu := (not in_level) and do_show
+    playMusic(musicForMenu)
+    background.visible = (not in_level) and do_show
+    backgroundForLevel.visible = in_level and do_show
     menu.visible = do_show
     gauges.visible = !do_show
     if do_show:
@@ -133,11 +140,13 @@ func _on_exit_button_pressed() -> void:
     get_tree().quit()
 
 
+var isPickerActive := false
 func _on_controls_button_pressed() -> void:
     menu.visible = false
     var picker = PLAYER_PICKER.instantiate()
     picker.tree_exited.connect(_on_player_picker_destroy)
     add_child(picker)
+    isPickerActive = true
 
 func updatePlayerData(pd: Dictionary):
     playerData = pd
@@ -146,6 +155,7 @@ func updatePlayerData(pd: Dictionary):
 func _on_player_picker_destroy():
     menu.visible = true
     controls_button.grab_focus.call_deferred()
+    isPickerActive = false
 
 func playMusic(forMenu: bool) -> void:
     var player := menu_music if forMenu else level_music
@@ -153,3 +163,9 @@ func playMusic(forMenu: bool) -> void:
     otherPlayer.stop()
     if not player.playing:
         player.play()
+
+func isInLevel() -> bool:
+    return GameData.game.level != null
+
+func isMenuOpen() -> bool:
+    return menu.visible or isPickerActive
