@@ -24,7 +24,7 @@ var playerData = {
 var player_huds: Dictionary = {}
 var player_anims: Dictionary = {}
 var player_bars: Dictionary = {}
-var playerNumber: Dictionary = {"Fox": 0, "Ferret": 1, "Weasel": 2, "Snow": 3}      
+var playerNumber: Dictionary = {"Fox": 0, "Ferret": 1, "Weasel": 2, "Snow": 3}
 var playerPoints: Dictionary = {"Fox": 0.0, "Ferret": 0.0, "Weasel": 0.0, "Snow": 0.0}
 var dudes: Dictionary = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": null}
 var pointsCatchGain = 40.0
@@ -49,16 +49,16 @@ var pointsMax = 1000.0
 #    _setBerek(player_4_hud, playerNo==4)
 
 func initPlayers(ddudes: Array[Dude]):
-    for h in player_huds: 
+    for h in player_huds:
         player_huds[h].visible = false
-        
-    if ddudes.size() > 1:   
+
+    if ddudes.size() > 1:
         for dude in ddudes:
             dudes[dude.character] = dude
             player_huds[playerNumber[dude.character]].visible = true
             if ! dude.isBerek:
                 player_anims[playerNumber[dude.character]].play()
-        
+
 func _ready() -> void:
 
     for i in range(4):
@@ -67,45 +67,45 @@ func _ready() -> void:
         player_anims[i] = get_node("Screen/Gauges/Player%dHud/Anim" % (i + 1) )
     for i in range(4):
         player_bars[i] = get_node("Screen/Gauges/Player%dHud/Bar" % (i + 1) )
-        
+
     show_menu(true, false)
-    
+
 func countPointsDudeGotMe(victim, hunter):
     countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
     countPointsSet(hunter.character, playerPoints[hunter.character] + pointsCatchGain)
     player_anims[playerNumber[victim.character]].stop()
-    
+
 func pointsToScreen(p):
     var screen_size = get_viewport().get_visible_rect().size
     var maxScreenCoord = screen_size.x - 20
     return (p / pointsMax) * maxScreenCoord
- 
-    
+
+
 func countPointsSet(ch, points):
     var p = max(0.001, min(pointsMax, points))
     playerPoints[ch] = p
     if points > pointsMax: game_won.emit(ch)
-    
+
     var bar: TextureRect = player_bars[playerNumber[ch]]
     var player_hud: Control = player_huds[playerNumber[ch]]
     var sp = pointsToScreen(playerPoints[ch])
     bar.size.x = sp
     bar.position.x = -sp
     player_hud.position.x = sp
-    
+
 func countPointsReset():
     for ch in playerPoints:
         countPointsSet(ch, 0.0)
-    
-    
+
+
 func _process(delta: float) -> void:
     if isInLevel() and (not isPickerActive):
         if Input.is_action_just_pressed("ui_menu"):
             show_menu(not isMenuOpen(), true)
-    
+
     const POINTS_PER_SECOND := 6.0
     var elapsed: float = 0.0 if isMenuOpen() else delta
-    
+
     for ch in playerPoints:
         if dudes[ch] != null:
             if dudes[ch].isBerek or dudes[ch].isDead():

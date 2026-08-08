@@ -29,14 +29,14 @@ func getTileMapForLayer(layer: int) -> TileMapLayer:
 func isSlope(tileMapLayer: TileMapLayer, mapCoords: Vector2i) -> bool:
     if tileMapLayer == null:
         return false
-        
+
     if tileMapLayer.get_cell_source_id(mapCoords) == -1:
         return false
-        
+
     var tile_data = tileMapLayer.get_cell_tile_data(mapCoords)
     if not tile_data:
         return false
-        
+
     var slope = tile_data.get_custom_data("Slope")
     return slope
 
@@ -44,10 +44,10 @@ func isSlope(tileMapLayer: TileMapLayer, mapCoords: Vector2i) -> bool:
 func isSolidTile(tileMapLayer: TileMapLayer, mapCoords: Vector2i) -> bool:
     if tileMapLayer == null:
         return false
-    
+
     if tileMapLayer.get_cell_source_id(mapCoords) == -1:
         return false
-    
+
     return true
 
 enum GroundType { EMPTY, SOLID, SLOPE }
@@ -89,7 +89,7 @@ func _ready():
         if not tileMap:
             break
         tile_map_layers.append(tileMap)
-    
+
     print(tileOffsetToPlanarOffset(Vector2(-40, 0)))
     print(Vector2(0, 0))
     print(tileOffsetToPlanarOffset(Vector2(0, -20)))
@@ -136,7 +136,7 @@ func mapPositionFromScreenPosition(globalPosition2d: Vector2, z: float) -> MapPo
     var offsetWithinTile := localCoords - tileLocalCoords
     var planarOffsetWithinTile := tileOffsetToPlanarOffset(offsetWithinTile)
     return MapPositionInfo.new(mapCoords, offsetWithinTile, planarOffsetWithinTile)
-    
+
 func screenPositionFromMapPosition(mapCoords: Vector2i, offsetWithinTile: Vector2, z: float) -> Vector2:
     var layer := layerFromZ(z)
     var tile_map_layer_0 := getTileMapForLayer(0)
@@ -145,7 +145,7 @@ func screenPositionFromMapPosition(mapCoords: Vector2i, offsetWithinTile: Vector
     var yOffsetFromZ :=  layer * layerHeight * zToYOffsetRatio
     globalCoords.y = globalCoords.y - yOffsetFromZ
     return globalCoords
-    
+
 func groundInfoFromMapPositionRaw(mapPosition: MapPositionInfo, z: float) -> GroundInfo:
     var layer := layerFromZ(z)
     var tileMap = getTileMapForLayer(layer)
@@ -163,7 +163,7 @@ func groundInfoFromMapPositionRaw(mapPosition: MapPositionInfo, z: float) -> Gro
     elif isSolidTile(tileMap, mapPosition.mapCoords):
         groundType = GroundType.SOLID
         groundHeight = layer * layerHeight
-        
+
     var useThisCollision := false
     var useBelowCollision := false
     if groundType == GroundType.SLOPE:
@@ -203,13 +203,13 @@ func isOnSlope(mapCoords: Vector2i, feetLayer: int) -> OnSlope:
 
     if feetTileMapLayer == null:
         return OnSlope.NO
-    
+
     if isSlope(feetTileMapLayer, mapCoords):
         return OnSlope.GOING_DOWN
 
     if aboveTileMapLayer and isSlope(aboveTileMapLayer, mapCoords):
         return OnSlope.GOING_UP
-    
+
     return OnSlope.NO
 
 
@@ -223,7 +223,7 @@ func _physics_process(delta: float) -> void:
         var distFromGround := currentZ - preGroundInfo.groundHeight
         var heightToConsiderOnGround := layerHeight / 20.0
         currentlyOnGround = distFromGround < heightToConsiderOnGround
-        
+
     if currentlyOnGround:
         velocityZ = 0.0
     else:
@@ -266,7 +266,7 @@ func _physics_process(delta: float) -> void:
 
     var previousZ := currentZ
     currentZ += deltaZ
-    
+
     global_position = screenPositionFromMapPosition(postMapPosition.mapCoords, postMapPosition.offsetWithinTile, currentZ)
     var curLayer := layerFromZ(currentZ)
     image.offset.y = baseOffsetY - (currentZ - curLayer * layerHeight) * zToYOffsetRatio / image.scale.y

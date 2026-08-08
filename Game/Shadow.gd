@@ -19,6 +19,6 @@ func _process(_delta: float) -> void:
         if GameData.layerHelpers.isSolidTile(tileMap, mapPosition.mapCoords):
             break
         layer -= 1
-    
+
     var screenPosition := GameData.layerHelpers.screenPositionFromMapPosition(mapPosition.mapCoords, mapPosition.offsetWithinTile, layer * GameData.layerHelpers.layerHeight)
     global_position = screenPosition

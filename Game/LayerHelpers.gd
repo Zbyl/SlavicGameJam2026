@@ -104,14 +104,14 @@ func layerFromZ(z: float) -> int:
 func isSlope(tileMapLayer: TileMapLayer, mapCoords: Vector2i) -> bool:
     if tileMapLayer == null:
         return false
-        
+
     if tileMapLayer.get_cell_source_id(mapCoords) == -1:
         return false
-        
+
     var tile_data = tileMapLayer.get_cell_tile_data(mapCoords)
     if not tile_data:
         return false
-        
+
     var slope = tile_data.get_custom_data("Slope")
     return slope
 
@@ -119,10 +119,10 @@ func isSlope(tileMapLayer: TileMapLayer, mapCoords: Vector2i) -> bool:
 func isSolidTile(tileMapLayer: TileMapLayer, mapCoords: Vector2i) -> bool:
     if tileMapLayer == null:
         return false
-    
+
     if tileMapLayer.get_cell_source_id(mapCoords) == -1:
         return false
-    
+
     return true
 
 enum GroundType { EMPTY, SOLID, SLOPE }
@@ -187,7 +187,7 @@ func mapPositionFromScreenPosition(globalPosition2d: Vector2, z: float) -> MapPo
     var offsetWithinTile := localCoords - tileLocalCoords
     var planarOffsetWithinTile := tileOffsetToPlanarOffset(offsetWithinTile)
     return MapPositionInfo.new(mapCoords, offsetWithinTile, planarOffsetWithinTile)
-    
+
 func screenPositionFromMapPosition(mapCoords: Vector2i, offsetWithinTile: Vector2, z: float) -> Vector2:
     var layer := layerFromZ(z)
     var tile_map_layer_0 := getTileMapForLayer(0)
@@ -196,7 +196,7 @@ func screenPositionFromMapPosition(mapCoords: Vector2i, offsetWithinTile: Vector
     var yOffsetFromZ :=  layer * layerHeight * zToYOffsetRatio
     globalCoords.y = globalCoords.y - yOffsetFromZ
     return globalCoords
-    
+
 func groundInfoFromMapPositionRaw(mapPosition: MapPositionInfo, z: float) -> GroundInfo:
     var layer := layerFromZ(z)
     var tileMap = getTileMapForLayer(layer)
@@ -214,7 +214,7 @@ func groundInfoFromMapPositionRaw(mapPosition: MapPositionInfo, z: float) -> Gro
     elif isSolidTile(tileMap, mapPosition.mapCoords):
         groundType = GroundType.SOLID
         groundHeight = layer * layerHeight
-        
+
     var useThisCollision := false
     var useBelowCollision := false
     if groundType == GroundType.SLOPE:
@@ -260,7 +260,7 @@ func allGroundHeightsInPosition(mapCoords: Vector2i, planarOffsetWithinTile: Vec
         grounds = [0.0]
 
     return grounds
-            
+
 # Returs height of the highest ground below or equal to given z.
 # If z is < 0 will return 0.
 func groundHeightBelow(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, z: float) -> float:
@@ -270,7 +270,7 @@ func groundHeightBelow(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, z: 
         if ground <= z:
             lastLowerGround = z
     return lastLowerGround
-    
+
 # Returns all ground heights between, and including, lower and upper z. Sorted ascending.
 # Can return an empty array.
 func groundHeightsBeetweenZs(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, lowerZ: float, upperZ: float) -> Array[float]:
@@ -280,4 +280,3 @@ func groundHeightsBeetweenZs(mapCoords: Vector2i, planarOffsetWithinTile: Vector
         if (ground >= lowerZ) and (ground <= upperZ):
             beetweenGrounds.append(ground)
     return beetweenGrounds
-    
