@@ -14,7 +14,7 @@ font_color = Color(1, 1, 0.85490197, 1)
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Hud" type="CanvasLayer" unique_id=180480945]
+[node name="Hud" type="CanvasLayer" unique_id=180480945 groups=["Hud"]]
 script = ExtResource("1_rftc2")
 
 [node name="Screen" type="Control" parent="." unique_id=1265834220]
@@ -185,5 +185,6 @@ offset_bottom = 65.0
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("3_61f8s")
 
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

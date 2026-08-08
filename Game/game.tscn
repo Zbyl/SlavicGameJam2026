@@ -3,8 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://br65ovqjab54d" path="res://hud.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://n6yyrryw0el" path="res://game.gd" id="1_feb5d"]
 [ext_resource type="AudioStream" uid="uid://8cqk77mragml" path="res://Sounds/Music/starostin-fast-dynamic-percussion-music-263141.mp3" id="2_feb5d"]
+[ext_resource type="PackedScene" uid="uid://c5ej57awhlwb3" path="res://GameCamera.tscn" id="4_fc0e3"]
 
-[node name="Game" type="Node2D" unique_id=1767426143]
+[node name="Game" type="Node2D" unique_id=1767426143 groups=["Game"]]
 script = ExtResource("1_feb5d")
 
 [node name="Hud" parent="." unique_id=180480945 instance=ExtResource("1_e2o6t")]
@@ -15,3 +16,5 @@ script = ExtResource("1_feb5d")
 stream = ExtResource("2_feb5d")
 volume_db = -21.032
 autoplay = true
+
+[node name="GameCamera" parent="." unique_id=1524055874 instance=ExtResource("4_fc0e3")]

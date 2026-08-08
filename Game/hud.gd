@@ -1,4 +1,7 @@
 extends CanvasLayer
+class_name Hud
+
+signal new_game_pressed()
 
 @onready var player_1_hud: Control = $Screen/Gauges/Player1Hud
 @onready var player_2_hud: Control = $Screen/Gauges/Player2Hud
@@ -41,6 +44,10 @@ func show_menu(do_show: bool):
     gauges.visible = !do_show
     if do_show:
         new_game_button.grab_focus.call_deferred()
+
+
+func _on_new_game_button_pressed() -> void:
+    new_game_pressed.emit()
 
 
 func _on_full_screen_button_pressed() -> void:

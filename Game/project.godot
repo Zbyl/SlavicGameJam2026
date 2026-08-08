@@ -15,6 +15,10 @@ run/main_scene="uid://dhh78k34kbkmc"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameData="*uid://bgy8f1gte1fl3"
+
 [display]
 
 window/stretch/mode="canvas_items"
@@ -28,6 +32,8 @@ project/assembly_name="Game"
 
 Dude="This is some dude"
 Berek="This dude is berek"
+Game=""
+Hud=""
 
 [layer_names]
 

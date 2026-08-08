@@ -1,7 +1,7 @@
 extends Camera2D
+class_name GameCamera
 
-
-@onready var dude: Dude = $"../Dude"
+var dudes: Array[Dude] = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -11,4 +11,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-    position = dude.positionOfKunek()
+    var averagePosition := Vector2.ZERO
+    for dude in dudes:
+        averagePosition += dude.positionOfKunek()
+    if dudes.size() > 0:
+        averagePosition /= dudes.size()
+        position = averagePosition
