@@ -5,6 +5,7 @@ var layerHeight: float = 40.0
 var zToYOffsetRatio: float = 1.0 # Multiply z by this much to get y offset. But note that Z goes up, but y goes down.
 
 var tile_map_layers: Array[TileMapLayer] = []  # Used by level preprocessing, Dudes and Shadow.
+var collision_map_layers: Array[TileMapLayer] = []  # Used by level preprocessing.
 var spawnPoints: Array[Vector3] = [] # @note Order of spawn points does not correspond to names inside Level.
 
 # Empty tile Level0 is in source 1, tile 23,0
@@ -20,7 +21,8 @@ var block_tiles: Array[Vector3i] = [
     Vector3i(0, 14, 1),
 ]
 
-func make_boundaries(tileMapLayer: TileMapLayer, blockTile: Vector3i):
+# Unused
+func _unused_make_boundaries(tileMapLayer: TileMapLayer, blockTile: Vector3i):
     var filled_tiles := tileMapLayer.get_used_cells()
     for filled_tile: Vector2i in filled_tiles:
         var neighboring_tiles := tileMapLayer.get_surrounding_cells(filled_tile)
@@ -28,7 +30,9 @@ func make_boundaries(tileMapLayer: TileMapLayer, blockTile: Vector3i):
             if tileMapLayer.get_cell_source_id(neighbour) == -1:
                 tileMapLayer.set_cell(neighbour, blockTile.z, Vector2i(blockTile.x, blockTile.y))
 
-func make_blocks(tileMapLower: TileMapLayer, tileMapAbove: TileMapLayer, blockTileLower: Vector3i):
+# blockTileLower - block tile to use for collisionMapLower.
+#                  (Each collision map needs a block with appropriate collision layer.)
+func make_blocks(collisionMapLower: TileMapLayer, tileMapAbove: TileMapLayer, blockTileLower: Vector3i):
     var filled_tiles := tileMapAbove.get_used_cells()
     for filled_tile: Vector2i in filled_tiles:
         var tile_data = tileMapAbove.get_cell_tile_data(filled_tile)
@@ -37,18 +41,21 @@ func make_blocks(tileMapLower: TileMapLayer, tileMapAbove: TileMapLayer, blockTi
             if slope:
                 continue
 
-        #if tileMapLower.get_cell_source_id(filled_tile) != -1:
-        tileMapLower.set_cell(filled_tile, blockTileLower.z, Vector2i(blockTileLower.x, blockTileLower.y))
+        collisionMapLower.set_cell(filled_tile, blockTileLower.z, Vector2i(blockTileLower.x, blockTileLower.y))
 
 
 func initTileMaps(level: Node2D):
     tile_map_layers = []
     for i in range(100):
         var tileMapName = "TileMapLayer{idx}".format({"idx": i})
+        var collisionMapName = "CollisionLayer{idx}".format({"idx": i})
         var tileMap: TileMapLayer = level.get_node_or_null(tileMapName)
+        var collisionMap: TileMapLayer = level.get_node_or_null(collisionMapName)
         if not tileMap:
             break
+        assert(collisionMap, "Collision map missing")
         tile_map_layers.append(tileMap)
+        collision_map_layers.append(collisionMap)
 
     # Load spawn points
     var spawnPointMarkers: Array[Node] = level.get_tree().get_nodes_in_group('SpawnPoint')
@@ -63,15 +70,12 @@ func initTileMaps(level: Node2D):
     assert(spawnPoints.size() == 4, "Must have 4 spawn points in a level")
 
     # Generate collisions
-    var tile_map_layer_0: TileMapLayer = level.get_node("TileMapLayer0")
-    var previousLayer: TileMapLayer = tile_map_layer_0
     for i in range(100):
-        var tileMapName = "TileMapLayer{idx}".format({"idx": i + 1})
-        var currentLayer: TileMapLayer = level.get_node_or_null(tileMapName)
+        var currentLayer: TileMapLayer = getTileMapForLayer(i + 1)
+        var previousCollisionLayer: TileMapLayer = getCollisionMapForLayer(i)
         if not currentLayer:
             break
-        make_blocks(previousLayer, currentLayer, block_tiles[i])
-        previousLayer = currentLayer
+        make_blocks(previousCollisionLayer, currentLayer, block_tiles[i])
 
 # Returns tilemap for layer or null if this layer doesn't have a tilemap.
 func getTileMapForLayer(layer: int) -> TileMapLayer:
@@ -80,6 +84,14 @@ func getTileMapForLayer(layer: int) -> TileMapLayer:
     if layer >= tile_map_layers.size():
         return null
     return tile_map_layers[layer]
+
+# Returns collision tilemap for layer or null if this layer doesn't have a tilemap.
+func getCollisionMapForLayer(layer: int) -> TileMapLayer:
+    if layer < 0:
+        return null
+    if layer >= collision_map_layers.size():
+        return null
+    return collision_map_layers[layer]
 
 ########################################################################
 # 3D movement stuff

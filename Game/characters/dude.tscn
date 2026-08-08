@@ -10,7 +10,7 @@
 [ext_resource type="SpriteFrames" uid="uid://dbicsqv1sa4ie" path="res://characters/dude_outline_frames.tres" id="outline_frames"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lfj2m"]
-radius = 11
+radius = 11.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d5dh0"]
 radius = 20.0
