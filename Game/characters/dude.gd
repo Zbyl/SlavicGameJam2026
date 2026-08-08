@@ -277,7 +277,6 @@ func _physics_process(delta: float):
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-    return
     if !is_in_group("Berek") && body.is_in_group("Berek"):
         body.setBerek(false)
 
