@@ -57,9 +57,11 @@ func initPlayers(ddudes: Array[Dude]):
 
         for dude in ddudes:
             playerOffsetsRev.append(playerNumber[dude.character])
+            
         playerOffsetsRev.sort()
-        var playerOffsets = Dictionary()
-        for i in playerOffsetsRev:
+        
+        var playerOffsets: Dictionary = Dictionary()
+        for i in range(playerOffsetsRev.size()):
             # i order, playerOffsetsRev[i] - playernumber
             playerOffsets[playerOffsetsRev[i]] = i
 
