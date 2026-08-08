@@ -3,6 +3,7 @@
 [ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_lfj2m"]
 
 [node name="Level2" type="Node2D" unique_id=664743491]
+y_sort_enabled = true
 
 [node name="TileMapLayer0" type="TileMapLayer" parent="." unique_id=930500294]
 y_sort_enabled = true

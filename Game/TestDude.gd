@@ -4,6 +4,7 @@ extends CharacterBody2D
 var tile_map_layers: Array[TileMapLayer] = []
 @export var debugLabel: Label
 
+@onready var image: Node2D = $Image # Image of Boguś. Will be moved relative to CollisionShape to simulate jumping.
 
 const SPEED = 6000.0
 const JUMP_VELOCITY = 200.0
@@ -14,6 +15,8 @@ var zToYOffsetRatio: float = 1.0 # Multiply z by this much to get y offset. But 
 
 var currentZ: float = 0.0
 var velocityZ: float = 0.0
+
+var baseOffsetY: float = 0.0
 
 # Returns tilemap for layer or null if this layer doesn't have a tilemap.
 func getTileMapForLayer(layer: int) -> TileMapLayer:
@@ -78,6 +81,8 @@ class GroundInfo:
         self.useBelowCollision = useBelowCollision
 
 func _ready():
+    baseOffsetY = image.offset.y
+    #debugLabel = get_node("../../%DebugLabel")
     for i in range(100):
         var tileMapName = "TileMapLayer{idx}".format({"idx": i})
         var tileMap: TileMapLayer = level.get_node_or_null(tileMapName)
@@ -118,7 +123,8 @@ func tileOffsetToPlanarOffset(tileOffset: Vector2) -> Vector2:
 
 # Position 2D is expected to already contain offset corresponding to z.
 func mapPositionFromScreenPosition(globalPosition2d: Vector2, z: float) -> MapPositionInfo:
-    var yOffsetFromZ := zToYOffsetRatio * z
+    var layer := layerFromZ(z)
+    var yOffsetFromZ := layer * layerHeight * zToYOffsetRatio
     var correctedPosition := Vector2(globalPosition2d.x, globalPosition2d.y + yOffsetFromZ)
     var tile_map_layer_0 := getTileMapForLayer(0)
     var localCoords := tile_map_layer_0.to_local(correctedPosition)
@@ -127,6 +133,15 @@ func mapPositionFromScreenPosition(globalPosition2d: Vector2, z: float) -> MapPo
     var offsetWithinTile := localCoords - tileLocalCoords
     var planarOffsetWithinTile := tileOffsetToPlanarOffset(offsetWithinTile)
     return MapPositionInfo.new(mapCoords, offsetWithinTile, planarOffsetWithinTile)
+    
+func screenPositionFromMapPosition(mapCoords: Vector2i, offsetWithinTile: Vector2, z: float) -> Vector2:
+    var layer := layerFromZ(z)
+    var tile_map_layer_0 := getTileMapForLayer(0)
+    var mapLocalCoords = tile_map_layer_0.map_to_local(mapCoords) + offsetWithinTile
+    var globalCoords = tile_map_layer_0.to_global(mapLocalCoords)
+    var yOffsetFromZ :=  layer * layerHeight * zToYOffsetRatio
+    globalCoords.y = globalCoords.y - yOffsetFromZ
+    return globalCoords
     
 func groundInfoFromMapPositionRaw(mapPosition: MapPositionInfo, z: float) -> GroundInfo:
     var layer := layerFromZ(z)
@@ -163,7 +178,7 @@ func groundInfoFromMapPosition(mapPosition: MapPositionInfo, z: float) -> Ground
     var groundAbove := groundInfoFromMapPositionRaw(mapPosition, z + groundEpsilon)
     if groundAbove.groundType != GroundType.EMPTY:
         return groundAbove
-    return groundInfoFromMapPositionRaw(mapPosition, z + groundEpsilon)
+    return groundInfoFromMapPositionRaw(mapPosition, z)
 
 # Returns slopeGroundHeight (absolute), or null if not on slope.
 func slopeGroundHeight(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, layer: int) -> Variant: # float or null
@@ -242,25 +257,31 @@ func _physics_process(delta: float) -> void:
     var postMapPosition := mapPositionFromScreenPosition(global_position, currentZ)
     var postGroundInfo := groundInfoFromMapPosition(postMapPosition, currentZ)
 
-    # We use collision mask from previous z. It's close enough.
-    clearLayerCollisionMask()
-    #setLayerCollisionMask(0, true)
-    setLayerCollisionMask(postGroundInfo.layer, postGroundInfo.useThisCollision)
-    setLayerCollisionMask(postGroundInfo.layer - 1, postGroundInfo.useBelowCollision)
-    #z_index = postGroundInfo.layer + 1
-
     var movedOnGround := false
     if currentlyOnGround: # We know we did not apply gravity nor jumped.
         # If we are still on ground, glue player to the ground.
-        if postGroundInfo.groundType == GroundType.SLOPE:
+        if postGroundInfo.groundType != GroundType.EMPTY:
             movedOnGround = true
             deltaZ = postGroundInfo.groundHeight - currentZ
 
+    var previousZ := currentZ
     currentZ += deltaZ
-    global_position.y -= deltaZ * zToYOffsetRatio
+    
+    global_position = screenPositionFromMapPosition(postMapPosition.mapCoords, postMapPosition.offsetWithinTile, currentZ)
+    var curLayer := layerFromZ(currentZ)
+    image.offset.y = baseOffsetY - (currentZ - curLayer * layerHeight) * zToYOffsetRatio / image.scale.y
+    #image.position.y += (curLayer - prevLayer) * layerHeight * zToYOffsetRatio
 
-    #debugLabel.text = "gravity={gravity} delta={delta} velocityZ={velocityZ} onGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
-    #    format({"gravity": gravity, "delta": delta, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
+    # We use collision mask from previous z. It's close enough.
+    clearLayerCollisionMask()
+    setLayerCollisionMask(curLayer, true)
+    #setLayerCollisionMask(postGroundInfo.layer, postGroundInfo.useThisCollision)
+    #setLayerCollisionMask(postGroundInfo.layer - 1, postGroundInfo.useBelowCollision)
+    z_index = postGroundInfo.layer + 1
+    #z_index = 1
+
+    debugLabel.text = "imageOffset={imageOffset} z_index={z_index} gravity={gravity} deltaZ={deltaZ} velocityZ={velocityZ}\nonGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
+        format({"imageOffset": image.position.y - baseOffsetY, "z_index": z_index, "gravity": gravity, "deltaZ": deltaZ, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
 
 func setLayerCollisionMask(layer: int, value: bool) -> void:
     if (layer >= 0) and (layer < 16):
