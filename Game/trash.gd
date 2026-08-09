@@ -26,7 +26,10 @@ func _ready() -> void:
     if isBall:
         ball.visible = true
         leaf4.visible = false
+        linear_damp = 1.0
+        angular_damp = 0.05
     else:
+        physics_material_override = null
         ball.visible = false
         leaf4.visible = true
 

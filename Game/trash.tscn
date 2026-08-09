@@ -4,12 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://8ai6guymfcfs" path="res://images/leaf4.png" id="1_avkd5"]
 [ext_resource type="Texture2D" uid="uid://lwhn44pdcu3x" path="res://images/ball.png" id="3_76yqg"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_gpiub"]
+bounce = 1.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0v0hr"]
 
 [node name="Trash" type="RigidBody2D" unique_id=1650879338 groups=["Trash"]]
 y_sort_enabled = true
 collision_layer = 32
 collision_mask = 41
+physics_material_override = SubResource("PhysicsMaterial_gpiub")
 linear_damp = 2.0
 angular_damp = 0.1
 script = ExtResource("1_43he1")
@@ -22,10 +26,9 @@ position = Vector2(0, 100)
 
 [node name="Ball" type="Sprite2D" parent="BallContainer" unique_id=823224905]
 y_sort_enabled = true
-position = Vector2(-0.5, 1.2095947)
+position = Vector2(0, -99.23)
 scale = Vector2(0.3125, 0.32)
 texture = ExtResource("3_76yqg")
-offset = Vector2(0, -316.28)
 
 [node name="Leaf4Container" type="Node2D" parent="." unique_id=2090049566]
 position = Vector2(0, 100)
