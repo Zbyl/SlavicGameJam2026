@@ -16,7 +16,7 @@
 radius = 11.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d5dh0"]
-radius = 20.0
+radius = 25.0
 height = 50.0
 
 [node name="Dude" type="CharacterBody2D" unique_id=345096153 groups=["Dude"]]
