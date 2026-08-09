@@ -11,17 +11,21 @@ ALPHA=${3:-100}
 PREFIX="tile"$MOD
 
 SHAPES=(
-    box
-    half
-    up-half
-    slope-x0
-    slope-x1
-    slope-y0
-    slope-y1
-    up-slope-x0
-    up-slope-x1
-    up-slope-y0
-    up-slope-y1
+    #box
+    #half
+    #up-half
+    #slope-x0
+    #slope-x1
+    #slope-y0
+    #slope-y1
+    #up-slope-x0
+    #up-slope-x1
+    #up-slope-y0
+    #up-slope-y1
+    barely-slope-x0
+    barely-slope-x1
+    barely-slope-y0
+    barely-slope-y1
 )
 
 # Common settings for the whole tileset. Edit these as desired.
