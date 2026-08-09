@@ -7,7 +7,7 @@ const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
 
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
 const LEVEL_2 = preload("res://Levels/Level4.tscn")
-const LEVEL_3 = preload("res://Levels/Level1.tscn")
+const LEVEL_3 = preload("res://Levels/Level3.tscn")
 const DUDE = preload("res://characters/dude.tscn")
 
 @onready var gameCamera: GameCamera = $GameCamera
