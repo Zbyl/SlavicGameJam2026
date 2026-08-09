@@ -34,6 +34,7 @@ var player_bars: Dictionary = {}
 var playerNumber: Dictionary = {"Fox": 0, "Ferret": 1, "Weasel": 2, "Snow": 3}
 var playerPoints: Dictionary = {"Fox": 0.0, "Ferret": 0.0, "Weasel": 0.0, "Snow": 0.0}
 var dudes: Dictionary = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": null}
+var pointsPerSecond = POINTS_PER_SECOND
 
 #func getPlayerLabel(player_hud: Control) -> Label:
 #    return player_hud.get_node("PlayerLabel")
@@ -53,6 +54,8 @@ var dudes: Dictionary = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": nu
 #    _setBerek(player_4_hud, playerNo==4)
 
 func initPlayers(ddudes: Array[Dude]):
+    pointsPerSecond = POINTS_PER_SECOND
+
     for h in player_huds:
         player_huds[h].visible = false
 
@@ -76,6 +79,8 @@ func initPlayers(ddudes: Array[Dude]):
             player_huds[pn].position.y = 13 * playerOffsets[pn]
             if ! dude.isBerek:
                 player_anims[playerNumber[dude.character]].play()
+    else:
+        pointsPerSecond = 0
 
 func init_default_player_data():
     var padNum = Input.get_connected_joypads().size()

@@ -76,6 +76,8 @@ func _switch_level(new_level_scene):
 
     var berekIdx = randi_range(1, hud.playerData.size()) - 1
     var berekKey = hud.playerData.keys()[berekIdx]
+    if hud.playerData.size() <= 1:
+        berekKey = -1
     for key in hud.playerData.keys():
         var controllerData = hud.playerData[key]
         var dude: Dude = DUDE.instantiate()
