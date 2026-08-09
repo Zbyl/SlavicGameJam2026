@@ -2,7 +2,7 @@ extends Control
 const OPTION_CONTROLLER = 0
 const OPTION_KEYBOARD = 1
 const PICK_CONTROLLER = 4
-const DEFAULT_KEYBOARD_KEY_MAP = {"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE}
+const DEFAULT_KEYBOARD_KEY_MAP = {"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_CTRL}
 const DEFAULT_PAD_KEY_MAP = {"type":"pad","pad":0}
 
 @export var player_picker : Node

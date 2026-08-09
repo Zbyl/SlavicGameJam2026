@@ -8,6 +8,10 @@ const pointsCatchGain = 40.0
 const pointsCatchPenalty = 20.0
 const pointsMax = 1000.0
 
+const KEYBOARD_PLAYER1 = {"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_CTRL}
+const KEYBOARD_PLAYER2 = {"type":"keyboard","up":KEY_W,"down":KEY_S,"left":KEY_A,"right":KEY_D,"jump":KEY_SHIFT,"duck":KEY_Q}
+const PAD_PLAYER = {"type":"pad","pad":0}
+
 signal new_game_pressed(levelIdx: int)
 signal game_won(info: String)
 
@@ -21,10 +25,7 @@ signal game_won(info: String)
 @onready var menu_music: AudioStreamPlayer = $Music/MenuMusic
 @onready var level_music: AudioStreamPlayer = $Music/LevelMusic
 
-var playerData = {
-    0:{"type":"pad","pad":0},
-    1:{"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_0}
-}
+var playerData = {}
 
 var player_huds: Dictionary = {}
 var player_anims: Dictionary = {}
@@ -75,7 +76,27 @@ func initPlayers(ddudes: Array[Dude]):
             if ! dude.isBerek:
                 player_anims[playerNumber[dude.character]].play()
 
+func init_default_player_data():
+    var padNum = Input.get_connected_joypads().size()
+    if padNum==0:
+        playerData = {
+            0:KEYBOARD_PLAYER1.duplicate(),
+            1:KEYBOARD_PLAYER2.duplicate()
+        }
+    elif padNum==1:
+        playerData = {
+            0:PAD_PLAYER.duplicate(),
+            1:KEYBOARD_PLAYER1.duplicate()
+        }
+    else:
+        playerData = {}
+        for i in range(0, padNum):
+            var pl = PAD_PLAYER.duplicate()
+            pl.pad = i
+            playerData[i] = pl
+
 func _ready() -> void:
+    init_default_player_data()
 
     for i in range(4):
         player_huds[i] = get_node("Screen/Gauges/Player%dHud" % (i + 1) )

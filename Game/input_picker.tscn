@@ -121,7 +121,7 @@ focus_neighbor_right = NodePath("../GridContainer/Right")
 focus_neighbor_bottom = NodePath("../OkButton")
 focus_next = NodePath("../OkButton")
 focus_previous = NodePath("../Jump")
-text = "Kucnij"
+text = "Gadaj"
 
 [node name="OkButton" type="Button" parent="VBoxContainer" unique_id=692754225]
 layout_mode = 2
