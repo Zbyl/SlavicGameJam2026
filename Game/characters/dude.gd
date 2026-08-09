@@ -46,7 +46,7 @@ var currentState: DudeState = DudeState.Idle
 @onready var respawn_player: AudioStreamPlayer2D = $RespawnPlayer
 @onready var gotcha_player: AudioStreamPlayer2D = $GotchaPlayer
 @onready var duck_player: AudioStreamPlayer2D = $DuckPlayer
-@onready var duck_cooldown: Timer = $DuckCooldown
+#@onready var duck_cooldown: Timer = $DuckCooldown
 @onready var dust: AnimatedSprite2D = $Dust
 @onready var crown: Sprite2D = $Crown
 
@@ -186,7 +186,7 @@ func updateJumpButton() -> void:
     wasJumpJustPressed = justPressed
 
 func updateDuckButton():
-    if isDuckButtonPressed() && duck_cooldown.is_stopped():
+    if isDuckButtonPressed() and not duck_player.playing:
         var quacks: Array
         if isBerek:
             quacks = duckBerek
@@ -196,7 +196,7 @@ func updateDuckButton():
         duck_player.stream = quacks[idx]
         duck_player.play()
         megaphone.visible = true
-        duck_cooldown.start()
+        #duck_cooldown.start()
 
 func isJumpButtonPressed() -> bool:
     if wasJumpJustPressed:
