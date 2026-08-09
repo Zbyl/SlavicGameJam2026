@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://dvmjk733us21y"]
 
 [ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_70wcc"]
+[ext_resource type="PackedScene" uid="uid://b6rcuufxlodyj" path="res://trash.tscn" id="2_g3oj6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w77jt"]
 size = Vector2(5617, 121.53125)
@@ -34,6 +35,88 @@ position = Vector2(-300, 220)
 
 [node name="Spawn4" type="Marker2D" parent="TileMapLayer0" unique_id=1280338986 groups=["SpawnPoint"]]
 position = Vector2(349, -90)
+
+[node name="Trash" parent="TileMapLayer0" unique_id=1650879338 instance=ExtResource("2_g3oj6")]
+position = Vector2(1148, 130)
+isBall = true
+
+[node name="Trash5" parent="TileMapLayer0" unique_id=743623505 instance=ExtResource("2_g3oj6")]
+position = Vector2(1810, -474)
+
+[node name="Trash6" parent="TileMapLayer0" unique_id=523070276 instance=ExtResource("2_g3oj6")]
+position = Vector2(1807, -433)
+
+[node name="Trash7" parent="TileMapLayer0" unique_id=324382193 instance=ExtResource("2_g3oj6")]
+position = Vector2(1871, -451)
+
+[node name="Trash8" parent="TileMapLayer0" unique_id=1303311303 instance=ExtResource("2_g3oj6")]
+position = Vector2(1751, -462)
+
+[node name="Trash9" parent="TileMapLayer0" unique_id=631681008 instance=ExtResource("2_g3oj6")]
+position = Vector2(1755, -417)
+
+[node name="Trash10" parent="TileMapLayer0" unique_id=1317228659 instance=ExtResource("2_g3oj6")]
+position = Vector2(1836, -380)
+
+[node name="Trash11" parent="TileMapLayer0" unique_id=1684066975 instance=ExtResource("2_g3oj6")]
+position = Vector2(1877, -417)
+
+[node name="Trash12" parent="TileMapLayer0" unique_id=258753666 instance=ExtResource("2_g3oj6")]
+position = Vector2(1901, -355)
+
+[node name="Trash13" parent="TileMapLayer0" unique_id=1772927816 instance=ExtResource("2_g3oj6")]
+position = Vector2(628, 763)
+
+[node name="Trash14" parent="TileMapLayer0" unique_id=1396840687 instance=ExtResource("2_g3oj6")]
+position = Vector2(524, 773)
+
+[node name="Trash15" parent="TileMapLayer0" unique_id=1288181443 instance=ExtResource("2_g3oj6")]
+position = Vector2(548, 812)
+
+[node name="Trash16" parent="TileMapLayer0" unique_id=402954041 instance=ExtResource("2_g3oj6")]
+position = Vector2(572, 710)
+
+[node name="Trash17" parent="TileMapLayer0" unique_id=1608033473 instance=ExtResource("2_g3oj6")]
+position = Vector2(435, 772)
+
+[node name="Trash18" parent="TileMapLayer0" unique_id=539607602 instance=ExtResource("2_g3oj6")]
+position = Vector2(440, 804)
+
+[node name="Trash19" parent="TileMapLayer0" unique_id=1009217643 instance=ExtResource("2_g3oj6")]
+position = Vector2(503, 714)
+
+[node name="Trash20" parent="TileMapLayer0" unique_id=1267144127 instance=ExtResource("2_g3oj6")]
+position = Vector2(628, 805)
+
+[node name="Trash21" parent="TileMapLayer0" unique_id=28373068 instance=ExtResource("2_g3oj6")]
+position = Vector2(612, -918)
+
+[node name="Trash22" parent="TileMapLayer0" unique_id=1416684533 instance=ExtResource("2_g3oj6")]
+position = Vector2(708, -914)
+
+[node name="Trash23" parent="TileMapLayer0" unique_id=513630725 instance=ExtResource("2_g3oj6")]
+position = Vector2(644, -881)
+
+[node name="Trash24" parent="TileMapLayer0" unique_id=796875617 instance=ExtResource("2_g3oj6")]
+position = Vector2(780, -951)
+
+[node name="Trash25" parent="TileMapLayer0" unique_id=914144774 instance=ExtResource("2_g3oj6")]
+position = Vector2(681, -952)
+
+[node name="Trash26" parent="TileMapLayer0" unique_id=1954299868 instance=ExtResource("2_g3oj6")]
+position = Vector2(757, -904)
+
+[node name="Trash2" parent="TileMapLayer0" unique_id=1230494695 instance=ExtResource("2_g3oj6")]
+position = Vector2(1222, -677)
+isBall = true
+
+[node name="Trash3" parent="TileMapLayer0" unique_id=653011751 instance=ExtResource("2_g3oj6")]
+position = Vector2(-1090, 606)
+isBall = true
+
+[node name="Trash4" parent="TileMapLayer0" unique_id=159770339 instance=ExtResource("2_g3oj6")]
+position = Vector2(-1206, -738)
+isBall = true
 
 [node name="TileMapLayer1" type="TileMapLayer" parent="." unique_id=742237042]
 z_index = 1

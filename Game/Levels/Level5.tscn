@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://b6tkn3r66dwqb"]
 
 [ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_4wmwj"]
+[ext_resource type="PackedScene" uid="uid://b6rcuufxlodyj" path="res://trash.tscn" id="2_kb5ut"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w77jt"]
 size = Vector2(5617, 121.53125)
@@ -34,6 +35,44 @@ position = Vector2(-100, -350)
 
 [node name="Spawn4" type="Marker2D" parent="TileMapLayer0" unique_id=1280338986 groups=["SpawnPoint"]]
 position = Vector2(600, -350)
+
+[node name="Trash" parent="TileMapLayer0" unique_id=1650879338 instance=ExtResource("2_kb5ut")]
+position = Vector2(-189, 231)
+isBall = true
+
+[node name="Trash2" parent="TileMapLayer0" unique_id=621968808 instance=ExtResource("2_kb5ut")]
+position = Vector2(58, -328)
+isBall = true
+
+[node name="Trash3" parent="TileMapLayer0" unique_id=906767475 instance=ExtResource("2_kb5ut")]
+position = Vector2(551, -295)
+
+[node name="Trash4" parent="TileMapLayer0" unique_id=928008997 instance=ExtResource("2_kb5ut")]
+position = Vector2(528, -325)
+
+[node name="Trash5" parent="TileMapLayer0" unique_id=1305262850 instance=ExtResource("2_kb5ut")]
+position = Vector2(570, -318)
+
+[node name="Trash6" parent="TileMapLayer0" unique_id=662315971 instance=ExtResource("2_kb5ut")]
+position = Vector2(528, -232)
+
+[node name="Trash7" parent="TileMapLayer0" unique_id=1323396636 instance=ExtResource("2_kb5ut")]
+position = Vector2(269, -256)
+
+[node name="Trash8" parent="TileMapLayer0" unique_id=1657102601 instance=ExtResource("2_kb5ut")]
+position = Vector2(254, -204)
+
+[node name="Trash9" parent="TileMapLayer0" unique_id=1470921875 instance=ExtResource("2_kb5ut")]
+position = Vector2(228, -256)
+
+[node name="Trash10" parent="TileMapLayer0" unique_id=2073766901 instance=ExtResource("2_kb5ut")]
+position = Vector2(284, -332)
+
+[node name="Trash11" parent="TileMapLayer0" unique_id=1750147253 instance=ExtResource("2_kb5ut")]
+position = Vector2(297, -372)
+
+[node name="Trash12" parent="TileMapLayer0" unique_id=2032776598 instance=ExtResource("2_kb5ut")]
+position = Vector2(235, -318)
 
 [node name="TileMapLayer1" type="TileMapLayer" parent="." unique_id=742237042]
 z_index = 1
