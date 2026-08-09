@@ -8,6 +8,7 @@ const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
 const LEVEL_2 = preload("res://Levels/Level4.tscn")
 const LEVEL_3 = preload("res://Levels/Level3.tscn")
+const LEVEL_4 = preload("res://Levels/Level5.tscn")
 const DUDE = preload("res://characters/dude.tscn")
 
 @onready var gameCamera: GameCamera = $GameCamera
@@ -26,6 +27,9 @@ func _on_new_game_pressed(levelIdx: int):
         return
     if levelIdx == 2:
         await _switch_level(LEVEL_3)
+        return
+    if levelIdx == 3:
+        await _switch_level(LEVEL_4)
         return
     assert(false, "Invalid level index.")
 
