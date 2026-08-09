@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c7bs3e1ual10d"]
+
+[ext_resource type="Texture2D" uid="uid://2hha1p1jmtle" path="res://images/End_screen.png" id="1_l2arl"]
+[ext_resource type="Script" uid="uid://blg7ovrbr8lq7" path="res://win_screen.gd" id="1_wmwda"]
+
+[node name="WinScreen" type="Control" unique_id=460952487]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wmwda")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1964472863]
+layout_mode = 0
+offset_right = 1158.0
+offset_bottom = 652.0
+texture = ExtResource("1_l2arl")
+
+[node name="Timer" type="Timer" parent="." unique_id=1495061318]
+wait_time = 30.0
+one_shot = true
+
+[node name="MandatoryTimer" type="Timer" parent="." unique_id=570341714]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

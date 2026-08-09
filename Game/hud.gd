@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name Hud
 
 const PLAYER_PICKER = preload("res://player_picker.tscn")
+const WIN_SCREEN = preload("res://win_screen.tscn")
 
 signal new_game_pressed(levelIdx: int)
 signal game_won(info: String)
@@ -186,3 +187,18 @@ func isInLevel() -> bool:
 
 func isMenuOpen() -> bool:
     return menu.visible or isPickerActive
+
+
+func _on_game_won(character: String) -> void:
+    print("Game won by "+character)
+    var winners = [character]
+
+    for d in get_tree().get_nodes_in_group('Dude'):
+        if d.character != character:
+            winners.push_back(d.character)
+
+    var winScreen = WIN_SCREEN.instantiate()
+    winScreen.dudes = winners
+
+    GameData.game._switch_level(null)
+    GameData.game.add_child(winScreen)

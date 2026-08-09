@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://w8v6s0je5hvt"]
+
+[ext_resource type="Script" uid="uid://xcv8qvbhyxro" path="res://win_dude.gd" id="1_uc1kj"]
+[ext_resource type="SpriteFrames" uid="uid://cgpoq8cd72o7w" path="res://characters/dude_kunek_frames.tres" id="2_0q2pv"]
+
+[node name="WinDude" type="Node2D" unique_id=752237004]
+script = ExtResource("1_uc1kj")
+
+[node name="Animation" type="AnimatedSprite2D" parent="." unique_id=762565829]
+sprite_frames = ExtResource("2_0q2pv")
+animation = &"FerretIdle5"
+
+[node name="Player" type="AudioStreamPlayer" parent="." unique_id=1088122374]
