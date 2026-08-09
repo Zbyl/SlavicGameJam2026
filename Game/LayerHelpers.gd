@@ -249,11 +249,11 @@ func allGroundHeightsInPosition(mapCoords: Vector2i, planarOffsetWithinTile: Vec
     var grounds: Array[float] = []
     for layer in range(tile_map_layers.size()):
         var tileMap := getTileMapForLayer(layer)
-        if isSolidTile(tileMap, mapCoords):
-            grounds.append(layer * layerHeight)
-            continue
         if isSlope(tileMap, mapCoords):
             grounds.append(slopeGroundHeight(mapCoords, planarOffsetWithinTile, layer))
+            continue
+        if isSolidTile(tileMap, mapCoords):
+            grounds.append(layer * layerHeight)
             continue
 
     if grounds.size() == 0:
@@ -268,7 +268,7 @@ func groundHeightBelow(mapCoords: Vector2i, planarOffsetWithinTile: Vector2, z: 
     var lastLowerGround := 0.0
     for ground in grounds:
         if ground <= z:
-            lastLowerGround = z
+            lastLowerGround = ground
     return lastLowerGround
 
 # Returns all ground heights between, and including, lower and upper z. Sorted ascending.
