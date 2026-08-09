@@ -66,6 +66,27 @@ position = Vector2(401, 163)
 [node name="Trash7" parent="TileMapLayer0" unique_id=1266135730 instance=ExtResource("2_3anf8")]
 position = Vector2(246, 157)
 
+[node name="Trash20" parent="TileMapLayer0" unique_id=1707410729 instance=ExtResource("2_3anf8")]
+position = Vector2(168, 133)
+
+[node name="Trash21" parent="TileMapLayer0" unique_id=514922362 instance=ExtResource("2_3anf8")]
+position = Vector2(153, 180)
+
+[node name="Trash22" parent="TileMapLayer0" unique_id=895747504 instance=ExtResource("2_3anf8")]
+position = Vector2(211, 158)
+
+[node name="Trash23" parent="TileMapLayer0" unique_id=1292668575 instance=ExtResource("2_3anf8")]
+position = Vector2(289, 178)
+
+[node name="Trash24" parent="TileMapLayer0" unique_id=1489766236 instance=ExtResource("2_3anf8")]
+position = Vector2(257, 193)
+
+[node name="Trash25" parent="TileMapLayer0" unique_id=1243248474 instance=ExtResource("2_3anf8")]
+position = Vector2(262, 138)
+
+[node name="Trash26" parent="TileMapLayer0" unique_id=476530222 instance=ExtResource("2_3anf8")]
+position = Vector2(219, 120)
+
 [node name="Trash8" parent="TileMapLayer0" unique_id=1428312041 instance=ExtResource("2_3anf8")]
 position = Vector2(111, -102)
 isBall = true
@@ -94,6 +115,21 @@ position = Vector2(-599, 429)
 
 [node name="Trash16" parent="TileMapLayer0" unique_id=532954328 instance=ExtResource("2_3anf8")]
 position = Vector2(-645, 463)
+
+[node name="Trash27" parent="TileMapLayer0" unique_id=259449249 instance=ExtResource("2_3anf8")]
+position = Vector2(-683, -145)
+
+[node name="Trash28" parent="TileMapLayer0" unique_id=1685613133 instance=ExtResource("2_3anf8")]
+position = Vector2(-640, -166)
+
+[node name="Trash29" parent="TileMapLayer0" unique_id=483662737 instance=ExtResource("2_3anf8")]
+position = Vector2(-595, -91)
+
+[node name="Trash30" parent="TileMapLayer0" unique_id=1343183843 instance=ExtResource("2_3anf8")]
+position = Vector2(-590, -156)
+
+[node name="Trash31" parent="TileMapLayer0" unique_id=2024758967 instance=ExtResource("2_3anf8")]
+position = Vector2(-636, -122)
 
 [node name="TileMapLayer1" type="TileMapLayer" parent="." unique_id=742237042]
 z_index = 1
