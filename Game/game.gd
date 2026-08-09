@@ -70,14 +70,14 @@ func _switch_level(new_level_scene):
     add_child(level)
     GameData.layerHelpers.initTileMaps(level) # Must be run when level is already in the tree (as it uses get_nodes_in_group()).
 
-    var first = true
+    var berekIdx = randi_range(1, hud.playerData.size()) - 1
+    var berekKey = hud.playerData.keys()[berekIdx]
     for key in hud.playerData.keys():
         var controllerData = hud.playerData[key]
         var dude: Dude = DUDE.instantiate()
-        dude.isBerek = first
+        dude.isBerek = key == berekKey
         dude.character = CHARACTERS[key]
         dude.controllerData = controllerData
-        first = false
         var spawnPoint = GameData.layerHelpers.spawnPoints[key]
         add_child(dude)
         dude.global_position = Vector2(spawnPoint.x, spawnPoint.y)
