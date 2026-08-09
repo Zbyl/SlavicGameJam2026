@@ -65,6 +65,15 @@ offset = Vector2(0, 55.305)
 script = ExtResource("6_s81fl")
 dude = NodePath("..")
 
+[node name="Dust" type="AnimatedSprite2D" parent="." unique_id=2081723083]
+visible = false
+y_sort_enabled = true
+position = Vector2(0, -12.56)
+scale = Vector2(0.66, 0.66)
+sprite_frames = ExtResource("magic_frames")
+animation = &"dirt"
+offset = Vector2(0, -5.9)
+
 [node name="RespawnTimer" type="Timer" parent="." unique_id=1340742229]
 wait_time = 2.0
 one_shot = true

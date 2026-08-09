@@ -8,7 +8,7 @@ const DECELERATION_FACTOR = 2*ACCELERATION_FACTOR
 const WORLD_ASPECT_FACTOR = 0.5
 
 const MAX_SPEED: float = 450.0
-const BEREK_MAX_SPEED: float = MAX_SPEED * 1.1
+const BEREK_MAX_SPEED: float = MAX_SPEED * 1.3
 
 @export var character: String = "Fox"
 @export var isBerek: bool = false
@@ -46,6 +46,7 @@ var currentState: DudeState = DudeState.Idle
 @onready var gotcha_player: AudioStreamPlayer2D = $GotchaPlayer
 @onready var duck_player: AudioStreamPlayer2D = $DuckPlayer
 @onready var duck_cooldown: Timer = $DuckCooldown
+@onready var dust: AnimatedSprite2D = $Dust
 @onready var streams = [
     load("res://Sounds/Kunek/FoxRun.wav"),
     load("res://Sounds/Kunek/FerretRun.wav"),
@@ -415,9 +416,19 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         die_player.play()
         gotcha_player.play()
         currentState = DudeState.Dead
+        animation.animation_finished.connect(_player_down)
         animation.play(character + stateToAnim(currentState) + str(currentAngle))
         syncAnimations()
         respawnTimer.start()
+
+func _player_down():
+    animation.animation_finished.disconnect(_player_down)
+    dust.visible = true
+    dust.animation_finished.connect(_dust_dispersed)
+    dust.play("dirt")
+
+func _dust_dispersed():
+    dust.visible = false
 
 # Calculated global_position shifted up using image offset to give screen position of Kunek.
 func positionOfKunek() -> Vector2:

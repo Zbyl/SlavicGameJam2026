@@ -3,6 +3,10 @@ class_name Hud
 
 const PLAYER_PICKER = preload("res://player_picker.tscn")
 const WIN_SCREEN = preload("res://win_screen.tscn")
+const POINTS_PER_SECOND = 12.0
+const pointsCatchGain = 40.0
+const pointsCatchPenalty = 20.0
+const pointsMax = 1000.0
 
 signal new_game_pressed(levelIdx: int)
 signal game_won(info: String)
@@ -28,9 +32,6 @@ var player_bars: Dictionary = {}
 var playerNumber: Dictionary = {"Fox": 0, "Ferret": 1, "Weasel": 2, "Snow": 3}
 var playerPoints: Dictionary = {"Fox": 0.0, "Ferret": 0.0, "Weasel": 0.0, "Snow": 0.0}
 var dudes: Dictionary = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": null}
-var pointsCatchGain = 40.0
-var pointsCatchPenalty = 20.0
-var pointsMax = 1000.0
 
 #func getPlayerLabel(player_hud: Control) -> Label:
 #    return player_hud.get_node("PlayerLabel")
@@ -121,7 +122,6 @@ func _process(delta: float) -> void:
         if Input.is_action_just_pressed("ui_menu"):
             show_menu(not isMenuOpen(), true)
 
-    const POINTS_PER_SECOND := 6.0
     var elapsed: float = 0.0 if isMenuOpen() else delta
 
     for ch in playerPoints:
@@ -201,4 +201,6 @@ func _on_game_won(character: String) -> void:
     winScreen.dudes = winners
 
     GameData.game._switch_level(null)
+    level_music.stop()
+    menu_music.stop()
     GameData.game.add_child(winScreen)
