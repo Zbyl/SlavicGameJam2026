@@ -1,8 +1,0 @@
-Graphics:
-Main character: https://hormelz.itch.io/8-directional-fox-character
-
-Megaphone: <a href="https://www.flaticon.com/free-icons/shout" title="shout icons">Shout icons created by Magnific - Flaticon</a>
-
-
-Audio:
-Find in readme_sounds.txt
