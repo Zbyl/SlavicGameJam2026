@@ -1,5 +1,6 @@
 extends Node2D
 const ANIM_DIE = {"name":"Die", "frame":0, "speed":1.0, "sound": -1}
+const ANIM_TWITCH = {"name":"Die", "frame":6, "speed":1.0, "sound": -1}
 const ANIM_JUMP = {"name":"Jump", "frame":4, "speed":0.5, "sound": 0}
 const ANIM_REST = {"name":"Die", "frame":0, "speed":1.0, "sound": 1}
 
@@ -29,6 +30,17 @@ func _ready() -> void:
         player.stream = streams[queue[queuePos].sound]
         player.play()
     queuePos += 1
+
+func _process(delta: float) -> void:
+    if Input.is_action_just_pressed("ui_text_backspace"):
+        if not animation.is_playing():
+            queue = [ANIM_TWITCH]
+            queuePos = 0
+            animation.animation = character+queue[queuePos].name+str(dir)
+            animation.frame = 12
+            animation.speed_scale = queue[queuePos].speed
+            queuePos += 1
+            animation.play()
 
 func _on_animation_finished():
     if queuePos >= queue.size():
