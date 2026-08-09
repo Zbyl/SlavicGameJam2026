@@ -39,3 +39,11 @@
 - Przycisk duck: Mam cię! Kwa kwa!
 - Single player? Wisienki do zbierania??? - Won't do
 - Zmieniarka leveli!
+- Ślizganie się po ścianie
+
+# Checklist
+
+- Fullscreen
+- Levele
+- Dźwięki / Muza
+- Spawn pointy

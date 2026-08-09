@@ -296,7 +296,27 @@ func _physics_process(delta: float):
         var acceleration_factor = BEREK_ACCELERATION_FACTOR if isBerek else ACCELERATION_FACTOR
         velocity = velocity.move_toward(direction * Vector2(max_speed, max_speed * WORLD_ASPECT_FACTOR), delta*acceleration_factor)
 
+    var prePos = global_position
     move_and_slide()
+    var postPos = global_position
+    var posDelta = postPos - prePos
+
+    # Super janky hack for sliding along walls.
+    debugLabel.text = "X"
+    if get_slide_collision_count() > 0:
+        var colliderName = ""
+        for i in get_slide_collision_count():
+            var collision = get_slide_collision(i)
+            colliderName += " " + collision.get_collider().name
+        #debugLabel.text = "Y " + colliderName
+        if (direction.length() > 0.1) and (posDelta.length() > 0.1):
+            var cosPrePost = direction.normalized().dot(posDelta.normalized())
+            #debugLabel.text = "Z cos={cos} colliderName={colliderName}".format({"cos": cosPrePost, "colliderName": colliderName})
+            if (cosPrePost >= 0) and (cosPrePost < 0.35):
+                var hackyPos = prePos * 0.9 + postPos * 0.1
+                global_position = hackyPos
+                velocity = (hackyPos - prePos) / delta
+                debugLabel.text = "W cos={cos} colliderName={colliderName}".format({"cos": cosPrePost, "colliderName": colliderName})
 
     var deltaZ := velocityZ * delta # @note We need to add y-offset computed from z later.
     # We don't allow falling 2 layers below, to simplify the code.
@@ -374,8 +394,9 @@ func _physics_process(delta: float):
     if debugLabel != null:
         #debugLabel.text = "state={state} imageOffset={imageOffset} z_index={z_index} gravity={gravity} deltaZ={deltaZ} velocityZ={velocityZ}\nonGround={onGround} movedOnGround={movedOnGround} mapCoords={mapCoords} currentZ={currentZ}".\
         #    format({"state": currentState, "imageOffset": baseImage.offset.y - baseImageOffsetY, "z_index": z_index, "gravity": gravity, "deltaZ": deltaZ, "velocityZ": velocityZ, "onGround": currentlyOnGround, "movedOnGround": movedOnGround, "mapCoords": postMapPosition.mapCoords, "currentZ": currentZ})
-        debugLabel.text = "isJumpPressed={isJumpPressed}".\
-            format({"isJumpPressed": isJumpPressed})
+        #debugLabel.text = "isJumpPressed={isJumpPressed}".\
+        #    format({"isJumpPressed": isJumpPressed})
+        pass
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
