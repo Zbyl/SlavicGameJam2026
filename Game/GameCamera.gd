@@ -37,8 +37,8 @@ func _process(delta: float) -> void:
         stdOfPosition.y = sqrt(averagePosition2.y - averagePosition.y ** 2)
         position.x = (maxPosOfKuns.x + minPosOfKuns.x) * 0.5
         position.y = (maxPosOfKuns.y + minPosOfKuns.y) * 0.5
-        var neededZoomX = viewWidthAtZoom0 / max(maxPosOfKuns.x - minPosOfKuns.x + 0.05 * viewWidthAtZoom0, 2.7 * stdOfPosition.x)
-        var neededZoomY = viewHeightAtZoom0 / max(maxPosOfKuns.y - minPosOfKuns.y + 0.05 * viewHeightAtZoom0, 2.7 * stdOfPosition.y)
+        var neededZoomX = viewWidthAtZoom0 / max(maxPosOfKuns.x - minPosOfKuns.x + 0.07 * viewWidthAtZoom0, 2.9 * stdOfPosition.x)
+        var neededZoomY = viewHeightAtZoom0 / max(maxPosOfKuns.y - minPosOfKuns.y + 0.07 * viewHeightAtZoom0, 2.9 * stdOfPosition.y)
         var neededZoom = min(1.0, neededZoomX, neededZoomY)
         var oldZoom = zoom.x
         var zoomVelocity = (neededZoom - oldZoom) / delta
