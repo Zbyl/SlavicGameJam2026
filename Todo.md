@@ -1,27 +1,17 @@
 # TODO
 
-- Grubszy outline kunka x3
+- Exporty: Windows, Linux, Web
 - Background for menu in level.
-- Przy skoku czasem mruga.
-- Slopes! 
-- Hack na nie przysłanianie kunka przez klocek wyżej przy skoku.
-- Może hamowanie powinno być mocniejsze/słabsze od przyspieszania.
 - Wychodzenie z fullscreen nie działa???
 - Particle effects for points
 - Particle effects when respawning
-- Porysować po tileach: trawa, cegły, kamienie
-- Wyprostowanie slopeów Jasiek
-- Wisienki single player
+- Wisienki single player.
 - Ślady
-- Fajerwerki win screen
 - Tune time rozgrywki
-- Default key for taunts and timer for taunts.
-- Win Screen - pokazać kto wygrał - kręcący się puchar nad brzuchem
-- Wszyscy padają na koniec
-- Napis win screen
 
 # KNOWN BUGS
 - Kuna na moście koliduje z kuną pod mostem. Will not fix...
+- Przy skoku czasem mruga.
 
 # DONE
 
@@ -44,6 +34,16 @@
 - Skalowany boost dla Berka, z czasem. - Will not do.
 - Spawn pointy blisko
 - Czołganie. - Won't do
+- Wyprostowanie slopeów Jasiek - Done.
+- Win Screen - pokazać kto wygrał - kręcący się puchar nad brzuchem
+- Wszyscy padają na koniec
+- Fajerwerki win screen - won't do
+- Grubszy outline kunka x3
+- Slopes! - won't do
+- Default key for taunts and timer for taunts.
+- Może hamowanie powinno być mocniejsze/słabsze od przyspieszania. - Won't do.
+- Hack na nie przysłanianie kunka przez klocek wyżej przy skoku. - Won't do.
+- Porysować po tileach: trawa, cegły, kamienie - Won't do
 
 # Checklist
 
