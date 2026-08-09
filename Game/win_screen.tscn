@@ -2,18 +2,12 @@
 
 [ext_resource type="Texture2D" uid="uid://2hha1p1jmtle" path="res://images/End_screen.png" id="1_l2arl"]
 [ext_resource type="Script" uid="uid://blg7ovrbr8lq7" path="res://win_screen.gd" id="1_wmwda"]
+[ext_resource type="AudioStream" uid="uid://dscib8nwmhopl" path="res://Sounds/Music/success-swoop-main-version-18178-01-40.mp3" id="3_l5t5q"]
 
-[node name="WinScreen" type="Control" unique_id=460952487]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="WinScreen" type="CanvasLayer" unique_id=2034054968]
 script = ExtResource("1_wmwda")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1964472863]
-layout_mode = 0
 offset_right = 1158.0
 offset_bottom = 652.0
 texture = ExtResource("1_l2arl")
@@ -26,5 +20,10 @@ one_shot = true
 wait_time = 3.0
 one_shot = true
 autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=431190417]
+stream = ExtResource("3_l5t5q")
+volume_db = -24.632
+autoplay = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

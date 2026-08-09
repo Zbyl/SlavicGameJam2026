@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 const WIN_DUDE = preload("res://win_dude.tscn")
 const CIRCLE_RADIUS = 100.0
 const CIRCLE_CENTER = Vector2(0.5, 0.75)
@@ -8,7 +8,6 @@ const CIRCLE_CENTER = Vector2(0.5, 0.75)
 
 func _ready() -> void:
     GameData.hud.gauges.visible = false
-    set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     var idx = 0
     for dude in dudes:
         var win_dude: Node2D = WIN_DUDE.instantiate()
@@ -17,7 +16,7 @@ func _ready() -> void:
         win_dude.dir = 1+8*idx/dudes.size()
         if win_dude.dir > 8:
             win_dude.dir -= 8
-        win_dude.global_position = get_viewport_rect().size * CIRCLE_CENTER + (Vector2(1, -1) * CIRCLE_RADIUS).rotated(2.0*idx*PI/dudes.size())/Vector2(1.0, 2.0)
+        win_dude.global_position = GameData.game.get_viewport_rect().size * CIRCLE_CENTER + (Vector2(1, -1) * CIRCLE_RADIUS).rotated(2.0*idx*PI/dudes.size())/Vector2(1.0, 2.0)
         add_child(win_dude)
         idx += 1
 
