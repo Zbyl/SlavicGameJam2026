@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
         minPosOfKuns = minPosOfKuns.min(posOfKun)
         maxPosOfKuns = maxPosOfKuns.max(posOfKun)
 
-    var zoomIncreaseMaxRelVelocity =  0.05
+    var zoomIncreaseMaxRelVelocity =  0.08
     var screen_size = get_viewport().get_visible_rect().size
     var viewWidthAtZoom0 = screen_size.x
     var viewHeightAtZoom0 = screen_size.y
