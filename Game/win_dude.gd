@@ -6,9 +6,11 @@ const ANIM_REST = {"name":"Die", "frame":0, "speed":1.0, "sound": 1}
 
 @export var win: bool = false
 @export var character: String = "Fox"
+@export var playerIndex: int = 0
 @export var dir: int = 1
 @onready var animation: AnimatedSprite2D = $Animation
 @onready var player: AudioStreamPlayer = $Player
+@onready var crown: Sprite2D = $Crown
 @onready var streams = [
     load("res://Sounds/Kunek/yeah.wav"),
     load("res://Sounds/Kunek/ufff.wav")
@@ -20,6 +22,9 @@ const ANIM_REST = {"name":"Die", "frame":0, "speed":1.0, "sound": 1}
 func _ready() -> void:
     if win:
         queue = [ANIM_JUMP,ANIM_JUMP,ANIM_JUMP,ANIM_JUMP,ANIM_REST]
+
+    crown.visible = win
+
     animation.animation = character+queue[queuePos].name+str(dir)
     animation.frame = queue[queuePos].frame
     animation.speed_scale = queue[queuePos].speed
@@ -31,8 +36,21 @@ func _ready() -> void:
         player.play()
     queuePos += 1
 
+func istwitchButtonPressed() -> bool:
+    var pressed := false
+    var controllerData = GameData.hud.playerData[playerIndex]
+    if controllerData["type"]=="pad":
+        var controller = controllerData["pad"]
+        var x = Input.get_joy_axis(controller, JOY_AXIS_LEFT_X)
+        var y = Input.get_joy_axis(controller, JOY_AXIS_LEFT_Y)
+        pressed = Vector2(x, y).length()>0.1
+    elif controllerData["type"]=="keyboard":
+        pressed = Input.is_key_pressed(controllerData["up"]) || Input.is_key_pressed(controllerData["down"]) || Input.is_key_pressed(controllerData["left"]) || Input.is_key_pressed(controllerData["right"])
+    return pressed
+
+
 func _process(delta: float) -> void:
-    if Input.is_action_just_pressed("ui_text_backspace"):
+    if istwitchButtonPressed():
         if not animation.is_playing():
             queue = [ANIM_TWITCH]
             queuePos = 0

@@ -48,6 +48,8 @@ var currentState: DudeState = DudeState.Idle
 @onready var duck_player: AudioStreamPlayer2D = $DuckPlayer
 @onready var duck_cooldown: Timer = $DuckCooldown
 @onready var dust: AnimatedSprite2D = $Dust
+@onready var crown: Sprite2D = $Crown
+
 @onready var streams = [
     load("res://Sounds/Kunek/FoxRun.wav"),
     load("res://Sounds/Kunek/FerretRun.wav"),

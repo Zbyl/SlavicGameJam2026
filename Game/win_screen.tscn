@@ -15,10 +15,12 @@ offset_bottom = 652.0
 texture = ExtResource("1_l2arl")
 
 [node name="Greeting" type="TextureRect" parent="." unique_id=837376102]
+z_index = 10
 offset_left = 298.0
-offset_top = 45.0
+offset_top = 69.0
 offset_right = 848.0
-offset_bottom = 315.0
+offset_bottom = 339.0
+scale = Vector2(1, 0.8)
 texture = ExtResource("4_1txte")
 
 [node name="Timer" type="Timer" parent="." unique_id=1495061318]

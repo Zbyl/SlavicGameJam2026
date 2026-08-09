@@ -218,6 +218,8 @@ func _on_game_won(character: String) -> void:
 
     for d in get_tree().get_nodes_in_group('Dude'):
         d.initiate_death()
+        if character==d.character:
+            d.crown.visible = true
 
     win_delay_timer.start()
 

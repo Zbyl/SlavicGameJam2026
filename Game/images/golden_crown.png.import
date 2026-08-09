@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://byjm0udb0rm1t"
-path="res://.godot/imported/Fox_CrownFloat_dir1.png-d161ec0698c6cd961145200375c64ab3.ctex"
+uid="uid://cowle4s5fofui"
+path="res://.godot/imported/golden_crown.png-187ece31653c2f77c63c3785768a188f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/effects/Fox_CrownFloat_dir1.png"
-dest_files=["res://.godot/imported/Fox_CrownFloat_dir1.png-d161ec0698c6cd961145200375c64ab3.ctex"]
+source_file="res://images/golden_crown.png"
+dest_files=["res://.godot/imported/golden_crown.png-187ece31653c2f77c63c3785768a188f.ctex"]
 
 [params]
 
