@@ -37,6 +37,7 @@ var currentState: DudeState = DudeState.Idle
 @onready var animation: AnimatedSprite2D = $Kunek
 @onready var outline: AnimatedSprite2D = $Outline
 @onready var berek: AnimatedSprite2D = $Berek
+@onready var megaphone: Sprite2D = $Megaphone
 @onready var respawnTimer: Timer = $RespawnTimer
 @onready var run_player: AudioStreamPlayer2D = $RunPlayer
 @onready var jump_player: AudioStreamPlayer2D = $JumpPlayer
@@ -73,8 +74,10 @@ var run_stream: AudioStream
 
 @onready var baseImage: Node2D = $Kunek # Image of Boguś. Will be moved relative to CollisionShape to simulate jumping.
 @onready var outlineImage: Node2D = $Outline # Outline of Boguś.
+@onready var megaphoneImage: Node2D = $Megaphone # Image of Megaphone
 var baseImageOffsetY: float = 0.0
 var outlineImageOffsetY: float = 0.0
+var megaphoneImageOffsetY: float = 0.0
 
 var layerHeight: float = 40.0
 var zToYOffsetRatio: float = 1.0 # Multiply z by this much to get y offset. But note that Z goes up, but y goes down.
@@ -88,6 +91,7 @@ func _ready() -> void:
     game = GameData.game
     baseImageOffsetY = baseImage.offset.y
     outlineImageOffsetY = outlineImage.offset.y
+    megaphoneImageOffsetY = megaphoneImage.offset.y
     #debugLabel = get_node("../../%DebugLabel")
 
     setBerek(isBerek)
@@ -189,6 +193,7 @@ func updateDuckButton():
         var idx = randi_range(0, quacks.size()-1)
         duck_player.stream = quacks[idx]
         duck_player.play()
+        megaphone.visible = true
         duck_cooldown.start()
 
 func isJumpButtonPressed() -> bool:
@@ -348,6 +353,7 @@ func _physics_process(delta: float):
     var curLayer := GameData.layerHelpers.layerFromZ(currentZ)
     baseImage.offset.y = baseImageOffsetY - (currentZ - curLayer * layerHeight) * zToYOffsetRatio / baseImage.scale.y
     outlineImage.offset.y = outlineImageOffsetY - (currentZ - curLayer * layerHeight) * zToYOffsetRatio / outlineImage.scale.y
+    megaphoneImage.offset.y = megaphoneImageOffsetY - (currentZ - curLayer * layerHeight) * zToYOffsetRatio / megaphoneImage.scale.y
     #image.position.y += (curLayer - prevLayer) * layerHeight * zToYOffsetRatio
 
     # We use collision mask from previous z. It's close enough.
@@ -453,3 +459,7 @@ func stateToAnim(state: DudeState) -> String:
     if state == DudeState.Falling:
         return "Dir"
     return DudeState.find_key(state)
+
+
+func _on_duck_player_finished() -> void:
+    megaphone.visible = false

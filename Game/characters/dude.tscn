@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://drswjhe6veebk" path="res://Sounds/Kunek/Slap.wav" id="6_k77yt"]
 [ext_resource type="Script" uid="uid://m5uhr7hfbyv7" path="res://characters/berek.gd" id="6_s81fl"]
 [ext_resource type="AudioStream" uid="uid://n6q0kyyprkfu" path="res://Sounds/Kunek/Respawn.wav" id="7_8hsc3"]
+[ext_resource type="Texture2D" uid="uid://b6mh2g5g8uip8" path="res://images/megaphone.png" id="7_cde7o"]
 [ext_resource type="AudioStream" uid="uid://bfy4f6p4sdj26" path="res://Sounds/Kunek/Landing.wav" id="7_s81fl"]
 [ext_resource type="PackedScene" uid="uid://cauxcx362hp4n" path="res://Shadow.tscn" id="8_tt1jp"]
 [ext_resource type="AudioStream" uid="uid://hyhgnphg8wln" path="res://Sounds/Kunek/mam_cie.wav" id="11_kn2et"]
@@ -74,6 +75,13 @@ sprite_frames = ExtResource("magic_frames")
 animation = &"dirt"
 offset = Vector2(0, -5.9)
 
+[node name="Megaphone" type="Sprite2D" parent="." unique_id=1653987955]
+visible = false
+y_sort_enabled = true
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("7_cde7o")
+offset = Vector2(0, -80)
+
 [node name="RespawnTimer" type="Timer" parent="." unique_id=1340742229]
 wait_time = 2.0
 one_shot = true
@@ -106,3 +114,4 @@ one_shot = true
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="animation_finished" from="Dust" to="." method="_dust_dispersed"]
 [connection signal="timeout" from="RespawnTimer" to="." method="respawn"]
+[connection signal="finished" from="DuckPlayer" to="." method="_on_duck_player_finished"]
