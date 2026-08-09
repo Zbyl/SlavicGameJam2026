@@ -84,19 +84,19 @@ offset_bottom = 148.0
 
 [node name="NewGameButton0" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352075614]
 layout_mode = 2
-text = "Poluj!"
+text = "Poziom 1: Poluj!"
 
 [node name="NewGameButton1" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=23288239]
 layout_mode = 2
-text = "Łapaj!"
+text = "Poziom 2: Łapaj!"
 
 [node name="NewGameButton2" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=403209621]
 layout_mode = 2
-text = "Capaj!"
+text = "Poziom 3: Capaj!"
 
 [node name="NewGameButton3" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=1503424243]
 layout_mode = 2
-text = "Goń!"
+text = "Poziom 4: Goń!"
 
 [node name="HSeparator" type="HSeparator" parent="Screen/Menu/VBoxContainer" unique_id=2067736781]
 modulate = Color(1, 1, 1, 0)
