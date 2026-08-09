@@ -399,6 +399,13 @@ func _physics_process(delta: float):
         #    format({"isJumpPressed": isJumpPressed})
         pass
 
+func initiate_death():
+        currentState = DudeState.Dead
+        animation.play(character + stateToAnim(currentState) + str(currentAngle))
+        syncAnimations()
+        dust.visible = true
+        dust.play("dirt")
+
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
     if !is_in_group("Berek") && body.is_in_group("Berek"):
@@ -415,11 +422,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         run_player.stop()
         die_player.play()
         gotcha_player.play()
-        currentState = DudeState.Dead
-        animation.play(character + stateToAnim(currentState) + str(currentAngle))
-        syncAnimations()
-        dust.visible = true
-        dust.play("dirt")
+
+        initiate_death()
         respawnTimer.start()
 
 func _dust_dispersed():

@@ -21,6 +21,7 @@ signal game_won(info: String)
 @onready var backgroundForLevel: TextureRect = $Screen/BackgroundForLevel
 @onready var menu: Control = $Screen/Menu
 @onready var gauges: Control = $Screen/Gauges
+@onready var win_delay_timer: Timer = $WinDelayTimer
 
 @onready var menu_music: AudioStreamPlayer = $Music/MenuMusic
 @onready var level_music: AudioStreamPlayer = $Music/LevelMusic
@@ -209,9 +210,20 @@ func isInLevel() -> bool:
 func isMenuOpen() -> bool:
     return menu.visible or isPickerActive
 
+var gameWonBy: String
 
 func _on_game_won(character: String) -> void:
     print("Game won by "+character)
+    gameWonBy = character
+
+    for d in get_tree().get_nodes_in_group('Dude'):
+        d.initiate_death()
+
+    win_delay_timer.start()
+
+func _on_win_delay_timer_timeout() -> void:
+    var character = gameWonBy
+
     var winners = [character]
 
     for d in get_tree().get_nodes_in_group('Dude'):
