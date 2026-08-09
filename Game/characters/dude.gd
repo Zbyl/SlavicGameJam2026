@@ -424,7 +424,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 func _player_down():
     animation.animation_finished.disconnect(_player_down)
     dust.visible = true
-    dust.animation_finished.connect(_dust_dispersed)
     dust.play("dirt")
 
 func _dust_dispersed():

@@ -43,7 +43,7 @@ func updateSettingsInfoText(keyMap: Dictionary):
         appendInfo("◄", keyMap.get("left", -1))
         appendInfo("►", keyMap.get("right", -1))
         appendInfo("skok", keyMap.get("jump", -1))
-        appendInfo("kucanie", keyMap.get("duck", -1))
+        appendInfo("gadanie", keyMap.get("duck", -1))
     else:
         settings_info.visible = false
         player_picker.updateControls(playerIndex, UNKNOWN.duplicate())
