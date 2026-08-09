@@ -153,5 +153,5 @@ animations = [{
 }],
 "loop": 0,
 "name": &"dirt",
-"speed": 7.0
+"speed": 6.0
 }]

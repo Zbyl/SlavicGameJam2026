@@ -416,15 +416,11 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         die_player.play()
         gotcha_player.play()
         currentState = DudeState.Dead
-        animation.animation_finished.connect(_player_down)
         animation.play(character + stateToAnim(currentState) + str(currentAngle))
         syncAnimations()
+        dust.visible = true
+        dust.play("dirt")
         respawnTimer.start()
-
-func _player_down():
-    animation.animation_finished.disconnect(_player_down)
-    dust.visible = true
-    dust.play("dirt")
 
 func _dust_dispersed():
     dust.visible = false
