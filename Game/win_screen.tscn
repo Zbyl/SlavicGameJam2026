@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://kqpop1gijphi" path="res://images/End_screen.png" id="1_l2arl"]
 [ext_resource type="Script" uid="uid://blg7ovrbr8lq7" path="res://win_screen.gd" id="1_wmwda"]
 [ext_resource type="AudioStream" uid="uid://dscib8nwmhopl" path="res://Sounds/Music/success-swoop-main-version-18178-01-40.mp3" id="3_l5t5q"]
+[ext_resource type="Texture2D" uid="uid://bf1bfr40rg0e" path="res://images/End_screen_text.png" id="4_1txte"]
 
 [node name="WinScreen" type="CanvasLayer" unique_id=2034054968]
 script = ExtResource("1_wmwda")
@@ -12,6 +13,13 @@ z_index = -1
 offset_right = 1158.0
 offset_bottom = 652.0
 texture = ExtResource("1_l2arl")
+
+[node name="Greeting" type="TextureRect" parent="." unique_id=837376102]
+offset_left = 298.0
+offset_top = 45.0
+offset_right = 848.0
+offset_bottom = 315.0
+texture = ExtResource("4_1txte")
 
 [node name="Timer" type="Timer" parent="." unique_id=1495061318]
 wait_time = 30.0
