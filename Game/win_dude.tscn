@@ -50,6 +50,7 @@ animation = &"FerretDie1"
 frame = 15
 
 [node name="Player" type="AudioStreamPlayer" parent="." unique_id=1088122374]
+volume_db = -5.474
 
 [node name="Crown" type="Sprite2D" parent="." unique_id=818162517]
 position = Vector2(0, -164)

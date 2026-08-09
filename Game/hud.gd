@@ -6,7 +6,7 @@ const WIN_SCREEN = preload("res://win_screen.tscn")
 const POINTS_PER_SECOND = 12.0
 const pointsCatchGain = 40.0
 const pointsCatchPenalty = 20.0
-const pointsMax = 1000.0
+const pointsMax = 50.0
 
 const KEYBOARD_PLAYER1 = {"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_CTRL}
 const KEYBOARD_PLAYER2 = {"type":"keyboard","up":KEY_W,"down":KEY_S,"left":KEY_A,"right":KEY_D,"jump":KEY_SHIFT,"duck":KEY_Q}

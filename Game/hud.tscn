@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://br65ovqjab54d"]
 
-[ext_resource type="Texture2D" uid="uid://dshehsdmdnme6" path="res://images/start_screen.png" id="1_1xsix"]
 [ext_resource type="Script" uid="uid://2mtppe2o7dt6" path="res://hud.gd" id="1_rftc2"]
+[ext_resource type="Texture2D" uid="uid://da57r0i4l7ibq" path="res://images/start_screen-aspect1.26.png" id="2_gpiub"]
 [ext_resource type="Texture2D" uid="uid://buowutrxtt43m" path="res://images/fox/icon_Fox.png" id="2_rftc2"]
 [ext_resource type="Texture2D" uid="uid://dyl5bb2tcj6af" path="res://images/menu_backgroun_for_level.png" id="3_gpiub"]
 [ext_resource type="Texture2D" uid="uid://drtvoym8hvqfu" path="res://images/ferret/icon_Ferret.png" id="4_g10ll"]
@@ -60,7 +60,7 @@ offset_bottom = 650.0
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 655.0
-texture = ExtResource("1_1xsix")
+texture = ExtResource("2_gpiub")
 
 [node name="BackgroundForLevel" type="TextureRect" parent="Screen" unique_id=2074522170]
 layout_mode = 0
