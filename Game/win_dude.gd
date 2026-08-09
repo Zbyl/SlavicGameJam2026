@@ -4,6 +4,8 @@ const ANIM_TWITCH = {"name":"Die", "frame":6, "speed":1.0, "sound": -1}
 const ANIM_JUMP = {"name":"Jump", "frame":4, "speed":0.5, "sound": 0}
 const ANIM_REST = {"name":"Die", "frame":0, "speed":1.0, "sound": 1}
 
+@onready var crown_animation_player: AnimationPlayer = $CrownAnimationPlayer
+
 @export var win: bool = false
 @export var character: String = "Fox"
 @export var playerIndex: int = 0
@@ -73,3 +75,5 @@ func _on_animation_finished():
             player.stream = streams[queue[queuePos].sound]
             player.play()
         queuePos += 1
+        if (queuePos == queue.size()):
+            crown_animation_player.play("CrownFly0")
