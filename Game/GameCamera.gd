@@ -12,19 +12,15 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     var averagePosition := Vector2.ZERO
-    var averagePosition2 := Vector2.ZERO
     var minPosOfKuns := Vector2(1e10, 1e10)
     var maxPosOfKuns := Vector2(-1e10, -1e10)
 
     for dude in dudes:
         var posOfKun = dude.positionOfKunek()
         averagePosition += posOfKun
-        averagePosition2.x += posOfKun.x ** 2
-        averagePosition2.y += posOfKun.y ** 2
         minPosOfKuns = minPosOfKuns.min(posOfKun)
         maxPosOfKuns = maxPosOfKuns.max(posOfKun)
 
-    var stdOfPosition = Vector2.ZERO
     var zoomIncreaseMaxRelVelocity =  0.05
     var screen_size = get_viewport().get_visible_rect().size
     var viewWidthAtZoom0 = screen_size.x
@@ -32,16 +28,14 @@ func _process(delta: float) -> void:
 
     if dudes.size() > 0:
         averagePosition /= dudes.size()
-        averagePosition2 /= dudes.size()
-        stdOfPosition.x = sqrt(averagePosition2.x - averagePosition.x ** 2)
-        stdOfPosition.y = sqrt(averagePosition2.y - averagePosition.y ** 2)
         position.x = (maxPosOfKuns.x + minPosOfKuns.x) * 0.5
         position.y = (maxPosOfKuns.y + minPosOfKuns.y) * 0.5
-        var neededZoomX = viewWidthAtZoom0 / max(maxPosOfKuns.x - minPosOfKuns.x + 0.07 * viewWidthAtZoom0, 2.9 * stdOfPosition.x)
-        var neededZoomY = viewHeightAtZoom0 / max(maxPosOfKuns.y - minPosOfKuns.y + 0.07 * viewHeightAtZoom0, 2.9 * stdOfPosition.y)
+        var neededZoomX = viewWidthAtZoom0 / (maxPosOfKuns.x - minPosOfKuns.x + 0.55 * viewWidthAtZoom0)
+        var neededZoomY = viewHeightAtZoom0 / (maxPosOfKuns.y - minPosOfKuns.y + 0.55 * viewHeightAtZoom0)
         var neededZoom = min(1.0, neededZoomX, neededZoomY)
         var oldZoom = zoom.x
         var zoomVelocity = (neededZoom - oldZoom) / delta
 
+        #zoom.x = neededZoom
         zoom.x = min(zoomVelocity / oldZoom, zoomIncreaseMaxRelVelocity) * oldZoom * delta + oldZoom
         zoom.y = zoom.x
