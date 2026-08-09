@@ -5,9 +5,14 @@ const CIRCLE_CENTER = Vector2(0.5, 0.75)
 
 @export var dudes: Array = ["Fox", "Snow", "Weasel", "Ferret"]
 @onready var mandatory_timer: Timer = $MandatoryTimer
+@onready var greeting: TextureRect = $Greeting
 
 func _ready() -> void:
     #GameData.hud.gauges.visible = false
+    greeting.modulate.a = 0.0
+    var greeting_tween = create_tween().set_trans(Tween.TRANS_EXPO)
+    greeting_tween.tween_property(greeting, "modulate:a", 1.0, 5.0)
+
     var idx = 0
     for dude in dudes:
         var win_dude: Node2D = WIN_DUDE.instantiate()
