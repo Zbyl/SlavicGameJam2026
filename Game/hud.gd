@@ -225,3 +225,4 @@ func _on_game_won(character: String) -> void:
     level_music.stop()
     menu_music.stop()
     GameData.game.add_child(winScreen)
+    GameData.game.move_child(winScreen, 0)

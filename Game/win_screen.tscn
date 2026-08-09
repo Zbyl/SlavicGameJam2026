@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c7bs3e1ual10d"]
 
-[ext_resource type="Texture2D" uid="uid://2hha1p1jmtle" path="res://images/End_screen.png" id="1_l2arl"]
+[ext_resource type="Texture2D" uid="uid://kqpop1gijphi" path="res://images/End_screen.png" id="1_l2arl"]
 [ext_resource type="Script" uid="uid://blg7ovrbr8lq7" path="res://win_screen.gd" id="1_wmwda"]
 [ext_resource type="AudioStream" uid="uid://dscib8nwmhopl" path="res://Sounds/Music/success-swoop-main-version-18178-01-40.mp3" id="3_l5t5q"]
 
@@ -8,6 +8,7 @@
 script = ExtResource("1_wmwda")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1964472863]
+z_index = -1
 offset_right = 1158.0
 offset_bottom = 652.0
 texture = ExtResource("1_l2arl")

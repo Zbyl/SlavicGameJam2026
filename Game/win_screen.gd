@@ -7,7 +7,7 @@ const CIRCLE_CENTER = Vector2(0.5, 0.75)
 @onready var mandatory_timer: Timer = $MandatoryTimer
 
 func _ready() -> void:
-    GameData.hud.gauges.visible = false
+    #GameData.hud.gauges.visible = false
     var idx = 0
     for dude in dudes:
         var win_dude: Node2D = WIN_DUDE.instantiate()
