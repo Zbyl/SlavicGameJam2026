@@ -80,6 +80,7 @@ volume_db = -10.0
 
 [node name="DiePlayer" type="AudioStreamPlayer2D" parent="." unique_id=1008268916]
 stream = ExtResource("6_k77yt")
+volume_db = 10.0
 
 [node name="RespawnPlayer" type="AudioStreamPlayer2D" parent="." unique_id=478866122]
 stream = ExtResource("7_8hsc3")
