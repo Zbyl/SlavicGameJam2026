@@ -45,7 +45,7 @@ layout_mode = 2
 
 [node name="PlayerEnable" type="CheckBox" parent="GridContainer/Kunek/Buttons" unique_id=1368732391 groups=["PlayerEnable"]]
 layout_mode = 2
-focus_neighbor_left = NodePath("../../../Ferret/Buttons/PlayerEnable")
+focus_neighbor_right = NodePath("../../../Ferret/Buttons/PlayerEnable")
 text = "Kunek Boguś"
 
 [node name="Controls" type="Button" parent="GridContainer/Kunek/Buttons" unique_id=1341727989 groups=["PlayerControls"]]
@@ -74,6 +74,7 @@ layout_mode = 2
 
 [node name="PlayerEnable" type="CheckBox" parent="GridContainer/Ferret/Buttons" unique_id=1543523612 groups=["PlayerEnable"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../../../Kunek/Buttons/PlayerEnable")
 text = "Świrofretka"
 
 [node name="Controls" type="Button" parent="GridContainer/Ferret/Buttons" unique_id=281125576 groups=["PlayerControls"]]
@@ -101,6 +102,7 @@ layout_mode = 2
 
 [node name="PlayerEnable" type="CheckBox" parent="GridContainer/Weasel/Buttons" unique_id=562716403 groups=["PlayerEnable"]]
 layout_mode = 2
+focus_neighbor_right = NodePath("../../../Snow/Buttons/PlayerEnable")
 text = "Pieczona Łasica"
 
 [node name="Controls" type="Button" parent="GridContainer/Weasel/Buttons" unique_id=244780677 groups=["PlayerControls"]]
@@ -128,6 +130,7 @@ layout_mode = 2
 
 [node name="PlayerEnable" type="CheckBox" parent="GridContainer/Snow/Buttons" unique_id=1510167081 groups=["PlayerEnable"]]
 layout_mode = 2
+focus_neighbor_left = NodePath("../../../Weasel/Buttons/PlayerEnable")
 text = "Mrożony Gronostaj"
 
 [node name="Controls" type="Button" parent="GridContainer/Snow/Buttons" unique_id=1640160640 groups=["PlayerControls"]]
