@@ -56,6 +56,7 @@ func initTileMaps(level: Node2D):
             break
         assert(collisionMap, "Collision map missing")
         tile_map_layers.append(tileMap)
+        collisionMap.visible = false # Don't render collision maps - we don't need that
         collision_map_layers.append(collisionMap)
 
     # Load spawn points
