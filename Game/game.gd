@@ -6,9 +6,9 @@ const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
 @onready var hud: CanvasLayer = $Hud
 
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
-const LEVEL_2 = preload("res://Levels/Level4.tscn")
+const LEVEL_2 = preload("res://Levels/Level2.tscn")
 const LEVEL_3 = preload("res://Levels/Level3.tscn")
-const LEVEL_4 = preload("res://Levels/Level5.tscn")
+const LEVEL_4 = preload("res://Levels/Level4.tscn")
 const DUDE = preload("res://characters/dude.tscn")
 
 @onready var gameCamera: GameCamera = $GameCamera
