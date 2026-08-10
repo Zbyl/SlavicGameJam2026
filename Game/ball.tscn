@@ -7,8 +7,8 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_41u45"]
 bounce = 1.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktgx5"]
-size = Vector2(30, 32)
+[sub_resource type="CircleShape2D" id="CircleShape2D_ktgx5"]
+radius = 16.18
 
 [node name="Ball" unique_id=1650879338 instance=ExtResource("1_x8fbi")]
 collision_layer = 64
@@ -19,8 +19,9 @@ angular_damp = 0.05
 script = ExtResource("2_41u45")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=132389875]
-shape = SubResource("RectangleShape2D_ktgx5")
+shape = SubResource("CircleShape2D_ktgx5")
 
 [node name="Image" parent="ImageContainer" parent_id_path=PackedInt32Array(2090049566) index="0" unique_id=928635108]
+position = Vector2(0, -99.785)
 scale = Vector2(0.4, 0.409)
 texture = ExtResource("2_hgol0")
