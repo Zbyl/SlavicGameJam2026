@@ -2,6 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_70wcc"]
 [ext_resource type="PackedScene" uid="uid://b6rcuufxlodyj" path="res://trash.tscn" id="2_g3oj6"]
+[ext_resource type="PackedScene" uid="uid://bwa6ix1tgbsct" path="res://ball.tscn" id="3_nn734"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w77jt"]
 size = Vector2(5617, 121.53125)
@@ -35,10 +36,6 @@ position = Vector2(-300, 220)
 
 [node name="Spawn4" type="Marker2D" parent="TileMapLayer0" unique_id=1280338986 groups=["SpawnPoint"]]
 position = Vector2(349, -90)
-
-[node name="Trash" parent="TileMapLayer0" unique_id=1650879338 instance=ExtResource("2_g3oj6")]
-position = Vector2(1148, 130)
-isBall = true
 
 [node name="Trash5" parent="TileMapLayer0" unique_id=743623505 instance=ExtResource("2_g3oj6")]
 position = Vector2(1810, -474)
@@ -106,17 +103,17 @@ position = Vector2(681, -952)
 [node name="Trash26" parent="TileMapLayer0" unique_id=1954299868 instance=ExtResource("2_g3oj6")]
 position = Vector2(757, -904)
 
-[node name="Trash2" parent="TileMapLayer0" unique_id=1230494695 instance=ExtResource("2_g3oj6")]
-position = Vector2(1222, -677)
-isBall = true
+[node name="Ball5" parent="TileMapLayer0" unique_id=1650879338 instance=ExtResource("3_nn734")]
+position = Vector2(1149, 131)
 
-[node name="Trash3" parent="TileMapLayer0" unique_id=653011751 instance=ExtResource("2_g3oj6")]
-position = Vector2(-1090, 606)
-isBall = true
+[node name="Ball" parent="TileMapLayer0" unique_id=786267929 instance=ExtResource("3_nn734")]
+position = Vector2(1222, -675)
 
-[node name="Trash4" parent="TileMapLayer0" unique_id=159770339 instance=ExtResource("2_g3oj6")]
-position = Vector2(-1206, -738)
-isBall = true
+[node name="Ball2" parent="TileMapLayer0" unique_id=1711441487 instance=ExtResource("3_nn734")]
+position = Vector2(-1091, 608)
+
+[node name="Ball3" parent="TileMapLayer0" unique_id=733432695 instance=ExtResource("3_nn734")]
+position = Vector2(-1206, -737)
 
 [node name="TileMapLayer1" type="TileMapLayer" parent="." unique_id=742237042]
 z_index = 1

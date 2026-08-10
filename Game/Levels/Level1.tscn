@@ -2,6 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_w77jt"]
 [ext_resource type="PackedScene" uid="uid://b6rcuufxlodyj" path="res://trash.tscn" id="2_3anf8"]
+[ext_resource type="PackedScene" uid="uid://bwa6ix1tgbsct" path="res://ball.tscn" id="3_fhqol"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w77jt"]
 size = Vector2(5617, 121.53125)
@@ -87,14 +88,6 @@ position = Vector2(262, 138)
 [node name="Trash26" parent="TileMapLayer0" unique_id=476530222 instance=ExtResource("2_3anf8")]
 position = Vector2(219, 120)
 
-[node name="Trash8" parent="TileMapLayer0" unique_id=1428312041 instance=ExtResource("2_3anf8")]
-position = Vector2(111, -102)
-isBall = true
-
-[node name="Trash9" parent="TileMapLayer0" unique_id=158947557 instance=ExtResource("2_3anf8")]
-position = Vector2(-623, -163)
-isBall = true
-
 [node name="Trash10" parent="TileMapLayer0" unique_id=620456260 instance=ExtResource("2_3anf8")]
 position = Vector2(-743, 430)
 
@@ -130,6 +123,12 @@ position = Vector2(-590, -156)
 
 [node name="Trash31" parent="TileMapLayer0" unique_id=2024758967 instance=ExtResource("2_3anf8")]
 position = Vector2(-636, -122)
+
+[node name="Ball3" parent="TileMapLayer0" unique_id=1395616434 instance=ExtResource("3_fhqol")]
+position = Vector2(111, -102)
+
+[node name="Ball" parent="TileMapLayer0" unique_id=705434208 instance=ExtResource("3_fhqol")]
+position = Vector2(-623, -163)
 
 [node name="TileMapLayer1" type="TileMapLayer" parent="." unique_id=742237042]
 z_index = 1

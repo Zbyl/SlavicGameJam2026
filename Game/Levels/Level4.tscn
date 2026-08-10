@@ -2,6 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_4wmwj"]
 [ext_resource type="PackedScene" uid="uid://b6rcuufxlodyj" path="res://trash.tscn" id="2_kb5ut"]
+[ext_resource type="PackedScene" uid="uid://bwa6ix1tgbsct" path="res://ball.tscn" id="3_rkafn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w77jt"]
 size = Vector2(5617, 121.53125)
@@ -36,14 +37,6 @@ position = Vector2(-100, -350)
 [node name="Spawn4" type="Marker2D" parent="TileMapLayer0" unique_id=1280338986 groups=["SpawnPoint"]]
 position = Vector2(600, -350)
 
-[node name="Trash" parent="TileMapLayer0" unique_id=1650879338 instance=ExtResource("2_kb5ut")]
-position = Vector2(-189, 231)
-isBall = true
-
-[node name="Trash2" parent="TileMapLayer0" unique_id=621968808 instance=ExtResource("2_kb5ut")]
-position = Vector2(58, -328)
-isBall = true
-
 [node name="Trash3" parent="TileMapLayer0" unique_id=906767475 instance=ExtResource("2_kb5ut")]
 position = Vector2(551, -295)
 
@@ -73,6 +66,12 @@ position = Vector2(297, -372)
 
 [node name="Trash12" parent="TileMapLayer0" unique_id=2032776598 instance=ExtResource("2_kb5ut")]
 position = Vector2(235, -318)
+
+[node name="Ball3" parent="TileMapLayer0" unique_id=1650879338 instance=ExtResource("3_rkafn")]
+position = Vector2(-188, 231)
+
+[node name="Ball" parent="TileMapLayer0" unique_id=1824807525 instance=ExtResource("3_rkafn")]
+position = Vector2(58, -327)
 
 [node name="TileMapLayer1" type="TileMapLayer" parent="." unique_id=742237042]
 z_index = 1
