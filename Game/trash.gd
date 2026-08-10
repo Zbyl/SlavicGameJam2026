@@ -1,8 +1,8 @@
 extends RigidBody2D
 class_name Trash
 
-@onready var image: Sprite2D = $Leaf4Container/Leaf4
-@onready var imageContainer: Node2D = $Leaf4Container
+@onready var image: Sprite2D = $ImageContainer/Image
+@onready var imageContainer: Node2D = $ImageContainer
 
 var myLayer: int = 0
 

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bwa6ix1tgbsct"]
+
+[ext_resource type="PackedScene" uid="uid://b6rcuufxlodyj" path="res://trash.tscn" id="1_x8fbi"]
+[ext_resource type="Script" uid="uid://dxhr6005qtofx" path="res://ball.gd" id="2_41u45"]
+[ext_resource type="Texture2D" uid="uid://lwhn44pdcu3x" path="res://images/ball.png" id="2_hgol0"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_41u45"]
+bounce = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktgx5"]
+size = Vector2(30, 32)
+
+[node name="Ball" unique_id=1650879338 instance=ExtResource("1_x8fbi")]
+collision_layer = 64
+collision_mask = 73
+physics_material_override = SubResource("PhysicsMaterial_41u45")
+linear_damp = 1.0
+angular_damp = 0.05
+script = ExtResource("2_41u45")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=132389875]
+shape = SubResource("RectangleShape2D_ktgx5")
+
+[node name="Image" parent="ImageContainer" parent_id_path=PackedInt32Array(2090049566) index="0" unique_id=928635108]
+scale = Vector2(0.4, 0.409)
+texture = ExtResource("2_hgol0")
