@@ -129,61 +129,6 @@ position = Vector2(0, -280)
 tile_map_data = PackedByteArray("AAAAAAsAAAAAABYAAAAAAAoAAAABABwAAAABAAwAAAAAABYAAAACAA8AAAABABwAAAACAA4AAAABABwAAAABAA0AAAABABwAAAADAA4AAAAAABYAAAADAA0AAAAAABYAAAAEAAwAAAABABwAAAAEAAsAAAABABwAAAAFAAoAAAABABwAAAAEAAkAAAABABwAAAAEAAgAAAABABwAAAADAAcAAAABABwAAAADAAYAAAABABwAAAACAAUAAAABABwAAAACAAYAAAABABwAAAABAAcAAAABABwAAAABAAgAAAABABwAAAAAAAkAAAABABwAAAABAAoAAAAAABYAAAABAAsAAAAAABYAAAACAAoAAAABABwAAAACAAkAAAABABwAAAACAAgAAAABABwAAAACAAcAAAABABwAAAABAAkAAAABABwAAAADAAoAAAABABwAAAADAAsAAAABABwAAAADAAkAAAABABwAAAADAAgAAAABABwAAAAEAAoAAAABABwAAAADAAwAAAAAABYAAAACAA0AAAAAABYAAAD//wsAAAABABwAAAAAAAwAAAABABwAAAAAAA0AAAABABwAAAABAA4AAAABABwAAAABAA8AAAABABwAAAACABAAAAABABwAAAACABEAAAABABwAAAADABAAAAABABwAAAADAA8AAAABABwAAAAEAA4AAAABABwAAAAEAA0AAAABABwAAAAFAAwAAAABABwAAAAFAAsAAAABABwAAAACAAwAAAABABwAAAACAAsAAAABABwAAAA=")
 tile_set = ExtResource("1_4wmwj")
 
-[node name="CollisionLayer0" type="TileMapLayer" parent="." unique_id=963780600]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer1" type="TileMapLayer" parent="." unique_id=1447980636]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -40)
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer2" type="TileMapLayer" parent="." unique_id=759669828]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -80)
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer3" type="TileMapLayer" parent="." unique_id=759257524]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -120)
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer4" type="TileMapLayer" parent="." unique_id=1201033288]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -160)
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer5" type="TileMapLayer" parent="." unique_id=1558444749]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -200)
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer6" type="TileMapLayer" parent="." unique_id=2048079877]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -240)
-tile_set = ExtResource("1_4wmwj")
-
-[node name="CollisionLayer7" type="TileMapLayer" parent="." unique_id=2090372368]
-z_index = -10
-y_sort_enabled = true
-texture_filter = 1
-position = Vector2(0, -280)
-tile_set = ExtResource("1_4wmwj")
-
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1546374265]
 collision_layer = 8
 

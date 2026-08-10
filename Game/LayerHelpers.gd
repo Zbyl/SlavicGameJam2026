@@ -1,6 +1,8 @@
 extends Node
 class_name LayerHelpers
 
+const COLLISION_LAYER = preload("uid://cf1whr6xdp63r")
+
 var layerHeight: float = 40.0
 var zToYOffsetRatio: float = 1.0 # Multiply z by this much to get y offset. But note that Z goes up, but y goes down.
 
@@ -49,14 +51,16 @@ func initTileMaps(level: Node2D):
     collision_map_layers = []
     for i in range(100):
         var tileMapName = "TileMapLayer{idx}".format({"idx": i})
-        var collisionMapName = "CollisionLayer{idx}".format({"idx": i})
         var tileMap: TileMapLayer = level.get_node_or_null(tileMapName)
-        var collisionMap: TileMapLayer = level.get_node_or_null(collisionMapName)
         if not tileMap:
             break
-        assert(collisionMap, "Collision map missing")
-        tile_map_layers.append(tileMap)
+
+        var collisionMap: TileMapLayer = COLLISION_LAYER.instantiate()
+        level.add_child(collisionMap)
+        collisionMap.global_position = tileMap.global_position
         collisionMap.visible = false # Don't render collision maps - we don't need that
+        
+        tile_map_layers.append(tileMap)
         collision_map_layers.append(collisionMap)
 
     # Load spawn points

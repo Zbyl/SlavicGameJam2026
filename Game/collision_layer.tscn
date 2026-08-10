@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cf1whr6xdp63r"]
+
+[ext_resource type="TileSet" uid="uid://b71im4ui7gk2j" path="res://TileSets/Basic_tile_set.tres" id="1_h6eyq"]
+
+[node name="CollisionLayer" type="TileMapLayer" unique_id=1728641530]
+z_index = -10
+y_sort_enabled = true
+texture_filter = 1
+tile_set = ExtResource("1_h6eyq")
