@@ -44,6 +44,10 @@ popup/item_2/id = 2
 popup/item_3/text = "Kontroler 4"
 popup/item_3/id = 3
 
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1405239601]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=886018038 groups=["KeyboardCtrl"]]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -123,11 +127,15 @@ focus_next = NodePath("../OkButton")
 focus_previous = NodePath("../Jump")
 text = "Gadaj"
 
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=1592458351]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
 [node name="OkButton" type="Button" parent="VBoxContainer" unique_id=692754225]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Duck")
 focus_previous = NodePath("../Duck")
-text = "Wyjście"
+text = "Ok"
 
 [connection signal="gui_input" from="VBoxContainer/PressSomething" to="." method="_on_press_something_gui_input"]
 [connection signal="item_selected" from="VBoxContainer/ControllerType" to="." method="_on_controller_type_item_selected"]

@@ -40,7 +40,7 @@ offset_left = -328.47003
 offset_top = 247.521
 offset_right = 347.5
 offset_bottom = 278.66504
-text = "OK"
+text = "Ok"
 
 [node name="KunekPanel" type="Panel" parent="." unique_id=1265438870]
 layout_mode = 1

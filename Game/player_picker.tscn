@@ -151,7 +151,7 @@ text = "Anuluj"
 [node name="OkButton" type="Button" parent="GridContainer" unique_id=420547287]
 layout_mode = 2
 disabled = true
-text = "OK"
+text = "Ok"
 
 [node name="Timer" type="Timer" parent="." unique_id=270552737]
 wait_time = 0.2
