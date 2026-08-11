@@ -10,10 +10,12 @@ bounce = 1.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_ktgx5"]
 radius = 16.18
 
-[node name="Ball" unique_id=1650879338 instance=ExtResource("1_x8fbi")]
+[node name="Ball" unique_id=1650879338 groups=["Ball"] instance=ExtResource("1_x8fbi")]
 collision_layer = 64
-collision_mask = 73
+collision_mask = 201
 physics_material_override = SubResource("PhysicsMaterial_41u45")
+contact_monitor = true
+max_contacts_reported = 10
 linear_damp = 1.0
 angular_damp = 0.05
 script = ExtResource("2_41u45")
@@ -25,3 +27,5 @@ shape = SubResource("CircleShape2D_ktgx5")
 position = Vector2(0, -99.785)
 scale = Vector2(0.4, 0.409)
 texture = ExtResource("2_hgol0")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

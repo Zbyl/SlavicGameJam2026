@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://emlcs1y0reek" path="res://bramka.gd" id="1_jvats"]
 [ext_resource type="Texture2D" uid="uid://1d7eexj3bkmg" path="res://icon.svg" id="2_ygjjn"]
 [ext_resource type="AudioStream" uid="uid://bw2i5lk8cxxxk" path="res://Sounds/Kunek/hi_hi.wav" id="3_vem73"]
+[ext_resource type="AudioStream" uid="uid://c5vgxbktbk8fh" path="res://Sounds/Kunek/ufff.wav" id="4_pl6bn"]
 
 [node name="Bramka" type="Area2D" unique_id=2120189302]
 collision_layer = 128
@@ -23,4 +24,12 @@ texture = ExtResource("2_ygjjn")
 [node name="GoalSound" type="AudioStreamPlayer2D" parent="." unique_id=1265599818]
 stream = ExtResource("3_vem73")
 
+[node name="DustSound" type="AudioStreamPlayer2D" parent="." unique_id=674671825]
+stream = ExtResource("4_pl6bn")
+
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1873456749]
+wait_time = 1.5
+one_shot = true
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]
