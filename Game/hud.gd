@@ -35,7 +35,7 @@ var player_anims: Dictionary = {}
 var player_bars: Dictionary = {}
 var playerNumber: Dictionary = {"Fox": 0, "Ferret": 1, "Weasel": 2, "Snow": 3}
 var playerPoints: Dictionary = {"Fox": 0.0, "Ferret": 0.0, "Weasel": 0.0, "Snow": 0.0}
-var dudes: Dictionary = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": null}
+var dudes: Dictionary[String, Dude] = {"Fox": null, "Ferret": null, "Weasel": null, "Snow": null}
 var pointsPerSecond = POINTS_PER_SECOND
 
 #func getPlayerLabel(player_hud: Control) -> Label:
@@ -55,16 +55,16 @@ var pointsPerSecond = POINTS_PER_SECOND
 #    _setBerek(player_3_hud, playerNo==3)
 #    _setBerek(player_4_hud, playerNo==4)
 
-func initPlayers(ddudes: Array[Dude]):
+func initPlayers(dudesArray: Array[Dude]):
     pointsPerSecond = POINTS_PER_SECOND
 
     for h in player_huds:
         player_huds[h].visible = false
 
-    if ddudes.size() > 1:
+    if dudesArray.size() > 1:
         var playerOffsetsRev:Array = Array()
 
-        for dude in ddudes:
+        for dude in dudesArray:
             playerOffsetsRev.append(playerNumber[dude.character])
 
         playerOffsetsRev.sort()
@@ -74,12 +74,12 @@ func initPlayers(ddudes: Array[Dude]):
             # i order, playerOffsetsRev[i] - playernumber
             playerOffsets[playerOffsetsRev[i]] = i
 
-        for dude in ddudes:
+        for dude in dudesArray:
             dudes[dude.character] = dude
             var pn = playerNumber[dude.character]
             player_huds[pn].visible = true
             player_huds[pn].position.y = 13 * playerOffsets[pn]
-            if ! dude.isBerek:
+            if not GameData.isCharacterBerek(GameData.characterStrToEnum(dude.character)):
                 player_anims[playerNumber[dude.character]].play()
     else:
         pointsPerSecond = 0
@@ -155,13 +155,16 @@ func _process(delta: float) -> void:
     var elapsed: float = 0.0 if isMenuOpen() else delta
 
     for ch in playerPoints:
-        if dudes[ch] != null:
-            if dudes[ch].isBerek or dudes[ch].isDead():
-                player_anims[playerNumber[ch]].stop()
-            else:
-                if GameData.countPointsForTime:
-                    countPointsSet(ch, playerPoints[ch] + elapsed * pointsPerSecond)
-                player_anims[playerNumber[ch]].play()
+        var dude := dudes[ch]
+        if dude == null:
+            continue
+
+        if GameData.isCharacterBerek(GameData.characterStrToEnum(dude.character)) or dude.isDead():
+            player_anims[playerNumber[ch]].stop()
+        else:
+            if GameData.countPointsForTime:
+                countPointsSet(ch, playerPoints[ch] + elapsed * pointsPerSecond)
+            player_anims[playerNumber[ch]].play()
 
 func show_menu(do_show: bool, in_level: bool):
     var musicForMenu := (not in_level) and do_show

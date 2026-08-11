@@ -51,20 +51,30 @@ func characterEnumToStr(character: Character) -> String:
     return Character.find_key(character)
 
 var berekTeams: Array[int] = [] # Teams that are berek now. Initialized from numBereks at the start of the level.
-var characterToTeam: Dictionary[Character, int] = {}
-var nonEmptyTeamToCharacters: Dictionary[int, Array] = {} # int -> Array[Character], contains only non-empty teams
+var characterToTeam: Dictionary[Character, int] = {} # Active characters to their team.
+var nonEmptyTeamToCharacters: Dictionary[int, Array] = {} # int -> Array[Character], contains only non-empty teams (only active characters are considered)
+var activeCharacters: Array[Character] = [] # List of currently playing characters.
+var berekCooldownActive: bool = false   # If true bereks should not be berking. We are in a cooldown after berking.
 
 # Initializing game data for the level.
-func levelPreInit() -> void:
+# activeCharacters - characters that are going to play
+func levelPreInit(_activeCharacters: Array[Character]) -> void:
+    activeCharacters = _activeCharacters
+    print("Active characters: {activeCharacters}".format({ "activeCharacters": activeCharacters }))
+
     berekTeams = []
     characterToTeam = {}
     nonEmptyTeamToCharacters = {}
     var teamToCharacters := {0: [], 1: [], 2: [], 3: []}
 
-    characterToTeam[Character.Fox] = kunekTeam
-    characterToTeam[Character.Ferret] = fretkaTeam
-    characterToTeam[Character.Weasel] = lasicaTeam
-    characterToTeam[Character.Snow] = gronostajTeam
+    if Character.Fox in activeCharacters:
+        characterToTeam[Character.Fox] = kunekTeam
+    if Character.Ferret in activeCharacters:
+        characterToTeam[Character.Ferret] = fretkaTeam
+    if Character.Weasel in activeCharacters:
+        characterToTeam[Character.Weasel] = lasicaTeam
+    if Character.Snow in activeCharacters:
+        characterToTeam[Character.Snow] = gronostajTeam
     
     for character in characterToTeam:
         var team := characterToTeam[character]
@@ -76,15 +86,36 @@ func levelPreInit() -> void:
             nonEmptyTeamToCharacters[team] = chars
         
     var currentBerekCount: int = min(numBereks, nonEmptyTeamToCharacters.size() - 1)
-    berekTeams = Array(range(nonEmptyTeamToCharacters.size()), TYPE_INT, "", null) # Copying array, while casting to a typed array.
+    berekTeams = Array(nonEmptyTeamToCharacters.keys(), TYPE_INT, "", null) # Copying array, while casting to a typed array.
     berekTeams.shuffle()
     berekTeams.resize(currentBerekCount)
+    
+    printTeamsAndBereks()
+    
+func printTeamsAndBereks() -> void:
+    for team in range(4):
+        var chars := getCharactersInTeam(team)
+        print("Team {team}: {chars}".format({ "team": team, "chars": chars}))
+
+    print("Berek teams: {berekTeams}".format({ "berekTeams": berekTeams }))
+    if Character.Fox in activeCharacters:
+        print("Fox berek: {berek}".format({ "berek": isCharacterBerek(Character.Fox) }))
+    if Character.Ferret in activeCharacters:
+        print("Feret berek: {berek}".format({ "berek": isCharacterBerek(Character.Ferret) }))
+    if Character.Weasel in activeCharacters:
+        print("Weasel berek: {berek}".format({ "berek": isCharacterBerek(Character.Weasel) }))
+    if Character.Snow in activeCharacters:
+        print("Snow berek: {berek}".format({ "berek": isCharacterBerek(Character.Snow) }))
+
 
 # Returns characters in given team (even if team is empty)
 func getCharactersInTeam(team: int) -> Array[Character]:
     if team in nonEmptyTeamToCharacters:
         return nonEmptyTeamToCharacters[team]
     return []
+    
+func getCharacterTeam(character: Character) -> int:
+    return characterToTeam[character]
     
 func isCharacterBerek(character: Character) -> bool:
     var team = characterToTeam[character]
@@ -107,6 +138,47 @@ func getCharacterDude(character: Character) -> Dude:
             return dude
             
     return null
+
+# Returns true if given berek can zberkować other player.
+# False if this character cannot berek the other one.
+func canZberkowac(berekCharacter: Character, caughtCharacter: Character) -> bool:
+    if not isCharacterBerek(berekCharacter):
+        print("Not a berek {berek} cannot catch another player {caught}.".format({
+            "berek": berekCharacter,
+            "caught": caughtCharacter,
+        }))
+        return false
+
+    if isCharacterBerek(caughtCharacter):
+        print("Berek {berek} cannot catch another berek {caught}.".format({
+            "berek": berekCharacter,
+            "caught": caughtCharacter,
+        }))
+        return false
+
+    var berekTeam = characterToTeam[berekCharacter]
+    var caughtTeam = characterToTeam[caughtCharacter]
+
+    if berekTeam == caughtTeam:
+        print("Berek {berek} cannot catch player from his team {caught}.".format({
+            "berek": berekCharacter,
+            "caught": caughtCharacter,
+        }))
+        return false
+    
+    return true
+    
+# Zberkuj.
+func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
+    assert(canZberkowac(berekCharacter, caughtCharacter))
+    # Replace berekTeam with caughtTeam in berekTeams.
+    var berekTeam = characterToTeam[berekCharacter]
+    var caughtTeam = characterToTeam[caughtCharacter]
+    var foundIdx = berekTeams.find(berekTeam)
+    assert(foundIdx != -1)
+    berekTeams[foundIdx] = caughtTeam
+    printTeamsAndBereks()
+    
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

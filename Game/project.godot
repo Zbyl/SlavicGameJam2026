@@ -31,7 +31,6 @@ project/assembly_name="Game"
 [global_group]
 
 Dude="This is some dude"
-Berek="This dude is berek"
 Game=""
 Hud=""
 SpawnPoint=""

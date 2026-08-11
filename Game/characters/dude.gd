@@ -11,7 +11,6 @@ const MAX_SPEED: float = 450.0
 const BEREK_MAX_SPEED: float = MAX_SPEED * 1.3
 
 @export var character: String = "Fox"
-@export var isBerek: bool = false
 
 var controllerData : Dictionary
 
@@ -96,7 +95,7 @@ func _ready() -> void:
     megaphoneImageOffsetY = megaphoneImage.offset.y
     #debugLabel = get_node("../../%DebugLabel")
 
-    setBerek(isBerek)
+    updateBerekMarker()
     if character == "Fox":
         run_stream = streams[0]
     elif character == "Ferret":
@@ -110,13 +109,9 @@ func _ready() -> void:
     # Set initial animation.
     animation.play(character + stateToAnim(currentState) + str(currentAngle))
 
-func setBerek(state: bool):
-    isBerek = state
-    if isBerek:
-        add_to_group("Berek")
-    else:
-        remove_from_group("Berek")
-    berek.visible = isBerek
+func updateBerekMarker():
+    var isBerek := GameData.isCharacterBerek(GameData.characterStrToEnum(character))
+    berek.visible = isBerek and not GameData.berekCooldownActive
 
 func isDead():
     return currentState == DudeState.Dead
@@ -188,6 +183,7 @@ func updateJumpButton() -> void:
 func updateDuckButton():
     if isDuckButtonPressed() and not duck_player.playing:
         var quacks: Array
+        var isBerek := GameData.isCharacterBerek(GameData.characterStrToEnum(character))
         if isBerek:
             quacks = duckBerek
         else:
@@ -230,13 +226,12 @@ func respawn():
         return
 
     if currentState != DudeState.Dead:
-        print("Canot respawn! I'm not Dead!")
+        print("Canot respawn! I'm not Dead: " + character)
         return
 
-    print("Respawning")
-    get_tree().call_group("Berek", "setBerek", false)
+    print("Respawning: " + character)
+    GameData.berekCooldownActive = false
     respawn_player.play()
-    setBerek(true)
     currentState = DudeState.Idle
     animation.play(character + stateToAnim(currentState) + str(currentAngle))
 
@@ -255,6 +250,9 @@ func syncAnimations():
 func _physics_process(delta: float):
     if GameData.hud.isMenuOpen():
         return
+
+    var isBerek := GameData.isCharacterBerek(GameData.characterStrToEnum(character))
+    updateBerekMarker()
 
     updateJumpButton()
     updateDuckButton()
@@ -416,15 +414,21 @@ func initiate_death():
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-    if !is_in_group("Berek") && body.is_in_group("Berek"):
+    if (not GameData.berekCooldownActive) and body.is_in_group("Dude"):
         # Check if we are close enough in z.
         var zDist = absf(currentZ - body.currentZ)
         if zDist > GameData.layerHelpers.layerHeight:
             return
 
-        body.setBerek(false)
+        var thisCh := GameData.characterStrToEnum(character)
+        var otherCh := GameData.characterStrToEnum(body.character)
+        if !GameData.canZberkowac(otherCh, thisCh):
+            return
 
-        print("I'm dying!")
+        GameData.doZberkuj(otherCh, thisCh)
+        GameData.berekCooldownActive = true
+
+        print("Berek {berek} caught player {caught}.".format({ "berek": body.character, "caught": character }))
         GameData.hud.countPointsDudeGotMe(self, body)
 
         run_player.stop()

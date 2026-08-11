@@ -70,20 +70,19 @@ func _switch_level(new_level_scene):
     if new_level_scene==null:
         return
 
-    GameData.levelPreInit()
+    var activeCharacters: Array[GameData.Character] = []
+    for key in hud.playerData.keys():
+        var ch := GameData.characterStrToEnum(CHARACTERS[key])
+        activeCharacters.append(ch)
+    GameData.levelPreInit(activeCharacters)
 
     level = new_level_scene.instantiate()
     add_child(level)
     GameData.layerHelpers.initTileMaps(level) # Must be run when level is already in the tree (as it uses get_nodes_in_group()).
 
-    var berekIdx = randi_range(1, hud.playerData.size()) - 1
-    var berekKey = hud.playerData.keys()[berekIdx]
-    if hud.playerData.size() <= 1:
-        berekKey = -1
     for key in hud.playerData.keys():
         var controllerData = hud.playerData[key]
         var dude: Dude = DUDE.instantiate()
-        dude.isBerek = key == berekKey
         dude.character = CHARACTERS[key]
         dude.controllerData = controllerData
         var spawnPoint = GameData.layerHelpers.spawnPoints[key]
@@ -93,9 +92,9 @@ func _switch_level(new_level_scene):
         dude.debugLabel = GameData.hud.get_node("./%DebugLabel")
 
     var newDudes: Array[Node] = get_tree().get_nodes_in_group('Dude')
-    var ddudes: Array[Dude] = []
+    var dudesArray: Array[Dude] = []
     for newDude in newDudes:
-        ddudes.append(newDude as Dude)
-    gameCamera.dudes = ddudes
-    GameData.hud.initPlayers(ddudes)
+        dudesArray.append(newDude as Dude)
+    gameCamera.dudes = dudesArray
+    GameData.hud.initPlayers(dudesArray)
     GameData.hud.show_menu(false, true)
