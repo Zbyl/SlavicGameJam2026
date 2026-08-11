@@ -35,6 +35,7 @@ Game=""
 Hud=""
 SpawnPoint=""
 Trash=""
+Ball=""
 
 [input]
 
@@ -60,6 +61,7 @@ ui_menu={
 2d_physics/layer_4="BoudingBoxes"
 2d_physics/layer_6="TrashAndJunk"
 2d_physics/layer_7="Ball"
+2d_physics/layer_8="Bramka"
 2d_physics/layer_17="Layer0"
 2d_physics/layer_18="Layer1"
 2d_physics/layer_19="Layer2"

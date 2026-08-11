@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://fv2217hbxv1x"]
+
+[ext_resource type="Script" uid="uid://b1c40ka0hmqyp" path="res://dust.gd" id="1_hvgcl"]
+[ext_resource type="SpriteFrames" uid="uid://bnm5y0u6nh5pe" path="res://characters/dude_magic_frames.tres" id="2_p32id"]
+
+[node name="Dust" type="Node2D" unique_id=1814990239]
+script = ExtResource("1_hvgcl")
+
+[node name="Dust" type="AnimatedSprite2D" parent="." unique_id=1826448028]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(0, -12.56)
+scale = Vector2(0.66, 0.66)
+sprite_frames = ExtResource("2_p32id")
+animation = &"dirt"
+speed_scale = 5.0
+offset = Vector2(0, -5.9)
+
+[connection signal="animation_finished" from="Dust" to="." method="_dust_dispersed"]

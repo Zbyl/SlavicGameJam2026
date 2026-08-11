@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://qphfx16g6qea"]
+
+[ext_resource type="Script" uid="uid://emlcs1y0reek" path="res://bramka.gd" id="1_jvats"]
+[ext_resource type="Texture2D" uid="uid://1d7eexj3bkmg" path="res://icon.svg" id="2_ygjjn"]
+[ext_resource type="AudioStream" uid="uid://bw2i5lk8cxxxk" path="res://Sounds/Kunek/hi_hi.wav" id="3_vem73"]
+
+[node name="Bramka" type="Area2D" unique_id=2120189302]
+collision_layer = 128
+collision_mask = 64
+script = ExtResource("1_jvats")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=445846699]
+position = Vector2(-69, -29)
+polygon = PackedVector2Array(5, 0, 19, -8, 132, 56, 114, 64)
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=857114797]
+z_index = 3
+position = Vector2(-1.0000001, -0.9999999)
+rotation = 0.5366667
+scale = Vector2(1, 0.12276489)
+texture = ExtResource("2_ygjjn")
+
+[node name="GoalSound" type="AudioStreamPlayer2D" parent="." unique_id=1265599818]
+stream = ExtResource("3_vem73")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -4,7 +4,8 @@ class_name Hud
 const TEAM_PICKER = preload("res://team_picker.tscn")
 const PLAYER_PICKER = preload("res://player_picker.tscn")
 const WIN_SCREEN = preload("res://win_screen.tscn")
-const POINTS_PER_SECOND = 500.0
+const POINTS_PER_SECOND = 12.0
+const POINTS_PER_GOAL = 100.0
 const pointsCatchGain = 40.0
 const pointsCatchPenalty = 20.0
 const pointsMax = 1000.0
@@ -94,7 +95,7 @@ func _ready() -> void:
 
     show_menu(true, false)
 
-func countPointsDudeGotMe(victim, hunter):
+func countPointsDudeGotMe(victim: Dude, hunter: Dude):
     if GameData.countBerekPoints:
         var victimTeam := GameData.getCharacterTeam(victim.character)
         var hunterTeam := GameData.getCharacterTeam(hunter.character)
@@ -103,6 +104,12 @@ func countPointsDudeGotMe(victim, hunter):
         checkWinners()
     var playerNumber = GameData.ALL_CHARACTERS.find(victim.character)
     player_anims[playerNumber].stop()
+
+func countPointsForGoal(character: GameData.Character) -> void:
+    if GameData.countGoalsPoints:
+        var team := GameData.getCharacterTeam(character)
+        countPointsSet(character, teamPoints[team] + POINTS_PER_GOAL)
+        checkWinners()
 
 func pointsToScreen(p):
     var screen_size = get_viewport().get_visible_rect().size
