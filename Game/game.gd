@@ -1,8 +1,6 @@
 extends Node2D
 class_name Game
 
-const CHARACTERS = ["Fox", "Ferret", "Weasel", "Snow"]
-
 @onready var hud: CanvasLayer = $Hud
 
 const LEVEL_1 = preload("res://Levels/Level1.tscn")
@@ -72,7 +70,7 @@ func _switch_level(new_level_scene):
 
     var activeCharacters: Array[GameData.Character] = []
     for key in hud.playerData.keys():
-        var ch := GameData.characterStrToEnum(CHARACTERS[key])
+        var ch := GameData.ALL_CHARACTERS[key]
         activeCharacters.append(ch)
     GameData.levelPreInit(activeCharacters)
 
@@ -83,7 +81,7 @@ func _switch_level(new_level_scene):
     for key in hud.playerData.keys():
         var controllerData = hud.playerData[key]
         var dude: Dude = DUDE.instantiate()
-        dude.character = CHARACTERS[key]
+        dude.character = GameData.ALL_CHARACTERS[key]
         dude.controllerData = controllerData
         var spawnPoint = GameData.layerHelpers.spawnPoints[key]
         add_child(dude)

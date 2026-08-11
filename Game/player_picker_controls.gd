@@ -32,18 +32,18 @@ func _on_player_picker_destroy():
     player_picker.updateControls(playerIndex, keyMap)
     controls.grab_focus.call_deferred()
 
-func updateSettingsInfoText(keyMap: Dictionary):
+func updateSettingsInfoText(keyMapParam: Dictionary):
     settings_info.text = ""
-    if keyMap.has("type") && keyMap["type"]=="pad":
-        settings_info.append_text("Pad "+str(keyMap["pad"]+1))
-    elif keyMap.has("type") && keyMap["type"]=="keyboard":
+    if keyMapParam.has("type") && keyMapParam["type"]=="pad":
+        settings_info.append_text("Pad "+str(keyMapParam["pad"]+1))
+    elif keyMapParam.has("type") && keyMapParam["type"]=="keyboard":
         settings_info.append_text("Klawiatura")
-        appendInfo("▲", keyMap.get("up", -1))
-        appendInfo("▼", keyMap.get("down", -1))
-        appendInfo("◄", keyMap.get("left", -1))
-        appendInfo("►", keyMap.get("right", -1))
-        appendInfo("skok", keyMap.get("jump", -1))
-        appendInfo("gadanie", keyMap.get("duck", -1))
+        appendInfo("▲", keyMapParam.get("up", -1))
+        appendInfo("▼", keyMapParam.get("down", -1))
+        appendInfo("◄", keyMapParam.get("left", -1))
+        appendInfo("►", keyMapParam.get("right", -1))
+        appendInfo("skok", keyMapParam.get("jump", -1))
+        appendInfo("gadanie", keyMapParam.get("duck", -1))
     else:
         settings_info.visible = false
         player_picker.updateControls(playerIndex, UNKNOWN.duplicate())

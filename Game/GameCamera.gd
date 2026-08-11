@@ -11,13 +11,11 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-    var averagePosition := Vector2.ZERO
     var minPosOfKuns := Vector2(1e10, 1e10)
     var maxPosOfKuns := Vector2(-1e10, -1e10)
 
     for dude in dudes:
         var posOfKun = dude.positionOfKunek()
-        averagePosition += posOfKun
         minPosOfKuns = minPosOfKuns.min(posOfKun)
         maxPosOfKuns = maxPosOfKuns.max(posOfKun)
 
@@ -27,7 +25,6 @@ func _process(delta: float) -> void:
     var viewHeightAtZoom0 = screen_size.y
 
     if dudes.size() > 0:
-        averagePosition /= dudes.size()
         position.x = (maxPosOfKuns.x + minPosOfKuns.x) * 0.5
         position.y = (maxPosOfKuns.y + minPosOfKuns.y) * 0.5
         var neededZoomX = viewWidthAtZoom0 / (maxPosOfKuns.x - minPosOfKuns.x + 0.55 * viewWidthAtZoom0)

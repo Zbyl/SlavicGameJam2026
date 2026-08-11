@@ -7,8 +7,7 @@ const ANIM_REST = {"name":"Die", "frame":0, "speed":1.0, "sound": 1}
 @onready var crown_animation_player: AnimationPlayer = $CrownAnimationPlayer
 
 @export var win: bool = false
-@export var character: String = "Fox"
-@export var playerIndex: int = 0
+@export var character: GameData.Character = GameData.Character.Fox
 @export var dir: int = 1
 @onready var animation: AnimatedSprite2D = $Animation
 @onready var player: AudioStreamPlayer = $Player
@@ -27,7 +26,7 @@ func _ready() -> void:
 
     crown.visible = win
 
-    animation.animation = character+queue[queuePos].name+str(dir)
+    animation.animation = GameData.characterEnumToStr(character) + queue[queuePos].name + str(dir)
     animation.frame = queue[queuePos].frame
     animation.speed_scale = queue[queuePos].speed
     animation.animation_finished.connect(_on_animation_finished)
@@ -40,6 +39,7 @@ func _ready() -> void:
 
 func istwitchButtonPressed() -> bool:
     var pressed := false
+    var playerIndex = GameData.ALL_CHARACTERS.find(character)
     var controllerData = GameData.hud.playerData[playerIndex]
     if controllerData["type"]=="pad":
         var controller = controllerData["pad"]
@@ -51,12 +51,12 @@ func istwitchButtonPressed() -> bool:
     return pressed
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
     if istwitchButtonPressed():
         if not animation.is_playing():
             queue = [ANIM_TWITCH]
             queuePos = 0
-            animation.animation = character+queue[queuePos].name+str(dir)
+            animation.animation = GameData.characterEnumToStr(character) + queue[queuePos].name + str(dir)
             animation.frame = 12
             animation.speed_scale = queue[queuePos].speed
             queuePos += 1
@@ -67,7 +67,7 @@ func _on_animation_finished():
         if animation.is_playing():
             animation.stop()
     else:
-        animation.animation = character+queue[queuePos].name+str(dir)
+        animation.animation = GameData.characterEnumToStr(character) + queue[queuePos].name + str(dir)
         animation.frame = queue[queuePos].frame
         animation.speed_scale = queue[queuePos].speed
         animation.play()

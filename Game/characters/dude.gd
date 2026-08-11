@@ -2,7 +2,7 @@ extends CharacterBody2D
 class_name Dude
 
 const DEADZONE = 0.1
-const ACCELERATION_FACTOR = 700
+const ACCELERATION_FACTOR = 700.0
 const BEREK_ACCELERATION_FACTOR = ACCELERATION_FACTOR * 1.3
 const DECELERATION_FACTOR = 2*ACCELERATION_FACTOR
 const WORLD_ASPECT_FACTOR = 0.5
@@ -10,7 +10,7 @@ const WORLD_ASPECT_FACTOR = 0.5
 const MAX_SPEED: float = 450.0
 const BEREK_MAX_SPEED: float = MAX_SPEED * 1.3
 
-@export var character: String = "Fox"
+@export var character: GameData.Character = GameData.Character.Fox
 
 var controllerData : Dictionary
 
@@ -96,21 +96,21 @@ func _ready() -> void:
     #debugLabel = get_node("../../%DebugLabel")
 
     updateBerekMarker()
-    if character == "Fox":
+    if character == GameData.Character.Fox:
         run_stream = streams[0]
-    elif character == "Ferret":
+    elif character == GameData.Character.Ferret:
         run_stream = streams[1]
-    elif character == "Weasel":
+    elif character == GameData.Character.Weasel:
         run_stream = streams[2]
-    elif character == "Snow":
+    elif character == GameData.Character.Snow:
         run_stream = streams[3]
     run_player.stream = run_stream
 
     # Set initial animation.
-    animation.play(character + stateToAnim(currentState) + str(currentAngle))
+    animation.play(GameData.characterEnumToStr(character) + stateToAnim(currentState) + str(currentAngle))
 
 func updateBerekMarker():
-    var isBerek := GameData.isCharacterBerek(GameData.characterStrToEnum(character))
+    var isBerek := GameData.isCharacterBerek(character)
     berek.visible = isBerek and not GameData.berekCooldownActive
 
 func isDead():
@@ -183,7 +183,7 @@ func updateJumpButton() -> void:
 func updateDuckButton():
     if isDuckButtonPressed() and not duck_player.playing:
         var quacks: Array
-        var isBerek := GameData.isCharacterBerek(GameData.characterStrToEnum(character))
+        var isBerek := GameData.isCharacterBerek(character)
         if isBerek:
             quacks = duckBerek
         else:
@@ -226,14 +226,14 @@ func respawn():
         return
 
     if currentState != DudeState.Dead:
-        print("Canot respawn! I'm not Dead: " + character)
+        print("Canot respawn! I'm not Dead: " + GameData.characterEnumToStr(character))
         return
 
-    print("Respawning: " + character)
+    print("Respawning: " + GameData.characterEnumToStr(character))
     GameData.berekCooldownActive = false
     respawn_player.play()
     currentState = DudeState.Idle
-    animation.play(character + stateToAnim(currentState) + str(currentAngle))
+    animation.play(GameData.characterEnumToStr(character) + stateToAnim(currentState) + str(currentAngle))
 
 func calculateAngle(dir: Vector2) -> int:
     var angle = roundi((rad_to_deg(atan2(dir.y, dir.x))+270.0)/45.0)
@@ -251,7 +251,7 @@ func _physics_process(delta: float):
     if GameData.hud.isMenuOpen():
         return
 
-    var isBerek := GameData.isCharacterBerek(GameData.characterStrToEnum(character))
+    var isBerek := GameData.isCharacterBerek(character)
     updateBerekMarker()
 
     updateJumpButton()
@@ -394,7 +394,7 @@ func _physics_process(delta: float):
             changeAnimation = true
 
     if changeAnimation:
-        animation.play(character + stateToAnim(currentState) + str(currentAngle))
+        animation.play(GameData.characterEnumToStr(character) + stateToAnim(currentState) + str(currentAngle))
 
     syncAnimations()
 
@@ -407,7 +407,7 @@ func _physics_process(delta: float):
 
 func initiate_death():
         currentState = DudeState.Dead
-        animation.play(character + stateToAnim(currentState) + str(currentAngle))
+        animation.play(GameData.characterEnumToStr(character) + stateToAnim(currentState) + str(currentAngle))
         syncAnimations()
         dust.visible = true
         dust.play("dirt")
@@ -420,12 +420,10 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         if zDist > GameData.layerHelpers.layerHeight:
             return
 
-        var thisCh := GameData.characterStrToEnum(character)
-        var otherCh := GameData.characterStrToEnum(body.character)
-        if !GameData.canZberkowac(otherCh, thisCh):
+        if !GameData.canZberkowac(body.character, character):
             return
 
-        GameData.doZberkuj(otherCh, thisCh)
+        GameData.doZberkuj(body.character, character)
         GameData.berekCooldownActive = true
 
         print("Berek {berek} caught player {caught}.".format({ "berek": body.character, "caught": character }))

@@ -35,6 +35,8 @@ enum Character {
     Snow,
 }
 
+const ALL_CHARACTERS: Array[Character] = [Character.Fox, Character.Ferret, Character.Weasel, Character.Snow]
+
 func characterStrToEnum(character: String) -> Character:
     if character == "Fox":
         return Character.Fox
