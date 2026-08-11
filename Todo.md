@@ -1,13 +1,6 @@
 # TODO
 
 - Exporty: Windows, Linux, Web
-- Background for menu in level.
-- Wychodzenie z fullscreen nie działa???
-- Particle effects for points
-- Particle effects when respawning
-- Wisienki single player.
-- Ślady
-- Tune time rozgrywki
 
 # KNOWN BUGS
 - Kuna na moście koliduje z kuną pod mostem. Will not fix...
@@ -44,6 +37,18 @@
 - Może hamowanie powinno być mocniejsze/słabsze od przyspieszania. - Won't do.
 - Hack na nie przysłanianie kunka przez klocek wyżej przy skoku. - Won't do.
 - Porysować po tileach: trawa, cegły, kamienie - Won't do
+- Tryb piłki dla wielu graczy - czas zatrzymany jak dla jednego.
+- Level stadion
+- Team play I wielu berków 
+- Background for menu in level.
+- Wychodzenie z fullscreen nie działa???
+- Ślady - Won't do.
+- Tune time rozgrywki
+- Hide collision layers
+- Wisienki single player. - Won't do.
+- Particle effects for points - Won't do.
+- Particle effects when respawning - Won't do.
+
 
 # Checklist
 
