@@ -129,6 +129,7 @@ func countPointsSet(team: int, points: float) -> void:
     var p = clampf(points, 0.001, pointsMax)
     teamPoints[team] = p
 
+    var isFirst := true
     for character in GameData.getCharactersInTeam(team):
         var playerNumber = GameData.ALL_CHARACTERS.find(character)
         var bar: TextureRect = player_bars[playerNumber]
@@ -136,7 +137,9 @@ func countPointsSet(team: int, points: float) -> void:
         var sp = pointsToScreen(p)
         bar.size.x = sp
         bar.position.x = -sp
+        bar.visible = isFirst
         player_hud.position.x = sp
+        isFirst = false
 
 func countPointsReset():
     for team in teamPoints:
@@ -243,24 +246,27 @@ var gameWonByTeams: Array[int] = []
 func _on_game_won(winningTeams: Array[int]) -> void:
     GameData.printTeamsAndBereks()
     print("Game won by teams: " + str(winningTeams))
-    gameWonByTeams = winningTeams
 
+    for dude in get_tree().get_nodes_in_group('Dude'):
+        dude.initiate_death()
+        if GameData.getCharacterTeam(dude.character) in winningTeams:
+            dude.crown.visible = true
+
+    gameWonByTeams = winningTeams
     win_delay_timer.start()
 
 func _on_win_delay_timer_timeout() -> void:
     var winners: Array[GameData.Character] = []
-    for dude in get_tree().get_nodes_in_group('Dude'):
-        dude.initiate_death()
-        if GameData.getCharacterTeam(dude.character) in gameWonByTeams:
-            dude.crown.visible = true
-            winners.append(dude.character)
+    for team in gameWonByTeams:
+        for character in GameData.getCharactersInTeam(team):
+            winners.append(character)
 
     print("Game winners: " + str(winners))
 
     var loosers: Array[GameData.Character] = []
-    for dude in get_tree().get_nodes_in_group('Dude'):
-        if dude.character not in winners:
-            loosers.push_back(dude.character)
+    for character in GameData.activeCharacters:
+        if character not in winners:
+            loosers.push_back(character)
 
     print("Game loosers: " + str(loosers))
 
