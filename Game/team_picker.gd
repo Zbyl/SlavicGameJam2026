@@ -5,6 +5,9 @@ extends Control
 @onready var lasica_panel: Panel = $ŁasicaPanel
 @onready var gronostaj_panel: Panel = $GronostajPanel
 @onready var ok_button: Button = $OkButton
+@onready var num_bereks_button: OptionButton = $NumBereksButton
+@onready var count_berek_points: CheckBox = $CountBerekPoints
+@onready var count_goals: CheckBox = $CountGoals
 
 var kunki: Array[Node] = []
 var fretki: Array[Node] = []
@@ -27,6 +30,10 @@ func _ready() -> void:
     
     selectRow(0)
     updateKunki()
+    num_bereks_button.select(GameData.numBereks)
+    count_berek_points.button_pressed = GameData.countPointsForTime
+    count_goals.button_pressed = GameData.countPointsForGoals
+    
     ok_button.grab_focus()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -80,3 +87,15 @@ func selectRow(rowIdx: int) -> void:
 
 func _on_ok_button_pressed() -> void:
     queue_free()
+
+
+func _on_num_bereks_button_item_selected(index: int) -> void:
+    GameData.numBereks = index
+
+
+func _on_count_berek_points_pressed() -> void:
+    GameData.countPointsForTime = count_berek_points.button_pressed
+
+
+func _on_count_goals_pressed() -> void:
+    GameData.countPointsForGoals = count_goals.button_pressed

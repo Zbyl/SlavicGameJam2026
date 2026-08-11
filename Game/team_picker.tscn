@@ -482,4 +482,58 @@ offset_bottom = 255.81299
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("6_f8es4")
 
+[node name="NumBereksLabel" type="Label" parent="." unique_id=1591749332]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -321.5
+offset_top = 212.0
+offset_right = -210.5
+offset_bottom = 235.0
+text = "Liczba berków"
+
+[node name="NumBereksButton" type="OptionButton" parent="." unique_id=950911841]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -164.5
+offset_top = 209.0
+offset_right = -109.5
+offset_bottom = 240.0
+selected = 1
+item_count = 4
+popup/item_0/text = "0"
+popup/item_0/id = 0
+popup/item_1/text = "1"
+popup/item_1/id = 1
+popup/item_2/text = "2"
+popup/item_2/id = 2
+popup/item_3/text = "3"
+popup/item_3/id = 3
+
+[node name="CountBerekPoints" type="CheckBox" parent="." unique_id=458377356]
+layout_mode = 0
+offset_left = 511.0
+offset_top = 534.0
+offset_right = 698.0
+offset_bottom = 565.0
+text = "Licz punkty berkowe"
+
+[node name="CountGoals" type="CheckBox" parent="." unique_id=1474016914]
+layout_mode = 0
+offset_left = 734.0
+offset_top = 533.0
+offset_right = 921.0
+offset_bottom = 564.0
+text = "Licz gole"
+
 [connection signal="pressed" from="OkButton" to="." method="_on_ok_button_pressed"]
+[connection signal="item_selected" from="NumBereksButton" to="." method="_on_num_bereks_button_item_selected"]
+[connection signal="pressed" from="CountBerekPoints" to="." method="_on_count_berek_points_pressed"]
+[connection signal="pressed" from="CountGoals" to="." method="_on_count_goals_pressed"]
