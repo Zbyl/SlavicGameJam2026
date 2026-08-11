@@ -98,6 +98,10 @@ text = "Poziom 3: Capaj!"
 layout_mode = 2
 text = "Poziom 4: Goń!"
 
+[node name="NewGameButton4" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=307836474]
+layout_mode = 2
+text = "Poziom 5: Graj!"
+
 [node name="HSeparator" type="HSeparator" parent="Screen/Menu/VBoxContainer" unique_id=2067736781]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -276,6 +280,7 @@ one_shot = true
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton1" to="." method="_on_new_game_button_pressed" binds= [1]]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton2" to="." method="_on_new_game_button_pressed" binds= [2]]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton3" to="." method="_on_new_game_button_pressed" binds= [3]]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton4" to="." method="_on_new_game_button_pressed" binds= [4]]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ControlsButton" to="." method="_on_controls_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/TeamsButton" to="." method="_on_teams_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]

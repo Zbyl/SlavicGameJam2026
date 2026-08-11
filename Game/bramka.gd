@@ -8,7 +8,7 @@ const DUST = preload("res://dust.tscn")
 @onready var dust_sound: AudioStreamPlayer2D = $DustSound
 @onready var respawn_timer: Timer = $RespawnTimer
 
-var team: int = -1  # Which team this goal belongs to. -1 if points should be awarded to whoever kicked it.
+@export var team: int = -1  # Which team this goal belongs to. -1 if points should be awarded to whoever kicked it.
 
 
 # Called when the node enters the scene tree for the first time.
