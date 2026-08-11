@@ -24,9 +24,9 @@ var numBereks: int = 1  # How many berek teams there should be.
 
 ##############################################
 
-var countPointsForTime: bool = true # Count points for time of not being berek,
-                                    # and bonus points for catching and penalty points for being catched.
-var countPointsForGoals: bool = true # Count points for scoring goals.
+var countBerekPoints: bool = true    # Count points for time of not being berek,
+                                     # and bonus points for catching and penalty points for being catched.
+var countGoalsPoints: bool = true # Count points for scoring goals.
 
 enum Character {
     Fox,
@@ -119,6 +119,9 @@ func getCharactersInTeam(team: int) -> Array[Character]:
 func getCharacterTeam(character: Character) -> int:
     return characterToTeam[character]
     
+func isTeamBerek(team: int) -> bool:
+    return team in berekTeams
+
 func isCharacterBerek(character: Character) -> bool:
     var team = characterToTeam[character]
     return team in berekTeams
@@ -135,8 +138,7 @@ func getCharacterDude(character: Character) -> Dude:
     assert(game.level)
     var dudes = get_tree().get_nodes_in_group("Dude")
     for dude in dudes:
-        var ch := characterStrToEnum(dude.character)
-        if ch == character:
+        if dude.character == character:
             return dude
             
     return null

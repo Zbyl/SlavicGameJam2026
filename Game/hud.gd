@@ -14,7 +14,7 @@ const KEYBOARD_PLAYER2 = {"type":"keyboard","up":KEY_W,"down":KEY_S,"left":KEY_A
 const PAD_PLAYER = {"type":"pad","pad":0}
 
 signal new_game_pressed(levelIdx: int)
-signal game_won(winners: Array[GameData.Character])
+signal game_won(winningTeams: Array[int])
 
 @onready var new_game_button0: Button = $Screen/Menu/VBoxContainer/NewGameButton0
 @onready var teams_button: Button = $Screen/Menu/VBoxContainer/TeamsButton
@@ -33,56 +33,32 @@ var playerData = {}
 var player_huds: Dictionary = {}
 var player_anims: Dictionary = {}
 var player_bars: Dictionary = {}
-var playerNumber: Dictionary[GameData.Character, int] = {GameData.Character.Fox: 0, GameData.Character.Ferret: 1, GameData.Character.Weasel: 2, GameData.Character.Snow: 3}
-var playerPoints: Dictionary[GameData.Character, float] = {GameData.Character.Fox: 0.0, GameData.Character.Ferret: 0.0, GameData.Character.Weasel: 0.0, GameData.Character.Snow: 0.0}
-var dudes: Dictionary[GameData.Character, Dude] = {GameData.Character.Fox: null, GameData.Character.Ferret: null, GameData.Character.Weasel: null, GameData.Character.Snow: null}
-var pointsPerSecond = POINTS_PER_SECOND
+var teamPoints: Dictionary[int, float] = {0: 0.0, 1: 0.0, 2: 0.0, 3: 0.0}
 
-#func getPlayerLabel(player_hud: Control) -> Label:
-#    return player_hud.get_node("PlayerLabel")
 
-#func getPlayerBerek(player_hud: Control) -> TextureRect:
-#    return player_hud.get_node("PlayerBerek")
+var countTimePoints: bool = true    # True if we should count points for passing time.
 
-#func _setBerek(player_hud: Control, berek: bool):
-#    getPlayerBerek(player_hud).visible = berek
-#    getPlayerLabel(player_hud).visible = !berek
-
-#func setBerek(playerNo: int):
-#    for(dude_hud in player_huds)
-#    _setBerek(player_1_hud, playerNo==1)
-#    _setBerek(player_2_hud, playerNo==2)
-#    _setBerek(player_3_hud, playerNo==3)
-#    _setBerek(player_4_hud, playerNo==4)
-
-func initPlayers(dudesArray: Array[Dude]):
-    pointsPerSecond = POINTS_PER_SECOND
+func initPlayers():
+    # No point in counting time points when we have only one team.
+    countTimePoints = GameData.countBerekPoints and (GameData.nonEmptyTeamToCharacters.size() > 1)
 
     for h in player_huds:
         player_huds[h].visible = false
 
-    if dudesArray.size() > 1:
-        var playerOffsetsRev:Array = Array()
-
-        for dude in dudesArray:
-            playerOffsetsRev.append(playerNumber[dude.character])
-
-        playerOffsetsRev.sort()
-
-        var playerOffsets: Dictionary = Dictionary()
-        for i in range(playerOffsetsRev.size()):
-            # i order, playerOffsetsRev[i] - playernumber
-            playerOffsets[playerOffsetsRev[i]] = i
-
-        for dude in dudesArray:
-            dudes[dude.character] = dude
-            var pn = playerNumber[dude.character]
-            player_huds[pn].visible = true
-            player_huds[pn].position.y = 13 * playerOffsets[pn]
-            if not GameData.isCharacterBerek(dude.character):
-                player_anims[playerNumber[dude.character]].play()
-    else:
-        pointsPerSecond = 0
+    var playerOffsets: Dictionary[GameData.Character, int] = {}
+    var playerOffset := 0
+    for team in GameData.nonEmptyTeamToCharacters:
+        var chars := GameData.getCharactersInTeam(team)
+        for ch in chars:
+            playerOffsets[ch] = playerOffset
+            playerOffset += 1
+        
+    for character in playerOffsets:
+        var playerNumber = GameData.ALL_CHARACTERS.find(character)
+        player_huds[playerNumber].visible = true
+        player_huds[playerNumber].position.y = 13 * playerOffsets[playerNumber]
+        if not GameData.isCharacterBerek(character):
+            player_anims[playerNumber].play()
 
 func init_default_player_data():
     var padNum = Input.get_connected_joypads().size()
@@ -119,11 +95,14 @@ func _ready() -> void:
     show_menu(true, false)
 
 func countPointsDudeGotMe(victim, hunter):
-    if GameData.countPointsForTime:
-        countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
-        countPointsSet(hunter.character, playerPoints[hunter.character] + pointsCatchGain)
+    if GameData.countBerekPoints:
+        var victimTeam := GameData.getCharacterTeam(victim.character)
+        var hunterTeam := GameData.getCharacterTeam(hunter.character)
+        countPointsSet(victim.character, teamPoints[victimTeam] - pointsCatchPenalty)
+        countPointsSet(hunter.character, teamPoints[hunterTeam] + pointsCatchGain)
         checkWinners()
-    player_anims[playerNumber[victim.character]].stop()
+    var playerNumber = GameData.ALL_CHARACTERS.find(victim.character)
+    player_anims[playerNumber].stop()
 
 func pointsToScreen(p):
     var screen_size = get_viewport().get_visible_rect().size
@@ -135,31 +114,33 @@ func checkWinners():
     if gameAlreadyWon:
         return
         
-    var winners: Array[GameData.Character] = []
-    for character in playerPoints:
-        var points = playerPoints[character]
+    var winningTeams: Array[int] = []
+    for team in teamPoints:
+        var points = teamPoints[team]
         if points >= pointsMax:
-            winners.append(character)
+            winningTeams.append(team)
             
-    if winners.size() > 0:
+    if winningTeams.size() > 0:
         gameAlreadyWon = true
-        game_won.emit(winners)
+        game_won.emit(winningTeams)
         
 
-func countPointsSet(ch, points):
+func countPointsSet(team: int, points: float) -> void:
     var p = clampf(points, 0.001, pointsMax)
-    playerPoints[ch] = p
+    teamPoints[team] = p
 
-    var bar: TextureRect = player_bars[playerNumber[ch]]
-    var player_hud: Control = player_huds[playerNumber[ch]]
-    var sp = pointsToScreen(playerPoints[ch])
-    bar.size.x = sp
-    bar.position.x = -sp
-    player_hud.position.x = sp
+    for character in GameData.getCharactersInTeam(team):
+        var playerNumber = GameData.ALL_CHARACTERS.find(character)
+        var bar: TextureRect = player_bars[playerNumber]
+        var player_hud: Control = player_huds[playerNumber]
+        var sp = pointsToScreen(p)
+        bar.size.x = sp
+        bar.position.x = -sp
+        player_hud.position.x = sp
 
 func countPointsReset():
-    for ch in playerPoints:
-        countPointsSet(ch, 0.0)
+    for team in teamPoints:
+        countPointsSet(team, 0.0)
 
 
 func _process(delta: float) -> void:
@@ -169,17 +150,17 @@ func _process(delta: float) -> void:
 
     var elapsed: float = 0.0 if isMenuOpen() else delta
 
-    for ch in playerPoints:
-        var dude := dudes[ch]
-        if dude == null:
-            continue
-
-        if GameData.isCharacterBerek(dude.character) or dude.isDead():
-            player_anims[playerNumber[ch]].stop()
+    for team in teamPoints:
+        if GameData.isTeamBerek(team) or GameData.berekCooldownActive:
+            for character in GameData.getCharactersInTeam(team):
+                var playerNumber = GameData.ALL_CHARACTERS.find(character)
+                player_anims[playerNumber].stop()
         else:
-            if GameData.countPointsForTime:
-                countPointsSet(ch, playerPoints[ch] + elapsed * pointsPerSecond)
-            player_anims[playerNumber[ch]].play()
+            if countTimePoints:
+                countPointsSet(team, teamPoints[team] + elapsed * POINTS_PER_SECOND)
+            for character in GameData.getCharactersInTeam(team):
+                var playerNumber = GameData.ALL_CHARACTERS.find(character)
+                player_anims[playerNumber].play()
 
     checkWinners()
 
@@ -258,37 +239,30 @@ func isMenuOpen() -> bool:
 
 var gameAlreadyWon: bool = false
 var gameWonByTeams: Array[int] = []
-var gameWonByCharacters: Array[GameData.Character] = []
 
-func _on_game_won(winners: Array[GameData.Character]) -> void:
+func _on_game_won(winningTeams: Array[int]) -> void:
     GameData.printTeamsAndBereks()
-    print("Game won directly by players: " + str(winners))
-    var winningTeams: Array[int] = []
-    for winner in winners:
-        var team = GameData.getCharacterTeam(winner)
-        if team not in winningTeams:
-            winningTeams.append(team)
-    
     print("Game won by teams: " + str(winningTeams))
     gameWonByTeams = winningTeams
-
-    gameWonByCharacters = []
-    for dude in get_tree().get_nodes_in_group('Dude'):
-        dude.initiate_death()
-        if GameData.getCharacterTeam(dude.character) in winningTeams:
-            dude.crown.visible = true
-            gameWonByCharacters.append(dude.character)
-
-    print("Game won indirecctly by players: " + str(gameWonByCharacters))
 
     win_delay_timer.start()
 
 func _on_win_delay_timer_timeout() -> void:
-    var winners := gameWonByCharacters
+    var winners: Array[GameData.Character] = []
+    for dude in get_tree().get_nodes_in_group('Dude'):
+        dude.initiate_death()
+        if GameData.getCharacterTeam(dude.character) in gameWonByTeams:
+            dude.crown.visible = true
+            winners.append(dude.character)
+
+    print("Game winners: " + str(winners))
+
     var loosers: Array[GameData.Character] = []
-    for d in get_tree().get_nodes_in_group('Dude'):
-        if d.character not in winners:
-            loosers.push_back(d.character)
+    for dude in get_tree().get_nodes_in_group('Dude'):
+        if dude.character not in winners:
+            loosers.push_back(dude.character)
+
+    print("Game loosers: " + str(loosers))
 
     var winScreen = WIN_SCREEN.instantiate()
     winScreen.winners = winners

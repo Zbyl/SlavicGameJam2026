@@ -31,8 +31,8 @@ func _ready() -> void:
     selectRow(0)
     updateKunki()
     num_bereks_button.select(GameData.numBereks)
-    count_berek_points.button_pressed = GameData.countPointsForTime
-    count_goals.button_pressed = GameData.countPointsForGoals
+    count_berek_points.button_pressed = GameData.countBerekPoints
+    count_goals.button_pressed = GameData.countGoalsPoints
     
     ok_button.grab_focus()
 
@@ -94,8 +94,8 @@ func _on_num_bereks_button_item_selected(index: int) -> void:
 
 
 func _on_count_berek_points_pressed() -> void:
-    GameData.countPointsForTime = count_berek_points.button_pressed
+    GameData.countBerekPoints = count_berek_points.button_pressed
 
 
 func _on_count_goals_pressed() -> void:
-    GameData.countPointsForGoals = count_goals.button_pressed
+    GameData.countGoalsPoints = count_goals.button_pressed

@@ -94,5 +94,5 @@ func _switch_level(new_level_scene):
     for newDude in newDudes:
         dudesArray.append(newDude as Dude)
     gameCamera.dudes = dudesArray
-    GameData.hud.initPlayers(dudesArray)
+    GameData.hud.initPlayers()
     GameData.hud.show_menu(false, true)
