@@ -1,6 +1,7 @@
 extends CanvasLayer
 class_name Hud
 
+const TEAM_PICKER = preload("res://team_picker.tscn")
 const PLAYER_PICKER = preload("res://player_picker.tscn")
 const WIN_SCREEN = preload("res://win_screen.tscn")
 const POINTS_PER_SECOND = 12.0
@@ -16,6 +17,7 @@ signal new_game_pressed(levelIdx: int)
 signal game_won(info: String)
 
 @onready var new_game_button0: Button = $Screen/Menu/VBoxContainer/NewGameButton0
+@onready var teams_button: Button = $Screen/Menu/VBoxContainer/TeamsButton
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
 @onready var background: TextureRect = $Screen/Background
 @onready var backgroundForLevel: TextureRect = $Screen/BackgroundForLevel
@@ -117,8 +119,9 @@ func _ready() -> void:
     show_menu(true, false)
 
 func countPointsDudeGotMe(victim, hunter):
-    countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
-    countPointsSet(hunter.character, playerPoints[hunter.character] + pointsCatchGain)
+    if GameData.countPointsForTime:
+        countPointsSet(victim.character, playerPoints[victim.character] - pointsCatchPenalty)
+        countPointsSet(hunter.character, playerPoints[hunter.character] + pointsCatchGain)
     player_anims[playerNumber[victim.character]].stop()
 
 func pointsToScreen(p):
@@ -145,7 +148,7 @@ func countPointsReset():
 
 
 func _process(delta: float) -> void:
-    if isInLevel() and (not isPickerActive):
+    if isInLevel() and (not isAnyPickerActive()):
         if Input.is_action_just_pressed("ui_menu"):
             show_menu(not isMenuOpen(), true)
 
@@ -156,7 +159,8 @@ func _process(delta: float) -> void:
             if dudes[ch].isBerek or dudes[ch].isDead():
                 player_anims[playerNumber[ch]].stop()
             else:
-                countPointsSet(ch, playerPoints[ch] + elapsed * POINTS_PER_SECOND)
+                if GameData.countPointsForTime:
+                    countPointsSet(ch, playerPoints[ch] + elapsed * pointsPerSecond)
                 player_anims[playerNumber[ch]].play()
 
 func show_menu(do_show: bool, in_level: bool):
@@ -186,6 +190,17 @@ func _on_exit_button_pressed() -> void:
     get_tree().quit()
 
 
+func isAnyPickerActive() -> bool:
+    return isTeamsPickerActive or isPickerActive
+
+var isTeamsPickerActive := false
+func _on_teams_button_pressed() -> void:
+    menu.visible = false
+    var picker = TEAM_PICKER.instantiate()
+    picker.tree_exited.connect(_on_teams_picker_destroy)
+    add_child(picker)
+    isTeamsPickerActive = true
+
 var isPickerActive := false
 func _on_controls_button_pressed() -> void:
     menu.visible = false
@@ -196,6 +211,11 @@ func _on_controls_button_pressed() -> void:
 
 func updatePlayerData(pd: Dictionary):
     playerData = pd
+
+func _on_teams_picker_destroy():
+    menu.visible = true
+    teams_button.grab_focus.call_deferred()
+    isTeamsPickerActive = false
 
 func _on_player_picker_destroy():
     menu.visible = true
@@ -213,7 +233,7 @@ func isInLevel() -> bool:
     return GameData.game.level != null
 
 func isMenuOpen() -> bool:
-    return menu.visible or isPickerActive
+    return menu.visible or isAnyPickerActive()
 
 var gameWonBy: String
 

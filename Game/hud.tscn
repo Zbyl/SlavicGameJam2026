@@ -107,6 +107,11 @@ layout_mode = 2
 text = "Gracze
 "
 
+[node name="TeamsButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=606176282]
+layout_mode = 2
+text = "Drużyny
+"
+
 [node name="FullScreenButton" type="Button" parent="Screen/Menu/VBoxContainer" unique_id=352484776]
 layout_mode = 2
 text = "Pełny ekran"
@@ -272,6 +277,7 @@ one_shot = true
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton2" to="." method="_on_new_game_button_pressed" binds= [2]]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/NewGameButton3" to="." method="_on_new_game_button_pressed" binds= [3]]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ControlsButton" to="." method="_on_controls_button_pressed"]
+[connection signal="pressed" from="Screen/Menu/VBoxContainer/TeamsButton" to="." method="_on_teams_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/FullScreenButton" to="." method="_on_full_screen_button_pressed"]
 [connection signal="pressed" from="Screen/Menu/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="timeout" from="WinDelayTimer" to="." method="_on_win_delay_timer_timeout"]

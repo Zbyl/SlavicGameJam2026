@@ -70,6 +70,8 @@ func _switch_level(new_level_scene):
     if new_level_scene==null:
         return
 
+    GameData.levelPreInit()
+
     level = new_level_scene.instantiate()
     add_child(level)
     GameData.layerHelpers.initTileMaps(level) # Must be run when level is already in the tree (as it uses get_nodes_in_group()).
