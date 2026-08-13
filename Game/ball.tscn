@@ -8,7 +8,7 @@
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ktgx5"]
-radius = 16.18
+radius = 20.0
 
 [node name="Ball" unique_id=1650879338 groups=["Ball"] instance=ExtResource("1_x8fbi")]
 collision_layer = 64
@@ -25,7 +25,7 @@ shape = SubResource("CircleShape2D_ktgx5")
 
 [node name="Image" parent="ImageContainer" parent_id_path=PackedInt32Array(2090049566) index="0" unique_id=928635108]
 position = Vector2(0, -99.785)
-scale = Vector2(0.4, 0.409)
+scale = Vector2(0.524, 0.534)
 texture = ExtResource("2_hgol0")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
