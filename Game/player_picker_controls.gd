@@ -69,5 +69,4 @@ func _on_controls_pressed() -> void:
     picker.player_picker = self
     picker.tree_exited.connect(_on_player_picker_destroy)
     player_picker.add_child(picker)
-    if keyMap.has("type") && keyMap["type"] != "unknown":
-        picker.initiateWithdata(keyMap)
+    picker.initiateWithdata(keyMap)

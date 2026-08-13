@@ -1,11 +1,18 @@
 extends Node
 
-# It is auto load, so not name here - autoload has a name already.
+# It is auto load, so no name here - autoload has a name already.
 #class_name GameData
 
 var game: Game
 var hud: Hud
 var layerHelpers: LayerHelpers
+
+const KEYBOARD_PLAYER_ARROWS_WIDE = {"type": "keyboard", "up": KEY_UP, "down": KEY_DOWN, "left": KEY_LEFT, "right": KEY_RIGHT, "jump": KEY_SPACE, "duck": KEY_CTRL}
+const KEYBOARD_PLAYER_ARROWS_TIGHT = {"type": "keyboard", "up": KEY_UP, "down": KEY_DOWN, "left": KEY_LEFT, "right": KEY_RIGHT, "jump": KEY_CTRL, "duck": KEY_ENTER}
+const KEYBOARD_PLAYER_WSAD = {"type": "keyboard", "up": KEY_W, "down": KEY_S, "left": KEY_A, "right": KEY_D, "jump": KEY_SHIFT, "duck": KEY_E}
+const KEYBOARD_PLAYER_IKJL = {"type": "keyboard", "up": KEY_I, "down": KEY_K, "left": KEY_J, "right": KEY_L, "jump": KEY_ALT, "duck": KEY_O}
+const KEYBOARD_PLAYER_NUMPAD = {"type": "keyboard", "up": KEY_KP_8, "down": KEY_KP_5, "left": KEY_KP_4, "right": KEY_KP_6, "jump": KEY_KP_ENTER, "duck": KEY_KP_0}
+const PAD_PLAYER_0 = {"type": "pad", "pad": 0}
 
 ##############################################
 # THOSE SHOULD BE USED ONLY AT LEVEL START!

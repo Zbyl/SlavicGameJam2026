@@ -34,6 +34,7 @@ popup/item_1/id = 1
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../GridContainer/Up")
 focus_next = NodePath("../GridContainer/Up")
+selected = 0
 item_count = 4
 popup/item_0/text = "Kontroler 1"
 popup/item_0/id = 0
@@ -43,6 +44,26 @@ popup/item_2/text = "Kontroler 3"
 popup/item_2/id = 2
 popup/item_3/text = "Kontroler 4"
 popup/item_3/id = 3
+
+[node name="SelectedKeyboardMapping" type="OptionButton" parent="VBoxContainer" unique_id=78298833 groups=["KeyboardCtrl"]]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../GridContainer/Up")
+focus_next = NodePath("../GridContainer/Up")
+selected = 0
+item_count = 6
+popup/item_0/text = "Własne"
+popup/item_0/id = 5
+popup/item_1/text = "Strzałki"
+popup/item_1/id = 0
+popup/item_2/text = "Strzałki kompaktowe"
+popup/item_2/id = 1
+popup/item_3/text = "WSAD"
+popup/item_3/id = 2
+popup/item_4/text = "IKJL"
+popup/item_4/id = 3
+popup/item_5/text = "Numpad"
+popup/item_5/id = 4
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1405239601]
 modulate = Color(1, 1, 1, 0)
@@ -113,7 +134,7 @@ split_offsets = PackedInt32Array(41)
 drag_nested_intersections = true
 split_offset = 41
 
-[node name="JumpLabel" type="Label" parent="VBoxContainer/SplitContainer" unique_id=1365352099]
+[node name="JumpLabel" type="Label" parent="VBoxContainer/SplitContainer" unique_id=1365352099 groups=["KeyboardCtrl"]]
 layout_mode = 2
 text = "Skok"
 
@@ -133,7 +154,7 @@ split_offsets = PackedInt32Array(45)
 drag_nested_intersections = true
 split_offset = 45
 
-[node name="DuckLabel" type="Label" parent="VBoxContainer/SplitContainer2" unique_id=248725552]
+[node name="DuckLabel" type="Label" parent="VBoxContainer/SplitContainer2" unique_id=248725552 groups=["KeyboardCtrl"]]
 layout_mode = 2
 text = "Gadaj"
 
@@ -158,6 +179,7 @@ text = "Ok"
 [connection signal="gui_input" from="VBoxContainer/PressSomething" to="." method="_on_press_something_gui_input"]
 [connection signal="item_selected" from="VBoxContainer/ControllerType" to="." method="_on_controller_type_item_selected"]
 [connection signal="item_selected" from="VBoxContainer/SelectedController" to="." method="_on_selected_controller_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/SelectedKeyboardMapping" to="." method="_on_selected_keyboard_mapping_item_selected"]
 [connection signal="gui_input" from="VBoxContainer/GridContainer/Up" to="." method="_on_keyboard_input"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/Up" to="." method="_on_up_pressed"]
 [connection signal="gui_input" from="VBoxContainer/GridContainer/Left" to="." method="_on_keyboard_input"]

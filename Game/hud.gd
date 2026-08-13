@@ -10,12 +10,6 @@ const pointsCatchGain = 40.0
 const pointsCatchPenalty = 20.0
 const pointsMax = 1000.0
 
-const KEYBOARD_PLAYER1 = {"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_CTRL}
-const KEYBOARD_PLAYER2 = {"type":"keyboard","up":KEY_W,"down":KEY_S,"left":KEY_A,"right":KEY_D,"jump":KEY_SHIFT,"duck":KEY_Q}
-const KEYBOARD_PLAYER3 = {"type":"keyboard","up":KEY_I,"down":KEY_K,"left":KEY_J,"right":KEY_L,"jump":KEY_O,"duck":KEY_U}
-const KEYBOARD_PLAYER4 = {"type":"keyboard","up":KEY_KP_8,"down":KEY_KP_5,"left":KEY_KP_4,"right":KEY_KP_6,"jump":KEY_KP_0,"duck":KEY_KP_ENTER}
-const PAD_PLAYER = {"type":"pad","pad":0}
-
 signal new_game_pressed(levelIdx: int)
 signal game_won(winningTeams: Array[int])
 
@@ -70,27 +64,27 @@ func initPlayers():
 func init_default_player_data():
     if false:
         playerData = {
-            0:KEYBOARD_PLAYER2.duplicate(),
-            1:KEYBOARD_PLAYER3.duplicate(),
-            2:KEYBOARD_PLAYER1.duplicate(),
-            3:KEYBOARD_PLAYER4.duplicate(),
+            0: GameData.KEYBOARD_PLAYER_WSAD.duplicate(),
+            1: GameData.KEYBOARD_PLAYER_IKJL.duplicate(),
+            2: GameData.KEYBOARD_PLAYER_ARROWS_TIGHT.duplicate(),
+            3: GameData.KEYBOARD_PLAYER_NUMPAD.duplicate(),
         }
         return 
     var padNum = Input.get_connected_joypads().size()
     if padNum==0:
         playerData = {
-            0:KEYBOARD_PLAYER1.duplicate(),
-            1:KEYBOARD_PLAYER2.duplicate()
+            0: GameData.KEYBOARD_PLAYER_WSAD.duplicate(),
+            1: GameData.KEYBOARD_PLAYER_ARROWS_TIGHT.duplicate(),
         }
     elif padNum==1:
         playerData = {
-            0:PAD_PLAYER.duplicate(),
-            1:KEYBOARD_PLAYER1.duplicate()
+            0: GameData.PAD_PLAYER_0.duplicate(),
+            1: GameData.KEYBOARD_PLAYER_ARROWS_WIDE.duplicate(),
         }
     else:
         playerData = {}
         for i in range(0, padNum):
-            var pl = PAD_PLAYER.duplicate()
+            var pl = GameData.PAD_PLAYER_0.duplicate()
             pl.pad = i
             playerData[i] = pl
 
