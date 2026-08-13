@@ -12,6 +12,8 @@ const pointsMax = 1000.0
 
 const KEYBOARD_PLAYER1 = {"type":"keyboard","up":KEY_UP,"down":KEY_DOWN,"left":KEY_LEFT,"right":KEY_RIGHT,"jump":KEY_SPACE,"duck":KEY_CTRL}
 const KEYBOARD_PLAYER2 = {"type":"keyboard","up":KEY_W,"down":KEY_S,"left":KEY_A,"right":KEY_D,"jump":KEY_SHIFT,"duck":KEY_Q}
+const KEYBOARD_PLAYER3 = {"type":"keyboard","up":KEY_I,"down":KEY_K,"left":KEY_J,"right":KEY_L,"jump":KEY_O,"duck":KEY_U}
+const KEYBOARD_PLAYER4 = {"type":"keyboard","up":KEY_KP_8,"down":KEY_KP_5,"left":KEY_KP_4,"right":KEY_KP_6,"jump":KEY_KP_0,"duck":KEY_KP_ENTER}
 const PAD_PLAYER = {"type":"pad","pad":0}
 
 signal new_game_pressed(levelIdx: int)
@@ -62,6 +64,14 @@ func initPlayers():
             player_anims[playerNumber].play()
 
 func init_default_player_data():
+    if false:
+        playerData = {
+            0:KEYBOARD_PLAYER2.duplicate(),
+            1:KEYBOARD_PLAYER3.duplicate(),
+            2:KEYBOARD_PLAYER1.duplicate(),
+            3:KEYBOARD_PLAYER4.duplicate(),
+        }
+        return 
     var padNum = Input.get_connected_joypads().size()
     if padNum==0:
         playerData = {
@@ -161,7 +171,9 @@ func _process(delta: float) -> void:
     var elapsed: float = 0.0 if isMenuOpen() else delta
 
     for team in teamPoints:
-        if GameData.isTeamBerek(team) or GameData.berekCooldownActive:
+        # Berek's don't get time points, even during berekCooldownActive.
+        # Everyone else does, even during berekCooldownActive.
+        if GameData.isTeamBerek(team):
             for character in GameData.getCharactersInTeam(team):
                 var playerNumber = GameData.ALL_CHARACTERS.find(character)
                 player_anims[playerNumber].stop()
@@ -170,7 +182,7 @@ func _process(delta: float) -> void:
                 countPointsSet(team, teamPoints[team] + elapsed * POINTS_PER_SECOND)
             for character in GameData.getCharactersInTeam(team):
                 var playerNumber = GameData.ALL_CHARACTERS.find(character)
-                player_anims[playerNumber].play()
+                player_anims[playerNumber].play() # @todo Should we stop() if !countTimePoints?
 
     checkWinners()
 

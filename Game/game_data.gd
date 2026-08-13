@@ -56,11 +56,19 @@ var berekTeams: Array[int] = [] # Teams that are berek now. Initialized from num
 var characterToTeam: Dictionary[Character, int] = {} # Active characters to their team.
 var nonEmptyTeamToCharacters: Dictionary[int, Array] = {} # int -> Array[Character], contains only non-empty teams (only active characters are considered)
 var activeCharacters: Array[Character] = [] # List of currently playing characters.
-var berekCooldownActive: bool = false   # If true bereks should not be berking. We are in a cooldown after berking.
+var berekCooldownActive: Dictionary[int, bool] = {}   # If true this team was just berek'd, but should not be berking yet as we are in a cooldown before they start berking.
+var deathCooldownActive: Dictionary[Character, int] = {} # Characters that are dead.
+                                                         # If true berekCooldownActive for his team must also be true.
+                                                         # @todo This is not really used now. We could remove it.
 
 # Initializing game data for the level.
 # activeCharacters - characters that are going to play
 func levelPreInit(_activeCharacters: Array[Character]) -> void:
+    berekCooldownActive = {0: false, 1: false, 2: false, 3: false}
+    deathCooldownActive = {}
+    for character in _activeCharacters:
+        deathCooldownActive[character] = false
+    
     activeCharacters = _activeCharacters
     print("Active characters: {activeCharacters}".format({ "activeCharacters": activeCharacters }))
 
@@ -170,9 +178,31 @@ func canZberkowac(berekCharacter: Character, caughtCharacter: Character) -> bool
         }))
         return false
     
+    if GameData.berekCooldownActive[berekTeam]:
+        print("Berek {berek} under berek cooldown cannot catch player {caught}.".format({
+            "berek": berekCharacter,
+            "caught": caughtCharacter,
+        }))
+        return false
+
+    if GameData.berekCooldownActive[caughtTeam]:
+        print("Berek {berek} cannot catch player under berek cooldown {caught}.".format({
+            "berek": berekCharacter,
+            "caught": caughtCharacter,
+        }))
+        return false
+
+    if GameData.deathCooldownActive[caughtCharacter]:
+        print("Berek {berek} cannot catch player under death cooldown {caught}.".format({
+            "berek": berekCharacter,
+            "caught": caughtCharacter,
+        }))
+        return false
+
     return true
     
 # Zberkuj.
+# After a while need to call doWakeUpAfterZberkowany().
 func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
     assert(canZberkowac(berekCharacter, caughtCharacter))
     # Replace berekTeam with caughtTeam in berekTeams.
@@ -181,8 +211,17 @@ func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
     var foundIdx = berekTeams.find(berekTeam)
     assert(foundIdx != -1)
     berekTeams[foundIdx] = caughtTeam
+
+    berekCooldownActive[caughtTeam] = true
+    deathCooldownActive[caughtCharacter] = true
+
     printTeamsAndBereks()
     
+# See doZberkuj()
+func doWakeUpAfterZberkowany(character: Character) -> void:
+    var team := GameData.getCharacterTeam(character)
+    berekCooldownActive[team] = false
+    deathCooldownActive[character] = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

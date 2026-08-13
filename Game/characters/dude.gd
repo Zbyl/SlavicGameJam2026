@@ -111,7 +111,9 @@ func _ready() -> void:
 
 func updateBerekMarker():
     var isBerek := GameData.isCharacterBerek(character)
-    berek.visible = isBerek and not GameData.berekCooldownActive
+    var team := GameData.getCharacterTeam(character)
+    berek.visible = isBerek
+    berek.modulate = Color(0.227, 0.345, 0.729) if GameData.berekCooldownActive[team] else Color.WHITE
 
 func isDead():
     return currentState == DudeState.Dead
@@ -230,7 +232,7 @@ func respawn():
         return
 
     print("Respawning: " + GameData.characterEnumToStr(character))
-    GameData.berekCooldownActive = false
+    GameData.doWakeUpAfterZberkowany(character)
     respawn_player.play()
     currentState = DudeState.Idle
     animation.play(GameData.characterEnumToStr(character) + stateToAnim(currentState) + str(currentAngle))
@@ -414,27 +416,29 @@ func initiate_death():
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-    if (not GameData.berekCooldownActive) and body.is_in_group("Dude"):
-        # Check if we are close enough in z.
-        var zDist = absf(currentZ - body.currentZ)
-        if zDist > GameData.layerHelpers.layerHeight:
-            return
+    # dude is the potential berek
+    if not body.is_in_group("Dude"):
+        return
+    
+    # Check if we are close enough in z.
+    var zDist = absf(currentZ - body.currentZ)
+    if zDist > GameData.layerHelpers.layerHeight:
+        return
 
-        if !GameData.canZberkowac(body.character, character):
-            return
+    if !GameData.canZberkowac(body.character, character):
+        return
 
-        GameData.doZberkuj(body.character, character)
-        GameData.berekCooldownActive = true
+    GameData.doZberkuj(body.character, character)
 
-        print("Berek {berek} caught player {caught}.".format({ "berek": body.character, "caught": character }))
-        GameData.hud.countPointsDudeGotMe(self, body)
+    print("Berek {berek} caught player {caught}.".format({ "berek": body.character, "caught": character }))
+    GameData.hud.countPointsDudeGotMe(self, body)
 
-        run_player.stop()
-        die_player.play()
-        gotcha_player.play()
+    run_player.stop()
+    die_player.play()
+    gotcha_player.play()
 
-        initiate_death()
-        respawnTimer.start()
+    initiate_death()
+    respawnTimer.start()
 
 func _dust_dispersed():
     dust.visible = false
