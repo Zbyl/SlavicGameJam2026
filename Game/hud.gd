@@ -36,7 +36,7 @@ var playerData = {}
 var player_huds: Dictionary = {}
 var player_anims: Dictionary = {}
 var player_bars: Dictionary = {}
-var teamPoints: Dictionary[int, float] = {0: 0.0, 1: 0.0, 2: 0.0, 3: 0.0}
+var teamPoints: Dictionary[int, float] = {}
 
 
 var countTimePoints: bool = true    # True if we should count points for passing time.
@@ -44,6 +44,9 @@ var countTimePoints: bool = true    # True if we should count points for passing
 func initPlayers():
     # No point in counting time points when we have only one team.
     countTimePoints = GameData.countBerekPoints and (GameData.nonEmptyTeamToCharacters.size() > 1)
+    teamPoints = {}
+    for team in GameData.nonEmptyTeamToCharacters:
+        teamPoints[team] = 0
 
     for h in player_huds:
         player_huds[h].visible = false
@@ -138,6 +141,7 @@ func checkWinners():
             winningTeams.append(team)
             
     if winningTeams.size() > 0:
+        print("winningTeams={winningTeams} teamPoints={teamPoints}".format({"winningTeams": winningTeams, "teamPoints": teamPoints}))
         gameAlreadyWon = true
         game_won.emit(winningTeams)
         
