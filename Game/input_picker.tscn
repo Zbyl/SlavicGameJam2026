@@ -97,34 +97,52 @@ layout_mode = 2
 [node name="Down" type="Button" parent="VBoxContainer/GridContainer" unique_id=848823560 groups=["KeyboardCtrl"]]
 layout_mode = 2
 focus_neighbor_left = NodePath("../Left")
-focus_neighbor_top = NodePath("../Up")
+focus_neighbor_top = NodePath("../Right")
 focus_neighbor_right = NodePath("../Right")
-focus_neighbor_bottom = NodePath("../../Jump")
-focus_next = NodePath("../../Jump")
+focus_neighbor_bottom = NodePath("../../SplitContainer/Jump")
+focus_next = NodePath("../../SplitContainer/Jump")
 focus_previous = NodePath("../Right")
 text = "▼"
 
 [node name="RightDown" type="Control" parent="VBoxContainer/GridContainer" unique_id=1215136797 groups=["KeyboardCtrl"]]
 layout_mode = 2
 
-[node name="Jump" type="Button" parent="VBoxContainer" unique_id=1743892500 groups=["KeyboardCtrl"]]
+[node name="SplitContainer" type="SplitContainer" parent="VBoxContainer" unique_id=721794832]
 layout_mode = 2
-focus_neighbor_left = NodePath("../GridContainer/Left")
-focus_neighbor_top = NodePath("../GridContainer/Down")
-focus_neighbor_right = NodePath("../GridContainer/Right")
-focus_neighbor_bottom = NodePath("../Duck")
-focus_next = NodePath("../Duck")
-focus_previous = NodePath("../GridContainer/Down")
+split_offsets = PackedInt32Array(41)
+drag_nested_intersections = true
+split_offset = 41
+
+[node name="JumpLabel" type="Label" parent="VBoxContainer/SplitContainer" unique_id=1365352099]
+layout_mode = 2
 text = "Skok"
 
-[node name="Duck" type="Button" parent="VBoxContainer" unique_id=72237679 groups=["KeyboardCtrl"]]
+[node name="Jump" type="Button" parent="VBoxContainer/SplitContainer" unique_id=1743892500 groups=["KeyboardCtrl"]]
 layout_mode = 2
-focus_neighbor_left = NodePath("../GridContainer/Left")
-focus_neighbor_top = NodePath("../Jump")
-focus_neighbor_right = NodePath("../GridContainer/Right")
-focus_neighbor_bottom = NodePath("../OkButton")
-focus_next = NodePath("../OkButton")
-focus_previous = NodePath("../Jump")
+focus_neighbor_left = NodePath("../../GridContainer/Left")
+focus_neighbor_top = NodePath("../../GridContainer/Down")
+focus_neighbor_right = NodePath("../../GridContainer/Right")
+focus_neighbor_bottom = NodePath("../../SplitContainer2/Duck")
+focus_next = NodePath("../../SplitContainer2/Duck")
+focus_previous = NodePath("../../GridContainer/Down")
+text = "Skok"
+
+[node name="SplitContainer2" type="SplitContainer" parent="VBoxContainer" unique_id=386921847]
+layout_mode = 2
+split_offsets = PackedInt32Array(45)
+drag_nested_intersections = true
+split_offset = 45
+
+[node name="DuckLabel" type="Label" parent="VBoxContainer/SplitContainer2" unique_id=248725552]
+layout_mode = 2
+text = "Gadaj"
+
+[node name="Duck" type="Button" parent="VBoxContainer/SplitContainer2" unique_id=1112373390 groups=["KeyboardCtrl"]]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../SplitContainer/Jump")
+focus_neighbor_bottom = NodePath("../../OkButton")
+focus_next = NodePath("../../OkButton")
+focus_previous = NodePath("../../SplitContainer/Jump")
 text = "Gadaj"
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=1592458351]
@@ -133,8 +151,8 @@ layout_mode = 2
 
 [node name="OkButton" type="Button" parent="VBoxContainer" unique_id=692754225]
 layout_mode = 2
-focus_neighbor_top = NodePath("../Duck")
-focus_previous = NodePath("../Duck")
+focus_neighbor_top = NodePath("../SplitContainer2/Duck")
+focus_previous = NodePath("../SplitContainer2/Duck")
 text = "Ok"
 
 [connection signal="gui_input" from="VBoxContainer/PressSomething" to="." method="_on_press_something_gui_input"]
@@ -148,8 +166,8 @@ text = "Ok"
 [connection signal="pressed" from="VBoxContainer/GridContainer/Right" to="." method="_on_right_pressed"]
 [connection signal="gui_input" from="VBoxContainer/GridContainer/Down" to="." method="_on_keyboard_input"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/Down" to="." method="_on_down_pressed"]
-[connection signal="gui_input" from="VBoxContainer/Jump" to="." method="_on_keyboard_input"]
-[connection signal="pressed" from="VBoxContainer/Jump" to="." method="_on_jump_pressed"]
-[connection signal="gui_input" from="VBoxContainer/Duck" to="." method="_on_keyboard_input"]
-[connection signal="pressed" from="VBoxContainer/Duck" to="." method="_on_duck_pressed"]
+[connection signal="gui_input" from="VBoxContainer/SplitContainer/Jump" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/SplitContainer/Jump" to="." method="_on_jump_pressed"]
+[connection signal="gui_input" from="VBoxContainer/SplitContainer2/Duck" to="." method="_on_keyboard_input"]
+[connection signal="pressed" from="VBoxContainer/SplitContainer2/Duck" to="." method="_on_duck_pressed"]
 [connection signal="pressed" from="VBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]

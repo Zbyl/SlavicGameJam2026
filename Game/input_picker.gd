@@ -14,8 +14,8 @@ const DEFAULT_PAD_KEY_MAP = {"type":"pad","pad":0}
 @onready var left: Button = $VBoxContainer/GridContainer/Left
 @onready var right: Button = $VBoxContainer/GridContainer/Right
 @onready var down: Button = $VBoxContainer/GridContainer/Down
-@onready var jump: Button = $VBoxContainer/Jump
-@onready var duck: Button = $VBoxContainer/Duck
+@onready var jump: Button = $VBoxContainer/SplitContainer/Jump
+@onready var duck: Button = $VBoxContainer/SplitContainer2/Duck
 
 @onready var buttons = {
     "up": up,
@@ -31,8 +31,8 @@ var originalLabels = {
     "down": "▼",
     "left": "◄",
     "right": "►",
-    "jump": "Skok",
-    "duck": "Szczekaj"
+    "jump": "?",
+    "duck": "?"
 }
 
 var waitForKey = false

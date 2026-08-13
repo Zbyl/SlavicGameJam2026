@@ -37,7 +37,8 @@ func validateKeyMap(map: Dictionary) -> bool:
             map.get("down", -1)!=-1 && \
             map.get("left", -1)!=-1 && \
             map.get("right", -1)!=-1 && \
-            map.get("jump", -1)!=-1
+            map.get("jump", -1)!=-1 && \
+            map.get("duck", -1)!=-1
     return false
 
 func validate():
