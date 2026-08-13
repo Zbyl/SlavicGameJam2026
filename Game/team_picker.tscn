@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://bfg7fujaaf0yf"]
 
 [ext_resource type="Script" uid="uid://dt6ucvttkh6rw" path="res://team_picker.gd" id="1_vx082"]
-[ext_resource type="Texture2D" uid="uid://buowutrxtt43m" path="res://images/fox/icon_Fox.png" id="3_flbh7"]
-[ext_resource type="Texture2D" uid="uid://drtvoym8hvqfu" path="res://images/ferret/icon_Ferret.png" id="4_swtyi"]
-[ext_resource type="Texture2D" uid="uid://v12gs52e5ysb" path="res://images/weasel/icon_Weasel.png" id="5_7tlxs"]
-[ext_resource type="Texture2D" uid="uid://bn20o8elmktkp" path="res://images/snow/icon_Snow.png" id="6_f8es4"]
+[ext_resource type="Texture2D" uid="uid://bli5w0f3w7pt5" path="res://images/TeamPickerAnimals/Fox.png" id="2_gqmn8"]
+[ext_resource type="Script" uid="uid://dvx0ybxp8r2vs" path="res://team_picker_kunek.gd" id="3_gqmn8"]
+[ext_resource type="Texture2D" uid="uid://c3ht667f2uw67" path="res://images/TeamPickerAnimals/Ferret.png" id="4_r2wc6"]
+[ext_resource type="Texture2D" uid="uid://bog5m7umo7dpi" path="res://images/TeamPickerAnimals/Weasel.png" id="5_flbh7"]
+[ext_resource type="Texture2D" uid="uid://ca86sinpiaud3" path="res://images/TeamPickerAnimals/Snow.png" id="6_swtyi"]
 
 [node name="TeamPicker" type="Control" unique_id=232536659]
 layout_mode = 3
@@ -29,7 +30,577 @@ offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="TeamSelector" type="Control" parent="." unique_id=551839830]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -575.5
+offset_top = -321.0
+offset_right = 230.5
+offset_bottom = 246.0
+mouse_filter = 1
+
+[node name="KunekPanel" type="Panel" parent="TeamSelector" unique_id=1265438870]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -356.5
+offset_top = -210.69
+offset_right = 368.5
+offset_bottom = -109.69
+
+[node name="FretkaPanel" type="Panel" parent="TeamSelector" unique_id=274423566]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -356.5
+offset_top = -104.69
+offset_right = 368.5
+offset_bottom = -3.6900024
+
+[node name="ŁasicaPanel" type="Panel" parent="TeamSelector" unique_id=180888791]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -356.5
+offset_top = 1.3099976
+offset_right = 368.5
+offset_bottom = 102.31
+
+[node name="GronostajPanel" type="Panel" parent="TeamSelector" unique_id=604947432]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -356.5
+offset_top = 107.31
+offset_right = 368.5
+offset_bottom = 208.31
+
+[node name="Team0" type="Control" parent="TeamSelector" unique_id=2051556330]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -331.561
+offset_top = -254.5
+offset_right = -198.56104
+offset_bottom = 222.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="TeamBackground" type="ColorRect" parent="TeamSelector/Team0" unique_id=457753465]
+modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -1.0
+offset_bottom = 1.0
+color = Color(0.07, 0.07, 0.07, 0.2)
+
+[node name="TeamLabel" type="Label" parent="TeamSelector/Team0" unique_id=241234249]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = 16.0
+offset_right = 32.0
+offset_bottom = 41.0
+text = "Team 1"
+
+[node name="Kunki" type="Control" parent="TeamSelector/Team0" unique_id=2134906048]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 50.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Kunek" type="TextureRect" parent="TeamSelector/Team0/Kunki" unique_id=295509586 groups=["Fox"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.93898
+offset_top = 2.0
+offset_right = 48.06102
+offset_bottom = 132.0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_gqmn8")
+script = ExtResource("3_gqmn8")
+
+[node name="Fretka" type="TextureRect" parent="TeamSelector/Team0/Kunki" unique_id=1899112768 groups=["Ferret"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.256
+anchor_right = 0.505
+anchor_bottom = 0.256
+offset_left = -25.553978
+offset_top = 0.9679947
+offset_right = 44.446022
+offset_bottom = 130.96799
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_r2wc6")
+script = ExtResource("3_gqmn8")
+character = 1
+
+[node name="Łasica" type="TextureRect" parent="TeamSelector/Team0/Kunki" unique_id=149354016 groups=["Weasel"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.508
+anchor_right = 0.5
+anchor_bottom = 0.508
+offset_left = -24.93898
+offset_top = 2.623993
+offset_right = 45.06102
+offset_bottom = 132.624
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("5_flbh7")
+script = ExtResource("3_gqmn8")
+character = 2
+
+[node name="Gronostaj" type="TextureRect" parent="TeamSelector/Team0/Kunki" unique_id=653325182 groups=["Snow"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.75100005
+anchor_right = 0.505
+anchor_bottom = 0.75100005
+offset_left = -27.553978
+offset_top = 2.0779724
+offset_right = 42.446022
+offset_bottom = 132.07797
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("6_swtyi")
+script = ExtResource("3_gqmn8")
+character = 3
+
+[node name="Team1" type="Control" parent="TeamSelector" unique_id=1737334450]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -155.561
+offset_top = -254.5
+offset_right = -22.561035
+offset_bottom = 222.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="TeamBackground" type="ColorRect" parent="TeamSelector/Team1" unique_id=606449492]
+modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -1.0
+offset_bottom = 1.0
+color = Color(0.07, 0.07, 0.07, 0.2)
+
+[node name="TeamLabel" type="Label" parent="TeamSelector/Team1" unique_id=1759050866]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = 16.0
+offset_right = 32.0
+offset_bottom = 41.0
+text = "Team 2"
+
+[node name="Kunki" type="Control" parent="TeamSelector/Team1" unique_id=707299933]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 50.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Kunek" type="TextureRect" parent="TeamSelector/Team1/Kunki" unique_id=883777122 groups=["Fox"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.93898
+offset_top = 6.0
+offset_right = 48.06102
+offset_bottom = 136.0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_gqmn8")
+script = ExtResource("3_gqmn8")
+team = 1
+
+[node name="Fretka" type="TextureRect" parent="TeamSelector/Team1/Kunki" unique_id=133542776 groups=["Ferret"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.256
+anchor_right = 0.505
+anchor_bottom = 0.256
+offset_left = -23.553978
+offset_top = 2.9679947
+offset_right = 46.446022
+offset_bottom = 132.96799
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_r2wc6")
+script = ExtResource("3_gqmn8")
+character = 1
+team = 1
+
+[node name="Łasica" type="TextureRect" parent="TeamSelector/Team1/Kunki" unique_id=956176381 groups=["Weasel"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.508
+anchor_right = 0.5
+anchor_bottom = 0.508
+offset_left = -20.93898
+offset_top = 3.623993
+offset_right = 49.06102
+offset_bottom = 133.624
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("5_flbh7")
+script = ExtResource("3_gqmn8")
+character = 2
+team = 1
+
+[node name="Gronostaj" type="TextureRect" parent="TeamSelector/Team1/Kunki" unique_id=2005140935 groups=["Snow"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.75100005
+anchor_right = 0.505
+anchor_bottom = 0.75100005
+offset_left = -25.553978
+offset_top = 3.0779724
+offset_right = 44.446022
+offset_bottom = 133.07797
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("6_swtyi")
+script = ExtResource("3_gqmn8")
+character = 3
+team = 1
+
+[node name="Team2" type="Control" parent="TeamSelector" unique_id=1169581991]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 24.438965
+offset_top = -254.5
+offset_right = 157.43896
+offset_bottom = 222.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="TeamBackground" type="ColorRect" parent="TeamSelector/Team2" unique_id=2124233926]
+modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -1.0
+offset_bottom = 1.0
+color = Color(0.07, 0.07, 0.07, 0.2)
+
+[node name="TeamLabel" type="Label" parent="TeamSelector/Team2" unique_id=1524943105]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = 16.0
+offset_right = 32.0
+offset_bottom = 41.0
+text = "Team 3"
+
+[node name="Kunki" type="Control" parent="TeamSelector/Team2" unique_id=1160725776]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 50.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Kunek" type="TextureRect" parent="TeamSelector/Team2/Kunki" unique_id=636861657 groups=["Fox"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.938965
+offset_top = 5.0
+offset_right = 47.061035
+offset_bottom = 135.0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_gqmn8")
+script = ExtResource("3_gqmn8")
+team = 2
+
+[node name="Fretka" type="TextureRect" parent="TeamSelector/Team2/Kunki" unique_id=1686064783 groups=["Ferret"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.256
+anchor_right = 0.505
+anchor_bottom = 0.256
+offset_left = -23.553963
+offset_top = -0.03200531
+offset_right = 46.446037
+offset_bottom = 129.96799
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_r2wc6")
+script = ExtResource("3_gqmn8")
+character = 1
+team = 2
+
+[node name="Łasica" type="TextureRect" parent="TeamSelector/Team2/Kunki" unique_id=605859756 groups=["Weasel"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.508
+anchor_right = 0.5
+anchor_bottom = 0.508
+offset_left = -22.938965
+offset_top = 2.623993
+offset_right = 47.061035
+offset_bottom = 132.624
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("5_flbh7")
+script = ExtResource("3_gqmn8")
+character = 2
+team = 2
+
+[node name="Gronostaj" type="TextureRect" parent="TeamSelector/Team2/Kunki" unique_id=263545707 groups=["Snow"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.75100005
+anchor_right = 0.505
+anchor_bottom = 0.75100005
+offset_left = -25.553963
+offset_top = 5.0779724
+offset_right = 44.446037
+offset_bottom = 135.07797
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("6_swtyi")
+script = ExtResource("3_gqmn8")
+character = 3
+team = 2
+
+[node name="Team3" type="Control" parent="TeamSelector" unique_id=483915727]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 203.43896
+offset_top = -254.5
+offset_right = 336.43896
+offset_bottom = 222.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="TeamBackground" type="ColorRect" parent="TeamSelector/Team3" unique_id=508533071]
+modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -1.0
+offset_bottom = 1.0
+color = Color(0.07, 0.07, 0.07, 0.2)
+
+[node name="TeamLabel" type="Label" parent="TeamSelector/Team3" unique_id=1039208797]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = 16.0
+offset_right = 32.0
+offset_bottom = 41.0
+text = "Team 4"
+
+[node name="Kunki" type="Control" parent="TeamSelector/Team3" unique_id=407252385]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 50.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Kunek" type="TextureRect" parent="TeamSelector/Team3/Kunki" unique_id=780305757 groups=["Fox"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -18.938965
+offset_top = 6.0
+offset_right = 51.061035
+offset_bottom = 136.0
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_gqmn8")
+script = ExtResource("3_gqmn8")
+team = 3
+
+[node name="Fretka" type="TextureRect" parent="TeamSelector/Team3/Kunki" unique_id=484628503 groups=["Ferret"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.256
+anchor_right = 0.505
+anchor_bottom = 0.256
+offset_left = -19.553932
+offset_top = -1.0320053
+offset_right = 50.446068
+offset_bottom = 128.96799
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_r2wc6")
+script = ExtResource("3_gqmn8")
+character = 1
+team = 3
+
+[node name="Łasica" type="TextureRect" parent="TeamSelector/Team3/Kunki" unique_id=1534871757 groups=["Weasel"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.508
+anchor_right = 0.5
+anchor_bottom = 0.508
+offset_left = -21.938965
+offset_top = 5.623993
+offset_right = 48.061035
+offset_bottom = 135.624
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("5_flbh7")
+script = ExtResource("3_gqmn8")
+character = 2
+team = 3
+
+[node name="Gronostaj" type="TextureRect" parent="TeamSelector/Team3/Kunki" unique_id=1225938655 groups=["Snow"]]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.505
+anchor_top = 0.75100005
+anchor_right = 0.505
+anchor_bottom = 0.75100005
+offset_left = -22.553932
+offset_top = 3.0779724
+offset_right = 47.446068
+offset_bottom = 133.07797
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("6_swtyi")
+script = ExtResource("3_gqmn8")
+character = 3
+team = 3
+
+[node name="GameOptions" type="VBoxContainer" parent="." unique_id=336033586]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 233.5
+offset_top = -288.0
+offset_right = 533.5
+offset_bottom = -152.0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="GameOptions" unique_id=2096555618]
+layout_mode = 2
+
+[node name="NumBereksLabel" type="Label" parent="GameOptions/HSplitContainer" unique_id=1591749332]
+layout_mode = 2
+text = "Liczba berków"
+
+[node name="NumBereksButton" type="OptionButton" parent="GameOptions/HSplitContainer" unique_id=950911841]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 1
+item_count = 4
+popup/item_0/text = "0"
+popup/item_0/id = 0
+popup/item_1/text = "1"
+popup/item_1/id = 1
+popup/item_2/text = "2"
+popup/item_2/id = 2
+popup/item_3/text = "3"
+popup/item_3/id = 3
+
+[node name="CountBerekPoints" type="CheckBox" parent="GameOptions" unique_id=458377356]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Licz punkty berkowe"
+
+[node name="CountGoals" type="CheckBox" parent="GameOptions" unique_id=1474016914]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Licz gole"
+
+[node name="TightControls" type="CheckBox" parent="GameOptions" unique_id=487026677]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Łatwiejsze sterowanie"
+
 [node name="OkButton" type="Button" parent="." unique_id=420547287]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -42,498 +613,8 @@ offset_right = 347.5
 offset_bottom = 278.66504
 text = "Ok"
 
-[node name="KunekPanel" type="Panel" parent="." unique_id=1265438870]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -348.5
-offset_top = -235.0
-offset_right = 376.5
-offset_bottom = -134.0
-
-[node name="FretkaPanel" type="Panel" parent="." unique_id=274423566]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -348.5
-offset_top = -129.0
-offset_right = 376.5
-offset_bottom = -28.0
-
-[node name="ŁasicaPanel" type="Panel" parent="." unique_id=180888791]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -348.5
-offset_top = -23.0
-offset_right = 376.5
-offset_bottom = 78.0
-
-[node name="GronostajPanel" type="Panel" parent="." unique_id=604947432]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -348.5
-offset_top = 83.0
-offset_right = 376.5
-offset_bottom = 184.0
-
-[node name="Team1" type="Control" parent="." unique_id=2051556330]
-layout_mode = 1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -323.561
-offset_top = -278.81
-offset_right = -190.56104
-offset_bottom = 198.19
-
-[node name="TeamBackground" type="ColorRect" parent="Team1" unique_id=457753465]
-modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -1.0
-offset_bottom = 1.0
-color = Color(0.07, 0.07, 0.07, 0.2)
-
-[node name="TeamLabel" type="Label" parent="Team1" unique_id=241234249]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -25.0
-offset_top = 16.0
-offset_right = 32.0
-offset_bottom = 41.0
-text = "Team 1"
-
-[node name="Kunki" type="Control" parent="Team1" unique_id=2134906048]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 50.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Kunek" type="TextureRect" parent="Team1/Kunki" unique_id=295509586 groups=["Fox"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -76.0
-offset_right = 180.0
-offset_bottom = 256.0
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("3_flbh7")
-
-[node name="Fretka" type="TextureRect" parent="Team1/Kunki" unique_id=1899112768 groups=["Ferret"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.256
-anchor_right = 0.505
-anchor_bottom = 0.256
-offset_left = -76.77
-offset_top = 0.12799835
-offset_right = 179.23001
-offset_bottom = 256.128
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("4_swtyi")
-
-[node name="Łasica" type="TextureRect" parent="Team1/Kunki" unique_id=149354016 groups=["Weasel"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.508
-anchor_right = 0.5
-anchor_bottom = 0.508
-offset_left = -76.0
-offset_top = 0.0039978027
-offset_right = 180.0
-offset_bottom = 256.004
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("5_7tlxs")
-
-[node name="Gronostaj" type="TextureRect" parent="Team1/Kunki" unique_id=653325182 groups=["Snow"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.75100005
-anchor_right = 0.505
-anchor_bottom = 0.75100005
-offset_left = -76.77
-offset_top = -0.18701172
-offset_right = 179.23001
-offset_bottom = 255.81299
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("6_f8es4")
-
-[node name="Team2" type="Control" parent="." unique_id=1737334450]
-layout_mode = 1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -147.561
-offset_top = -278.81
-offset_right = -14.561035
-offset_bottom = 198.19
-
-[node name="TeamBackground" type="ColorRect" parent="Team2" unique_id=606449492]
-modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -1.0
-offset_bottom = 1.0
-color = Color(0.07, 0.07, 0.07, 0.2)
-
-[node name="TeamLabel" type="Label" parent="Team2" unique_id=1759050866]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -25.0
-offset_top = 16.0
-offset_right = 32.0
-offset_bottom = 41.0
-text = "Team 2"
-
-[node name="Kunki" type="Control" parent="Team2" unique_id=707299933]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 50.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Kunek" type="TextureRect" parent="Team2/Kunki" unique_id=883777122 groups=["Fox"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -76.0
-offset_right = 180.0
-offset_bottom = 256.0
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("3_flbh7")
-
-[node name="Fretka" type="TextureRect" parent="Team2/Kunki" unique_id=133542776 groups=["Ferret"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.256
-anchor_right = 0.505
-anchor_bottom = 0.256
-offset_left = -76.77
-offset_top = 0.12799835
-offset_right = 179.23001
-offset_bottom = 256.128
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("4_swtyi")
-
-[node name="Łasica" type="TextureRect" parent="Team2/Kunki" unique_id=956176381 groups=["Weasel"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.508
-anchor_right = 0.5
-anchor_bottom = 0.508
-offset_left = -76.0
-offset_top = 0.0039978027
-offset_right = 180.0
-offset_bottom = 256.004
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("5_7tlxs")
-
-[node name="Gronostaj" type="TextureRect" parent="Team2/Kunki" unique_id=2005140935 groups=["Snow"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.75100005
-anchor_right = 0.505
-anchor_bottom = 0.75100005
-offset_left = -76.77
-offset_top = -0.18701172
-offset_right = 179.23001
-offset_bottom = 255.81299
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("6_f8es4")
-
-[node name="Team3" type="Control" parent="." unique_id=1169581991]
-layout_mode = 1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 32.438965
-offset_top = -278.81
-offset_right = 165.43896
-offset_bottom = 198.19
-
-[node name="TeamBackground" type="ColorRect" parent="Team3" unique_id=2124233926]
-modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -1.0
-offset_bottom = 1.0
-color = Color(0.07, 0.07, 0.07, 0.2)
-
-[node name="TeamLabel" type="Label" parent="Team3" unique_id=1524943105]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -25.0
-offset_top = 16.0
-offset_right = 32.0
-offset_bottom = 41.0
-text = "Team 3"
-
-[node name="Kunki" type="Control" parent="Team3" unique_id=1160725776]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 50.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Kunek" type="TextureRect" parent="Team3/Kunki" unique_id=636861657 groups=["Fox"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -76.0
-offset_right = 180.0
-offset_bottom = 256.0
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("3_flbh7")
-
-[node name="Fretka" type="TextureRect" parent="Team3/Kunki" unique_id=1686064783 groups=["Ferret"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.256
-anchor_right = 0.505
-anchor_bottom = 0.256
-offset_left = -76.77
-offset_top = 0.12799835
-offset_right = 179.23001
-offset_bottom = 256.128
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("4_swtyi")
-
-[node name="Łasica" type="TextureRect" parent="Team3/Kunki" unique_id=605859756 groups=["Weasel"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.508
-anchor_right = 0.5
-anchor_bottom = 0.508
-offset_left = -76.0
-offset_top = 0.0039978027
-offset_right = 180.0
-offset_bottom = 256.004
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("5_7tlxs")
-
-[node name="Gronostaj" type="TextureRect" parent="Team3/Kunki" unique_id=263545707 groups=["Snow"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.75100005
-anchor_right = 0.505
-anchor_bottom = 0.75100005
-offset_left = -76.77
-offset_top = -0.18701172
-offset_right = 179.23001
-offset_bottom = 255.81299
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("6_f8es4")
-
-[node name="Team4" type="Control" parent="." unique_id=483915727]
-layout_mode = 1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 211.43896
-offset_top = -278.81
-offset_right = 344.43896
-offset_bottom = 198.19
-
-[node name="TeamBackground" type="ColorRect" parent="Team4" unique_id=508533071]
-modulate = Color(0.511305, 0.5773929, 0.44065928, 0.76862746)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -1.0
-offset_bottom = 1.0
-color = Color(0.07, 0.07, 0.07, 0.2)
-
-[node name="TeamLabel" type="Label" parent="Team4" unique_id=1039208797]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -25.0
-offset_top = 16.0
-offset_right = 32.0
-offset_bottom = 41.0
-text = "Team 4"
-
-[node name="Kunki" type="Control" parent="Team4" unique_id=407252385]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 50.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Kunek" type="TextureRect" parent="Team4/Kunki" unique_id=780305757 groups=["Fox"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -76.0
-offset_right = 180.0
-offset_bottom = 256.0
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("3_flbh7")
-
-[node name="Fretka" type="TextureRect" parent="Team4/Kunki" unique_id=484628503 groups=["Ferret"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.256
-anchor_right = 0.505
-anchor_bottom = 0.256
-offset_left = -76.77
-offset_top = 0.12799835
-offset_right = 179.23001
-offset_bottom = 256.128
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("4_swtyi")
-
-[node name="Łasica" type="TextureRect" parent="Team4/Kunki" unique_id=1534871757 groups=["Weasel"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.508
-anchor_right = 0.5
-anchor_bottom = 0.508
-offset_left = -76.0
-offset_top = 0.0039978027
-offset_right = 180.0
-offset_bottom = 256.004
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("5_7tlxs")
-
-[node name="Gronostaj" type="TextureRect" parent="Team4/Kunki" unique_id=1225938655 groups=["Snow"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505
-anchor_top = 0.75100005
-anchor_right = 0.505
-anchor_bottom = 0.75100005
-offset_left = -76.77
-offset_top = -0.18701172
-offset_right = 179.23001
-offset_bottom = 255.81299
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("6_f8es4")
-
-[node name="NumBereksLabel" type="Label" parent="." unique_id=1591749332]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -321.5
-offset_top = 212.0
-offset_right = -210.5
-offset_bottom = 235.0
-text = "Liczba berków"
-
-[node name="NumBereksButton" type="OptionButton" parent="." unique_id=950911841]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -164.5
-offset_top = 209.0
-offset_right = -109.5
-offset_bottom = 240.0
-selected = 1
-item_count = 4
-popup/item_0/text = "0"
-popup/item_0/id = 0
-popup/item_1/text = "1"
-popup/item_1/id = 1
-popup/item_2/text = "2"
-popup/item_2/id = 2
-popup/item_3/text = "3"
-popup/item_3/id = 3
-
-[node name="CountBerekPoints" type="CheckBox" parent="." unique_id=458377356]
-layout_mode = 0
-offset_left = 511.0
-offset_top = 534.0
-offset_right = 698.0
-offset_bottom = 565.0
-text = "Licz punkty berkowe"
-
-[node name="CountGoals" type="CheckBox" parent="." unique_id=1474016914]
-layout_mode = 0
-offset_left = 734.0
-offset_top = 533.0
-offset_right = 921.0
-offset_bottom = 564.0
-text = "Licz gole"
-
+[connection signal="item_selected" from="GameOptions/HSplitContainer/NumBereksButton" to="." method="_on_num_bereks_button_item_selected"]
+[connection signal="pressed" from="GameOptions/CountBerekPoints" to="." method="_on_count_berek_points_pressed"]
+[connection signal="pressed" from="GameOptions/CountGoals" to="." method="_on_count_goals_pressed"]
+[connection signal="pressed" from="GameOptions/TightControls" to="." method="_on_tight_controls_pressed"]
 [connection signal="pressed" from="OkButton" to="." method="_on_ok_button_pressed"]
-[connection signal="item_selected" from="NumBereksButton" to="." method="_on_num_bereks_button_item_selected"]
-[connection signal="pressed" from="CountBerekPoints" to="." method="_on_count_berek_points_pressed"]
-[connection signal="pressed" from="CountGoals" to="." method="_on_count_goals_pressed"]

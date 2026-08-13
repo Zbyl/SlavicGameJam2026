@@ -11,16 +11,15 @@ var layerHelpers: LayerHelpers
 # THOSE SHOULD BE USED ONLY AT LEVEL START!
 # Later used values derived from them: berekTeams, characterToTeam, nonEmptyTeamToCharacters, getCharactersInTeam()...
 
-var kunekTeam: int = 0
-var fretkaTeam: int = 1
-var lasicaTeam: int = 2
-var gronostajTeam: int = 3
+var initialCharacterToTeam: Dictionary[Character, int] = {Character.Fox: 0, Character.Ferret: 1, Character.Weasel: 2, Character.Snow: 3} # Characters to their team.
 
 var numBereks: int = 1  # How many berek teams there should be.
                         # - if a team is a berek all members of that team are bereks
                         # - bereks can catch only non-bereks
                         # - 0 bereks make sense for single player or football
                         # - bereks more or equal to non-empty team count doesn't make sense
+
+var tightControls: bool = false # Tweaks to improve handling.
 
 ##############################################
 
@@ -77,14 +76,8 @@ func levelPreInit(_activeCharacters: Array[Character]) -> void:
     nonEmptyTeamToCharacters = {}
     var teamToCharacters := {0: [], 1: [], 2: [], 3: []}
 
-    if Character.Fox in activeCharacters:
-        characterToTeam[Character.Fox] = kunekTeam
-    if Character.Ferret in activeCharacters:
-        characterToTeam[Character.Ferret] = fretkaTeam
-    if Character.Weasel in activeCharacters:
-        characterToTeam[Character.Weasel] = lasicaTeam
-    if Character.Snow in activeCharacters:
-        characterToTeam[Character.Snow] = gronostajTeam
+    for character in activeCharacters:
+        characterToTeam[character] = initialCharacterToTeam[character]
     
     for character in characterToTeam:
         var team := characterToTeam[character]

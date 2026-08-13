@@ -47,6 +47,7 @@ func initPlayers():
     teamPoints = {}
     for team in GameData.nonEmptyTeamToCharacters:
         teamPoints[team] = 0
+    print("teamPoints={teamPoints}".format({"teamPoints": teamPoints}))
 
     for h in player_huds:
         player_huds[h].visible = false
@@ -203,7 +204,6 @@ func show_menu(do_show: bool, in_level: bool):
 
 func _on_new_game_button_pressed(levelIdx: int) -> void:
     gameAlreadyWon = false
-    countPointsReset()
     new_game_pressed.emit(levelIdx)
 
 

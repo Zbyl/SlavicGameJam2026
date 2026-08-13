@@ -302,6 +302,8 @@ func _physics_process(delta: float):
     else:
         var max_speed = BEREK_MAX_SPEED if isBerek else MAX_SPEED
         var acceleration_factor = BEREK_ACCELERATION_FACTOR if isBerek else ACCELERATION_FACTOR
+        if GameData.tightControls:
+            acceleration_factor *= 2
         velocity = velocity.move_toward(direction * Vector2(max_speed, max_speed * WORLD_ASPECT_FACTOR), delta*acceleration_factor)
 
     var prePos = global_position
