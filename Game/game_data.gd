@@ -19,7 +19,7 @@ var numBereks: int = 1  # How many berek teams there should be.
                         # - 0 bereks make sense for single player or football
                         # - bereks more or equal to non-empty team count doesn't make sense
 
-var tightControls: bool = false # Tweaks to improve handling.
+var tightControls: Dictionary[Character, bool] = {Character.Fox: false, Character.Ferret: false, Character.Weasel: false, Character.Snow: false}  # Tweaks to improve handling.
 
 ##############################################
 

@@ -6,6 +6,7 @@ const ACCELERATION_FACTOR = 700.0
 const BEREK_ACCELERATION_FACTOR = ACCELERATION_FACTOR * 1.3
 const DECELERATION_FACTOR = 2*ACCELERATION_FACTOR
 const WORLD_ASPECT_FACTOR = 0.5
+const TIGHT_LATERAL_DRAG = 0.5 # Lateral drag for tight controls.
 
 const MAX_SPEED: float = 450.0
 const BEREK_MAX_SPEED: float = MAX_SPEED * 1.3
@@ -302,9 +303,13 @@ func _physics_process(delta: float):
     else:
         var max_speed = BEREK_MAX_SPEED if isBerek else MAX_SPEED
         var acceleration_factor = BEREK_ACCELERATION_FACTOR if isBerek else ACCELERATION_FACTOR
-        if GameData.tightControls:
+        if GameData.tightControls[character]:
             acceleration_factor *= 2
         velocity = velocity.move_toward(direction * Vector2(max_speed, max_speed * WORLD_ASPECT_FACTOR), delta*acceleration_factor)
+        if GameData.tightControls[character]:
+            var velocityAlongDir = direction * direction.dot(velocity)
+            var lateralVelocity = velocity - velocityAlongDir
+            velocity = velocityAlongDir + lateralVelocity * (1.0 - TIGHT_LATERAL_DRAG * delta)
 
     var prePos = global_position
     move_and_slide()
