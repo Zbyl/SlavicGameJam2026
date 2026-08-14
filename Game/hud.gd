@@ -60,6 +60,11 @@ func initPlayers():
         player_huds[playerNumber].position.y = 13 * playerOffsets[playerNumber]
         if not GameData.isActiveCharacterBerek(character):
             player_anims[playerNumber].play()
+            
+    # Update the points HUD:
+    for team in teamPoints:
+        countPointsSet(team, teamPoints[team])
+    
 
 func init_default_player_data():
     if false:
