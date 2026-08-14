@@ -16,7 +16,7 @@ const PAD_PLAYER_0 = {"type": "pad", "pad": 0}
 
 ##############################################
 # THOSE SHOULD BE USED ONLY AT LEVEL START!
-# Later used values derived from them: berekTeams, characterToTeam, nonEmptyTeamToCharacters, getCharactersInTeam()...
+# Later used values derived from them: berekTeams, activeCharacterToTeam, nonEmptyTeamToCharacters, getCharactersInTeam()...
 
 var initialCharacterToTeam: Dictionary[Character, int] = {Character.Fox: 0, Character.Ferret: 1, Character.Weasel: 2, Character.Snow: 3} # Characters to their team.
 
@@ -59,7 +59,7 @@ func characterEnumToStr(character: Character) -> String:
     return Character.find_key(character)
 
 var berekTeams: Array[int] = [] # Teams that are berek now. Initialized from numBereks at the start of the level.
-var characterToTeam: Dictionary[Character, int] = {} # Active characters to their team.
+var activeCharacterToTeam: Dictionary[Character, int] = {} # Active characters to their team.
 var nonEmptyTeamToCharacters: Dictionary[int, Array] = {} # int -> Array[Character], contains only non-empty teams (only active characters are considered)
 var activeCharacters: Array[Character] = [] # List of currently playing characters.
 var berekCooldownActive: Dictionary[int, bool] = {}   # If true this team was just berek'd, but should not be berking yet as we are in a cooldown before they start berking.
@@ -79,15 +79,15 @@ func levelPreInit(_activeCharacters: Array[Character]) -> void:
     print("Active characters: {activeCharacters}".format({ "activeCharacters": activeCharacters }))
 
     berekTeams = []
-    characterToTeam = {}
+    activeCharacterToTeam = {}
     nonEmptyTeamToCharacters = {}
     var teamToCharacters := {0: [], 1: [], 2: [], 3: []}
 
     for character in activeCharacters:
-        characterToTeam[character] = initialCharacterToTeam[character]
+        activeCharacterToTeam[character] = initialCharacterToTeam[character]
     
-    for character in characterToTeam:
-        var team := characterToTeam[character]
+    for character in activeCharacterToTeam:
+        var team := activeCharacterToTeam[character]
         teamToCharacters[team].append(character)
 
     for team in teamToCharacters:
@@ -109,13 +109,13 @@ func printTeamsAndBereks() -> void:
 
     print("Berek teams: {berekTeams}".format({ "berekTeams": berekTeams }))
     if Character.Fox in activeCharacters:
-        print("Fox berek: {berek}".format({ "berek": isCharacterBerek(Character.Fox) }))
+        print("Fox berek: {berek}".format({ "berek": isActiveCharacterBerek(Character.Fox) }))
     if Character.Ferret in activeCharacters:
-        print("Feret berek: {berek}".format({ "berek": isCharacterBerek(Character.Ferret) }))
+        print("Feret berek: {berek}".format({ "berek": isActiveCharacterBerek(Character.Ferret) }))
     if Character.Weasel in activeCharacters:
-        print("Weasel berek: {berek}".format({ "berek": isCharacterBerek(Character.Weasel) }))
+        print("Weasel berek: {berek}".format({ "berek": isActiveCharacterBerek(Character.Weasel) }))
     if Character.Snow in activeCharacters:
-        print("Snow berek: {berek}".format({ "berek": isCharacterBerek(Character.Snow) }))
+        print("Snow berek: {berek}".format({ "berek": isActiveCharacterBerek(Character.Snow) }))
 
 
 # Returns characters in given team (even if team is empty)
@@ -124,14 +124,24 @@ func getCharactersInTeam(team: int) -> Array[Character]:
         return nonEmptyTeamToCharacters[team]
     return []
     
-func getCharacterTeam(character: Character) -> int:
-    return characterToTeam[character]
+func isCharacterActive(character: Character) -> bool:
+    return character in activeCharacterToTeam
+
+# Returns true if team has any active character.
+func isTeamActive(team: int) -> bool:
+    return team in nonEmptyTeamToCharacters
+
+func getActiveCharacterTeam(character: Character) -> int:
+    if not isCharacterActive(character):
+        push_error("character={character} is not active. activeCharacterToTeam={activeCharacterToTeam}".format({"character": character, "activeCharacterToTeam": activeCharacterToTeam}))
+        return initialCharacterToTeam[character] # Returning some invalid value here.
+    return activeCharacterToTeam[character]
     
 func isTeamBerek(team: int) -> bool:
     return team in berekTeams
 
-func isCharacterBerek(character: Character) -> bool:
-    var team = characterToTeam[character]
+func isActiveCharacterBerek(character: Character) -> bool:
+    var team = getActiveCharacterTeam(character)
     return team in berekTeams
 
 func getAllBereks() -> Array[Character]:
@@ -154,22 +164,22 @@ func getCharacterDude(character: Character) -> Dude:
 # Returns true if given berek can zberkować other player.
 # False if this character cannot berek the other one.
 func canZberkowac(berekCharacter: Character, caughtCharacter: Character) -> bool:
-    if not isCharacterBerek(berekCharacter):
+    if not isActiveCharacterBerek(berekCharacter):
         print("Not a berek {berek} cannot catch another player {caught}.".format({
             "berek": berekCharacter,
             "caught": caughtCharacter,
         }))
         return false
 
-    if isCharacterBerek(caughtCharacter):
+    if isActiveCharacterBerek(caughtCharacter):
         print("Berek {berek} cannot catch another berek {caught}.".format({
             "berek": berekCharacter,
             "caught": caughtCharacter,
         }))
         return false
 
-    var berekTeam = characterToTeam[berekCharacter]
-    var caughtTeam = characterToTeam[caughtCharacter]
+    var berekTeam = getActiveCharacterTeam(berekCharacter)
+    var caughtTeam = getActiveCharacterTeam(caughtCharacter)
 
     if berekTeam == caughtTeam:
         print("Berek {berek} cannot catch player from his team {caught}.".format({
@@ -206,8 +216,8 @@ func canZberkowac(berekCharacter: Character, caughtCharacter: Character) -> bool
 func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
     assert(canZberkowac(berekCharacter, caughtCharacter))
     # Replace berekTeam with caughtTeam in berekTeams.
-    var berekTeam = characterToTeam[berekCharacter]
-    var caughtTeam = characterToTeam[caughtCharacter]
+    var berekTeam = getActiveCharacterTeam(berekCharacter)
+    var caughtTeam = getActiveCharacterTeam(caughtCharacter)
     var foundIdx = berekTeams.find(berekTeam)
     assert(foundIdx != -1)
     berekTeams[foundIdx] = caughtTeam
@@ -219,7 +229,7 @@ func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
     
 # See doZberkuj()
 func doWakeUpAfterZberkowany(character: Character) -> void:
-    var team := GameData.getCharacterTeam(character)
+    var team := GameData.getActiveCharacterTeam(character)
     berekCooldownActive[team] = false
     deathCooldownActive[character] = false
 

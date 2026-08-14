@@ -1,6 +1,7 @@
 # TODO
 
 - Exporty: Windows, Linux, Web
+- Make sounds not fall-off with distance. Either AudioStreamPlayer, or by properties of AudioStreamPlayer2D (attenuation? panning?).
 
 # KNOWN BUGS
 - Kuna na moście koliduje z kuną pod mostem. Will not fix...

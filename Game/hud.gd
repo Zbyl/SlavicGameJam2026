@@ -58,7 +58,7 @@ func initPlayers():
         var playerNumber = GameData.ALL_CHARACTERS.find(character)
         player_huds[playerNumber].visible = true
         player_huds[playerNumber].position.y = 13 * playerOffsets[playerNumber]
-        if not GameData.isCharacterBerek(character):
+        if not GameData.isActiveCharacterBerek(character):
             player_anims[playerNumber].play()
 
 func init_default_player_data():
@@ -105,8 +105,8 @@ func _ready() -> void:
 
 func countPointsDudeGotMe(victim: Dude, hunter: Dude):
     if GameData.countBerekPoints:
-        var victimTeam := GameData.getCharacterTeam(victim.character)
-        var hunterTeam := GameData.getCharacterTeam(hunter.character)
+        var victimTeam := GameData.getActiveCharacterTeam(victim.character)
+        var hunterTeam := GameData.getActiveCharacterTeam(hunter.character)
         countPointsSet(victim.character, teamPoints[victimTeam] - pointsCatchPenalty)
         countPointsSet(hunter.character, teamPoints[hunterTeam] + pointsCatchGain)
         checkWinners()
@@ -115,7 +115,7 @@ func countPointsDudeGotMe(victim: Dude, hunter: Dude):
 
 func countPointsForGoal(character: GameData.Character) -> void:
     if GameData.countGoalsPoints:
-        var team := GameData.getCharacterTeam(character)
+        var team := GameData.getActiveCharacterTeam(character)
         countPointsSet(character, teamPoints[team] + POINTS_PER_GOAL)
         checkWinners()
 
@@ -181,7 +181,10 @@ func _process(delta: float) -> void:
                 countPointsSet(team, teamPoints[team] + elapsed * POINTS_PER_SECOND)
             for character in GameData.getCharactersInTeam(team):
                 var playerNumber = GameData.ALL_CHARACTERS.find(character)
-                player_anims[playerNumber].play() # @todo Should we stop() if !countTimePoints?
+                if countTimePoints:
+                    player_anims[playerNumber].play()
+                else:
+                    player_anims[playerNumber].stop()
 
     checkWinners()
 
@@ -266,7 +269,7 @@ func _on_game_won(winningTeams: Array[int]) -> void:
 
     for dude in get_tree().get_nodes_in_group('Dude'):
         dude.initiate_death()
-        if GameData.getCharacterTeam(dude.character) in winningTeams:
+        if GameData.getActiveCharacterTeam(dude.character) in winningTeams:
             dude.crown.visible = true
 
     gameWonByTeams = winningTeams

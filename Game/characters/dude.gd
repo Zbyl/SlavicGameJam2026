@@ -111,8 +111,8 @@ func _ready() -> void:
     animation.play(GameData.characterEnumToStr(character) + stateToAnim(currentState) + str(currentAngle))
 
 func updateBerekMarker():
-    var isBerek := GameData.isCharacterBerek(character)
-    var team := GameData.getCharacterTeam(character)
+    var isBerek := GameData.isActiveCharacterBerek(character)
+    var team := GameData.getActiveCharacterTeam(character)
     berek.visible = isBerek
     berek.modulate = Color(0.227, 0.345, 0.729) if GameData.berekCooldownActive[team] else Color.WHITE
 
@@ -186,7 +186,7 @@ func updateJumpButton() -> void:
 func updateDuckButton():
     if isDuckButtonPressed() and not duck_player.playing:
         var quacks: Array
-        var isBerek := GameData.isCharacterBerek(character)
+        var isBerek := GameData.isActiveCharacterBerek(character)
         if isBerek:
             quacks = duckBerek
         else:
@@ -254,7 +254,7 @@ func _physics_process(delta: float):
     if GameData.hud.isMenuOpen():
         return
 
-    var isBerek := GameData.isCharacterBerek(character)
+    var isBerek := GameData.isActiveCharacterBerek(character)
     updateBerekMarker()
 
     updateJumpButton()

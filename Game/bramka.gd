@@ -24,8 +24,8 @@ func _do_respawn_ball(ball: Ball) -> void:
 
     var scoringTeam = team
     if (scoringTeam == -1) and (ball.lastKicker != null):
-        scoringTeam = GameData.getCharacterTeam(ball.lastKicker.character)
-    if (scoringTeam != -1):
+        scoringTeam = GameData.getActiveCharacterTeam(ball.lastKicker.character)
+    if (scoringTeam != -1) and GameData.isTeamActive(scoringTeam):
         GameData.hud.countPointsForGoal(scoringTeam)
     
     # Moving a RigidBody doesn't seem to work.
