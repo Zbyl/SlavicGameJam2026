@@ -426,7 +426,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
     # dude is the potential berek
     if not body.is_in_group("Dude"):
         return
-    
+
     # Check if we are close enough in z.
     var zDist = absf(currentZ - body.currentZ)
     if zDist > GameData.layerHelpers.layerHeight:

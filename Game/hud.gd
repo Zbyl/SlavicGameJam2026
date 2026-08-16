@@ -4,6 +4,7 @@ class_name Hud
 const TEAM_PICKER = preload("res://team_picker.tscn")
 const PLAYER_PICKER = preload("res://player_picker.tscn")
 const WIN_SCREEN = preload("res://win_screen.tscn")
+
 const POINTS_PER_SECOND = 12.0
 const POINTS_PER_GOAL = 100.0
 const pointsCatchGain = 40.0
@@ -228,13 +229,13 @@ func _on_language_button_pressed() -> void:
     match GameData.currentLanguage:
         GameData.Language.PL:
             GameData.setLanguage(GameData.Language.EN)
-            language_button.text = "Deutsch"
+            language_button.text = "Deutsche Sprache"
         GameData.Language.EN:
             GameData.setLanguage(GameData.Language.DE)
-            language_button.text = "Polski"
+            language_button.text = "Język polski"
         GameData.Language.DE:
             GameData.setLanguage(GameData.Language.PL)
-            language_button.text = "English"
+            language_button.text = "English language"
 
 
 func isAnyPickerActive() -> bool:

@@ -153,7 +153,7 @@ func _on_keyboard_input(event: InputEvent) -> void:
         buttons[buttonWaiting].disabled = false
         buttonWaiting = ""
         get_viewport().set_input_as_handled()
-        
+
         updateUI()
 
 func detectKeyboardPreset():
