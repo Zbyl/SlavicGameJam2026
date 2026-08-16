@@ -7,6 +7,39 @@ var game: Game
 var hud: Hud
 var layerHelpers: LayerHelpers
 
+const TRANSLATION_PL = preload("res://translations/game.pl.translation")
+const TRANSLATION_EN = preload("res://translations/game.en.translation")
+const TRANSLATION_DE = preload("res://translations/game.de.translation")
+
+enum Language {
+    PL,
+    EN,
+    DE,
+}
+
+var currentLanguage: Language = Language.PL
+
+# Rejestruje pliki tlumaczen w TranslationServer, jawnie wymuszajac ich locale.
+# Robimy to w kodzie (zamiast polegac na automatycznym wczytaniu z ustawien projektu),
+# bo import CSV w edytorze Godota potrafi zapisac plik .translation z pustym/brakujacym
+# polem locale (zaobserwowane dla "en") - wymuszenie locale tutaj naprawia ten problem.
+func registerTranslations() -> void:
+    TranslationServer.add_translation(TRANSLATION_PL)
+    TranslationServer.add_translation(TRANSLATION_EN)
+    TranslationServer.add_translation(TRANSLATION_DE)
+
+# Switches the game's UI language. Call this instead of TranslationServer.set_locale()
+# directly, so currentLanguage always stays in sync with the actual locale.
+func setLanguage(lang: Language) -> void:
+    currentLanguage = lang
+    match lang:
+        Language.PL:
+            TranslationServer.set_locale("pl")
+        Language.EN:
+            TranslationServer.set_locale("en")
+        Language.DE:
+            TranslationServer.set_locale("de")
+
 const KEYBOARD_PLAYER_ARROWS_WIDE = {"type": "keyboard", "up": KEY_UP, "down": KEY_DOWN, "left": KEY_LEFT, "right": KEY_RIGHT, "jump": KEY_SPACE, "duck": KEY_CTRL}
 const KEYBOARD_PLAYER_ARROWS_TIGHT = {"type": "keyboard", "up": KEY_UP, "down": KEY_DOWN, "left": KEY_LEFT, "right": KEY_RIGHT, "jump": KEY_CTRL, "duck": KEY_ENTER}
 const KEYBOARD_PLAYER_WSAD = {"type": "keyboard", "up": KEY_W, "down": KEY_S, "left": KEY_A, "right": KEY_D, "jump": KEY_SHIFT, "duck": KEY_E}
@@ -74,7 +107,7 @@ func levelPreInit(_activeCharacters: Array[Character]) -> void:
     deathCooldownActive = {}
     for character in _activeCharacters:
         deathCooldownActive[character] = false
-    
+
     activeCharacters = _activeCharacters
     print("Active characters: {activeCharacters}".format({ "activeCharacters": activeCharacters }))
 
@@ -85,7 +118,7 @@ func levelPreInit(_activeCharacters: Array[Character]) -> void:
 
     for character in activeCharacters:
         activeCharacterToTeam[character] = initialCharacterToTeam[character]
-    
+
     for character in activeCharacterToTeam:
         var team := activeCharacterToTeam[character]
         teamToCharacters[team].append(character)
@@ -94,14 +127,14 @@ func levelPreInit(_activeCharacters: Array[Character]) -> void:
         var chars: Array[Character] = Array(teamToCharacters[team], TYPE_INT, "", null) # Copying array, while casting to a typed array.
         if chars.size() > 0:
             nonEmptyTeamToCharacters[team] = chars
-        
+
     var currentBerekCount: int = min(numBereks, nonEmptyTeamToCharacters.size() - 1)
     berekTeams = Array(nonEmptyTeamToCharacters.keys(), TYPE_INT, "", null) # Copying array, while casting to a typed array.
     berekTeams.shuffle()
     berekTeams.resize(currentBerekCount)
-    
+
     printTeamsAndBereks()
-    
+
 func printTeamsAndBereks() -> void:
     for team in range(4):
         var chars := getCharactersInTeam(team)
@@ -123,7 +156,7 @@ func getCharactersInTeam(team: int) -> Array[Character]:
     if team in nonEmptyTeamToCharacters:
         return nonEmptyTeamToCharacters[team]
     return []
-    
+
 func isCharacterActive(character: Character) -> bool:
     return character in activeCharacterToTeam
 
@@ -136,7 +169,7 @@ func getActiveCharacterTeam(character: Character) -> int:
         push_error("character={character} is not active. activeCharacterToTeam={activeCharacterToTeam}".format({"character": character, "activeCharacterToTeam": activeCharacterToTeam}))
         return initialCharacterToTeam[character] # Returning some invalid value here.
     return activeCharacterToTeam[character]
-    
+
 func isTeamBerek(team: int) -> bool:
     return team in berekTeams
 
@@ -150,7 +183,7 @@ func getAllBereks() -> Array[Character]:
         var chars := getCharactersInTeam(team)
         result += chars
     return result
-    
+
 # Returns Dude for given character. Returns null if character doesn't exist in current level.
 func getCharacterDude(character: Character) -> Dude:
     assert(game.level)
@@ -158,7 +191,7 @@ func getCharacterDude(character: Character) -> Dude:
     for dude in dudes:
         if dude.character == character:
             return dude
-            
+
     return null
 
 # Returns true if given berek can zberkować other player.
@@ -187,7 +220,7 @@ func canZberkowac(berekCharacter: Character, caughtCharacter: Character) -> bool
             "caught": caughtCharacter,
         }))
         return false
-    
+
     if GameData.berekCooldownActive[berekTeam]:
         print("Berek {berek} under berek cooldown cannot catch player {caught}.".format({
             "berek": berekCharacter,
@@ -210,7 +243,7 @@ func canZberkowac(berekCharacter: Character, caughtCharacter: Character) -> bool
         return false
 
     return true
-    
+
 # Zberkuj.
 # After a while need to call doWakeUpAfterZberkowany().
 func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
@@ -226,7 +259,7 @@ func doZberkuj(berekCharacter: Character, caughtCharacter: Character) -> void:
     deathCooldownActive[caughtCharacter] = true
 
     printTeamsAndBereks()
-    
+
 # See doZberkuj()
 func doWakeUpAfterZberkowany(character: Character) -> void:
     var team := GameData.getActiveCharacterTeam(character)
@@ -235,6 +268,8 @@ func doWakeUpAfterZberkowany(character: Character) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+    registerTranslations()
+    setLanguage(Language.PL)  # Polski jest domyslnym jezykiem gry.
     layerHelpers = LayerHelpers.new()
     hud = get_tree().get_first_node_in_group('Hud')
     game = get_tree().get_first_node_in_group('Game')

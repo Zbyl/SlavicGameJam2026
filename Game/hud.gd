@@ -16,6 +16,7 @@ signal game_won(winningTeams: Array[int])
 @onready var new_game_button0: Button = $Screen/Menu/VBoxContainer/NewGameButton0
 @onready var teams_button: Button = $Screen/Menu/VBoxContainer/TeamsButton
 @onready var controls_button: Button = $Screen/Menu/VBoxContainer/ControlsButton
+@onready var language_button: Button = $Screen/Menu/VBoxContainer/LanguageButton
 @onready var background: TextureRect = $Screen/Background
 @onready var backgroundForLevel: TextureRect = $Screen/BackgroundForLevel
 @onready var menu: Control = $Screen/Menu
@@ -53,18 +54,18 @@ func initPlayers():
         for ch in chars:
             playerOffsets[ch] = playerOffset
             playerOffset += 1
-        
+
     for character in playerOffsets:
         var playerNumber = GameData.ALL_CHARACTERS.find(character)
         player_huds[playerNumber].visible = true
         player_huds[playerNumber].position.y = 13 * playerOffsets[playerNumber]
         if not GameData.isActiveCharacterBerek(character):
             player_anims[playerNumber].play()
-            
+
     # Update the points HUD:
     for team in teamPoints:
         countPointsSet(team, teamPoints[team])
-    
+
 
 func init_default_player_data():
     if false:
@@ -74,7 +75,7 @@ func init_default_player_data():
             2: GameData.KEYBOARD_PLAYER_ARROWS_TIGHT.duplicate(),
             3: GameData.KEYBOARD_PLAYER_NUMPAD.duplicate(),
         }
-        return 
+        return
     var padNum = Input.get_connected_joypads().size()
     if padNum==0:
         playerData = {
@@ -133,18 +134,18 @@ func pointsToScreen(p):
 func checkWinners():
     if gameAlreadyWon:
         return
-        
+
     var winningTeams: Array[int] = []
     for team in teamPoints:
         var points = teamPoints[team]
         if points >= pointsMax:
             winningTeams.append(team)
-            
+
     if winningTeams.size() > 0:
         print("winningTeams={winningTeams} teamPoints={teamPoints}".format({"winningTeams": winningTeams, "teamPoints": teamPoints}))
         gameAlreadyWon = true
         game_won.emit(winningTeams)
-        
+
 
 func countPointsSet(team: int, points: float) -> void:
     var p = clampf(points, 0.001, pointsMax)
@@ -218,6 +219,22 @@ func _on_full_screen_button_pressed() -> void:
 
 func _on_exit_button_pressed() -> void:
     get_tree().quit()
+
+
+# Cykl: polski -> angielski -> niemiecki -> polski...
+# Etykieta guzika ZAWSZE pokazuje nazwe jezyka, na ktory MOZNA sie przelaczyc
+# (celowo nie tlumaczona - taka konwencja jest standardem w przelacznikach jezyka).
+func _on_language_button_pressed() -> void:
+    match GameData.currentLanguage:
+        GameData.Language.PL:
+            GameData.setLanguage(GameData.Language.EN)
+            language_button.text = "Deutsch"
+        GameData.Language.EN:
+            GameData.setLanguage(GameData.Language.DE)
+            language_button.text = "Polski"
+        GameData.Language.DE:
+            GameData.setLanguage(GameData.Language.PL)
+            language_button.text = "English"
 
 
 func isAnyPickerActive() -> bool:

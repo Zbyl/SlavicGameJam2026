@@ -19,7 +19,7 @@ func initiateWithData(data: Dictionary):
 func appendInfo(label: String, keyCode):
     if keyCode!=-1:
         settings_info.newline()
-        settings_info.append_text(label+": "+OS.get_keycode_string(keyCode))
+        settings_info.append_text(tr(label)+": "+OS.get_keycode_string(keyCode))
 
 func _on_player_picker_destroy():
     updateSettingsInfoText(keyMap)
@@ -35,9 +35,9 @@ func _on_player_picker_destroy():
 func updateSettingsInfoText(keyMapParam: Dictionary):
     settings_info.text = ""
     if keyMapParam.has("type") && keyMapParam["type"]=="pad":
-        settings_info.append_text("Pad "+str(keyMapParam["pad"]+1))
+        settings_info.append_text(tr("Pad")+" "+str(keyMapParam["pad"]+1))
     elif keyMapParam.has("type") && keyMapParam["type"]=="keyboard":
-        settings_info.append_text("Klawiatura")
+        settings_info.append_text(tr("Klawiatura"))
         appendInfo("▲", keyMapParam.get("up", -1))
         appendInfo("▼", keyMapParam.get("down", -1))
         appendInfo("◄", keyMapParam.get("left", -1))
