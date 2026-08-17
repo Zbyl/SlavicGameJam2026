@@ -3,13 +3,13 @@ class_name Dude
 
 const DEADZONE = 0.1
 const ACCELERATION_FACTOR = 700.0
-const BEREK_ACCELERATION_FACTOR = ACCELERATION_FACTOR * 1.3
+var BEREK_ACCELERATION_FACTOR = ACCELERATION_FACTOR * GameData.berek_boost
 const DECELERATION_FACTOR = 2*ACCELERATION_FACTOR
 const WORLD_ASPECT_FACTOR = 0.5
 const TIGHT_LATERAL_DRAG = 0.5 # Lateral drag for tight controls.
 
 const MAX_SPEED: float = 450.0
-const BEREK_MAX_SPEED: float = MAX_SPEED * 1.3
+var BEREK_MAX_SPEED: float = MAX_SPEED * GameData.berek_boost
 
 @export var character: GameData.Character = GameData.Character.Fox
 

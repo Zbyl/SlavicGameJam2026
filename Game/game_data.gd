@@ -67,6 +67,8 @@ var countBerekPoints: bool = true    # Count points for time of not being berek,
                                      # and bonus points for catching and penalty points for being catched.
 var countGoalsPoints: bool = true # Count points for scoring goals.
 
+var berek_boost: float = 1.3
+
 enum Character {
     Fox,
     Ferret,

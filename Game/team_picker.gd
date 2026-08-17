@@ -12,6 +12,8 @@ extends Control
 @onready var ferret_tight_controls: CheckBox = %FerretTightControls
 @onready var weasel_tight_controls: CheckBox = %WeaselTightControls
 @onready var snow_tight_controls: CheckBox = %SnowTightControls
+@onready var berek_boost: HSlider = %BerekBoost
+@onready var berek_boost_label: Label = %BerekBoostLabel
 @onready var team_background0: ColorRect = %TeamSelector/Team0/TeamBackground
 @onready var team_background1: ColorRect = %TeamSelector/Team1/TeamBackground
 @onready var team_background2: ColorRect = %TeamSelector/Team2/TeamBackground
@@ -49,6 +51,8 @@ func _ready() -> void:
     ferret_tight_controls.button_pressed = GameData.tightControls[GameData.Character.Ferret]
     weasel_tight_controls.button_pressed = GameData.tightControls[GameData.Character.Weasel]
     snow_tight_controls.button_pressed = GameData.tightControls[GameData.Character.Snow]
+    berek_boost.value = GameData.berek_boost
+    berek_boost_label.text = tr("Prędkość berka") + " x " + str(berek_boost.value)
     
     ok_button.grab_focus()
 
@@ -109,6 +113,10 @@ func _on_tight_controls_pressed() -> void:
     GameData.tightControls[GameData.Character.Ferret] = ferret_tight_controls.button_pressed
     GameData.tightControls[GameData.Character.Weasel] = weasel_tight_controls.button_pressed
     GameData.tightControls[GameData.Character.Snow] = snow_tight_controls.button_pressed
+
+func _on_berek_boost_value_changed(value: float) -> void:
+    GameData.berek_boost = berek_boost.value
+    berek_boost_label.text = tr("Prędkość berka") + " x " + str(berek_boost.value)
 
 #########################################################
 ## Code for dragging kunek's into teams.
