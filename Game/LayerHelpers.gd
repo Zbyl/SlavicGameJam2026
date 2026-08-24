@@ -147,7 +147,7 @@ class GroundInfo:
     var layer: int
     var tileMap: TileMapLayer
     var groundType: GroundType # When SLOPE layer and tileMap will contain the tileMap with slope.
-    var groundHeight: float # Absolute ground height on this layer. Meaningless ifnot solid or slope.
+    var groundHeight: float # Absolute ground height on this layer. Meaningless if not solid or slope.
 
     var useThisCollision: bool    # Use collision from this tilemap (so above the slope)
     var useBelowCollision: bool   # Use collision from tilemap below (so below the slope)

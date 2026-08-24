@@ -38,6 +38,11 @@ var teamPoints: Dictionary[int, float] = {}
 var countTimePoints: bool = true    # True if we should count points for passing time.
 
 func initPlayers():
+    print("Hud.initPlayers(): BEGIN")
+
+    gameAlreadyWon = false
+    gameWonByTeams = []
+
     # No point in counting time points when we have only one team.
     countTimePoints = GameData.countBerekPoints and (GameData.nonEmptyTeamToCharacters.size() > 1)
     teamPoints = {}
@@ -67,6 +72,7 @@ func initPlayers():
     for team in teamPoints:
         countPointsSet(team, teamPoints[team])
 
+    print("Hud.initPlayers(): END")
 
 func init_default_player_data():
     if false:
@@ -143,7 +149,7 @@ func checkWinners():
             winningTeams.append(team)
 
     if winningTeams.size() > 0:
-        print("winningTeams={winningTeams} teamPoints={teamPoints}".format({"winningTeams": winningTeams, "teamPoints": teamPoints}))
+        print("checkWinners(): winningTeams={winningTeams} teamPoints={teamPoints}".format({"winningTeams": winningTeams, "teamPoints": teamPoints}))
         gameAlreadyWon = true
         game_won.emit(winningTeams)
 
@@ -207,7 +213,6 @@ func show_menu(do_show: bool, in_level: bool):
 
 
 func _on_new_game_button_pressed(levelIdx: int) -> void:
-    gameAlreadyWon = false
     new_game_pressed.emit(levelIdx)
 
 
@@ -287,6 +292,8 @@ var gameAlreadyWon: bool = false
 var gameWonByTeams: Array[int] = []
 
 func _on_game_won(winningTeams: Array[int]) -> void:
+    print("Hud._on_game_won(): BEGIN")
+
     GameData.printTeamsAndBereks()
     print("Game won by teams: " + str(winningTeams))
 
@@ -298,7 +305,11 @@ func _on_game_won(winningTeams: Array[int]) -> void:
     gameWonByTeams = winningTeams
     win_delay_timer.start()
 
+    print("Hud._on_game_won(): END")
+
 func _on_win_delay_timer_timeout() -> void:
+    print("Hud._on_win_delay_timer_timeout(): BEGIN")
+
     var winners: Array[GameData.Character] = []
     for team in gameWonByTeams:
         for character in GameData.getCharactersInTeam(team):
@@ -317,8 +328,10 @@ func _on_win_delay_timer_timeout() -> void:
     winScreen.winners = winners
     winScreen.loosers = loosers
 
-    GameData.game._switch_level(null)
+    await GameData.game._switch_level(null)
     level_music.stop()
     menu_music.stop()
     GameData.game.add_child(winScreen)
     GameData.game.move_child(winScreen, 0)
+
+    print("Hud._on_win_delay_timer_timeout(): END")

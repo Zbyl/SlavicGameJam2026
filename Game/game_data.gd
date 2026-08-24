@@ -105,6 +105,8 @@ var deathCooldownActive: Dictionary[Character, int] = {} # Characters that are d
 # Initializing game data for the level.
 # activeCharacters - characters that are going to play
 func levelPreInit(_activeCharacters: Array[Character]) -> void:
+    print("GameData.levelPreInit(): BEGIN")
+
     berekCooldownActive = {0: false, 1: false, 2: false, 3: false}
     deathCooldownActive = {}
     for character in _activeCharacters:
@@ -136,6 +138,8 @@ func levelPreInit(_activeCharacters: Array[Character]) -> void:
     berekTeams.resize(currentBerekCount)
 
     printTeamsAndBereks()
+
+    print("GameData.levelPreInit(): END")
 
 func printTeamsAndBereks() -> void:
     for team in range(4):

@@ -54,6 +54,8 @@ func _switch_level(new_level_scene):
     # - Reset gameplay stats (health, scores, time)
     # - Start music
 
+    print("Game._switch_level(): BEGIN")
+
     gameCamera.dudes = []
     var oldDudes = get_tree().get_nodes_in_group('Dude')
     for dude in oldDudes:
@@ -69,7 +71,8 @@ func _switch_level(new_level_scene):
 
     GameData.hud.playMusic(false)
 
-    if new_level_scene==null:
+    if new_level_scene == null:
+        print("Game._switch_level(): END - NULL")
         return
 
     var activeCharacters: Array[GameData.Character] = []
@@ -100,3 +103,5 @@ func _switch_level(new_level_scene):
     gameCamera.dudes = dudesArray
     GameData.hud.initPlayers()
     GameData.hud.show_menu(false, true)
+
+    print("Game._switch_level(): END")
