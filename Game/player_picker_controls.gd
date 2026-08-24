@@ -67,6 +67,6 @@ func _on_controls_pressed() -> void:
     get_tree().set_group("PlayerEnable", "disabled", true)
     var picker = INPUT_PICKER.instantiate()
     picker.player_picker = self
-    picker.tree_exited.connect(_on_player_picker_destroy)
+    picker.tree_exiting.connect(_on_player_picker_destroy)
     player_picker.add_child(picker)
     picker.initiateWithdata(keyMap)
